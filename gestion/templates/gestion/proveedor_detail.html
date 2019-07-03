@@ -1,0 +1,18 @@
+{% extends "gestion/layout.html" %}
+{% block content %}
+<div class="container">
+    <legend class="border-bottom mb-4">
+        {{ object.razon_social}} 
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'update' object.id %}">Editar información 🖉</a>
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'delete' object.id %}">Borrar X</a>
+    </legend>
+        <ul class="list-group mb-4">
+            <li>{{object.email}}</li>
+            <li>{{object.telefono}}</li>
+            <li>{{object.cuit}}</li>
+            {% if object.detalles %}
+                <li>{{object.detalles}}</li>
+            {% endif %}
+        </ul>
+</div>
+{% endblock content  %}

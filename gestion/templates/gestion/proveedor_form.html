@@ -1,0 +1,15 @@
+{% extends "gestion/index.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group" style="display: grid; grid-auto-columns: min-content">
+                <legend class="border-bottom mb-4">Proveedor</legend>
+                {{ form }}
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
