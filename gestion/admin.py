@@ -5,14 +5,14 @@ from .models import (
     Insumo,
     Unidad,
     Cliente,
-    Localidad, 
+    Localidad,
     Provincia,
     EstadoPedido,
     Pedido,
     Producto,
     StockInsumo,
     InsumosProducto
-    )
+)
 # Register your models here.
 # Password: enredarte
 

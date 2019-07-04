@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class UserRegisterForm(UserCreationForm):
-    """ Inherit from the UserCreationForm 
+    """ Inherit from the UserCreationForm
     and modify it to include an email field """
     email = forms.EmailField(required=False)
 
