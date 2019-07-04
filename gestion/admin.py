@@ -24,12 +24,12 @@ class UnidadAdmin(admin.ModelAdmin):
 
 @admin.register(Provincia)
 class ProvinciaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre')
+    list_display = ('id', 'cod_provincia', 'provincia')
 
 
 @admin.register(Localidad)
 class LocalidadAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre', 'provincia')
+    list_display = ('id', 'localidad', 'provincia')
     list_filter = ('provincia',)
 
 

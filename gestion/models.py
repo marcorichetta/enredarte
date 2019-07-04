@@ -16,14 +16,16 @@ class Unidad(models.Model):
 
 
 class Provincia(models.Model):
-    nombre = models.CharField(max_length=128)
+    cod_provincia = models.CharField(max_length=10, blank=False, default='AR-')
+    provincia = models.CharField(
+        max_length=50, blank=False, default='Provincia')
 
     def __str__(self):
-        return f"{self.nombre}"
+        return f"{self.provincia}"
 
 
 class Localidad(models.Model):
-    nombre = models.CharField(max_length=128)
+    localidad = models.CharField(max_length=128)
     provincia = models.ForeignKey(
         Provincia, on_delete=models.CASCADE, related_name='provincias')
 
@@ -31,7 +33,7 @@ class Localidad(models.Model):
         verbose_name_plural = 'Localidades'
 
     def __str__(self):
-        return f"{self.nombre}"
+        return self.localidad
 
 
 class EstadoPedido(models.Model):

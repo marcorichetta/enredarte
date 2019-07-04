@@ -16,9 +16,25 @@ python manage.py startapp gestion
 
 Django usa UTF por defecto.
 
+### [Eliminar datos de tablas](https://www.postgresql.org/message-id/15aa6b3e0906171358i712e5e1hd44f9dfb3fb386c2@mail.gmail.com)
+
+- `DELETE` también elimina todos los registros.
+
+- `TRUNCATE` elimina todos los registros más rápido que `DELETE` (Postgres extension)
+ - Con la opción `CASCADE` se eliminan también todos los registros de las tablas 
+    que tengan Foreign Keys asociadas a la tabla objetivo.
+
+Ejemplo:
+
+```SQL
+TRUNCATE TABLE provincia 
+RESTART IDENTITY /* Reinciar los índices */
+CASCADE; /* Aplicar en todas las tablas asociadas con provincia */
+```
+
 ## Migrar data
 
-```
+```bash
 python manage.py makemigrations
 
 python manage.py migrate
