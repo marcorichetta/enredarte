@@ -16,14 +16,102 @@ from .models import (
 # Register your models here.
 # Password: enredarte
 
-admin.site.register(Proveedor)
-admin.site.register(Insumo)
-admin.site.register(Unidad)
-admin.site.register(Cliente)
-admin.site.register(Localidad)
-admin.site.register(Provincia)
-admin.site.register(EstadoPedido)
-admin.site.register(Pedido)
-admin.site.register(Producto)
-admin.site.register(StockInsumo)
-admin.site.register(InsumosProducto)
+
+@admin.register(Unidad)
+class UnidadAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre', 'descripcion')
+
+
+@admin.register(Provincia)
+class ProvinciaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre')
+
+
+@admin.register(Localidad)
+class LocalidadAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre', 'provincia')
+    list_filter = ('provincia',)
+
+
+@admin.register(EstadoPedido)
+class EstadoPedidoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'descripcion', 'detalles')
+
+
+@admin.register(Cliente)
+class ClienteAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'nombre',
+        'apellido',
+        'email',
+        'telefono',
+        'calle',
+        'numero',
+        'localidad',
+        'detalles',
+    )
+    list_filter = ('localidad',)
+
+
+@admin.register(Proveedor)
+class ProveedorAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'cuit',
+        'razon_social',
+        'nombre_fantasia',
+        'telefono',
+        'email',
+        'calle',
+        'numero',
+        'localidad',
+        'detalles',
+    )
+    list_filter = ('localidad',)
+
+
+@admin.register(Insumo)
+class InsumoAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'nombre',
+        'descripcion',
+        'medida',
+        'unidad_medida',
+        'precio',
+    )
+    list_filter = ('unidad_medida',)
+    raw_id_fields = ('proveedores',)
+
+
+@admin.register(StockInsumo)
+class StockInsumoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'insumo', 'cantidad', 'detalles')
+    list_filter = ('insumo',)
+
+
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre', 'descripcion', 'precio')
+    raw_id_fields = ('insumos',)
+
+
+@admin.register(InsumosProducto)
+class InsumosProductoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'producto', 'insumo', 'cantidad')
+    list_filter = ('producto', 'insumo')
+
+
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'fecha_pedido',
+        'cliente',
+        'estado_pedido',
+        'precio_final',
+        'detalles',
+    )
+    list_filter = ('fecha_pedido', 'cliente', 'estado_pedido')
+    raw_id_fields = ('productos_pedido',)

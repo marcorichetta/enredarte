@@ -20,7 +20,6 @@ class ProveedorListView(ListView):
 
 class ProveedorCreateView(CreateView):
     model = Proveedor
-    exclude = ['detalles']
     fields = ['razon_social', 'cuit', 'telefono', 'email',
               'calle', 'numero', 'localidad']
 
