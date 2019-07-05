@@ -20,6 +20,9 @@ class Provincia(models.Model):
     provincia = models.CharField(
         max_length=50, blank=False, default='Provincia')
 
+    class Meta:
+        ordering = ['provincia']
+
     def __str__(self):
         return f"{self.provincia}"
 

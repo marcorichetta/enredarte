@@ -24,7 +24,7 @@ class UnidadAdmin(admin.ModelAdmin):
 
 @admin.register(Provincia)
 class ProvinciaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'cod_provincia', 'provincia')
+    list_display = ('id', 'provincia', 'cod_provincia')
 
 
 @admin.register(Localidad)
@@ -49,7 +49,6 @@ class ClienteAdmin(admin.ModelAdmin):
         'calle',
         'numero',
         'localidad',
-        'detalles',
     )
     list_filter = ('localidad',)
 
@@ -66,7 +65,6 @@ class ProveedorAdmin(admin.ModelAdmin):
         'calle',
         'numero',
         'localidad',
-        'detalles',
     )
     list_filter = ('localidad',)
 
@@ -111,7 +109,6 @@ class PedidoAdmin(admin.ModelAdmin):
         'cliente',
         'estado_pedido',
         'precio_final',
-        'detalles',
     )
     list_filter = ('fecha_pedido', 'cliente', 'estado_pedido')
     raw_id_fields = ('productos_pedido',)
