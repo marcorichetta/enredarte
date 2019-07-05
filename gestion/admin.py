@@ -21,15 +21,27 @@ from .models import (
 class UnidadAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion')
 
+class LocalidadInline(admin.TabularInline):
+    '''Tabular Inline View for Localidad'''
+
+
+    model = Localidad
+    min_num = 3
+    max_num = 20
+    extra = 1
 
 @admin.register(Provincia)
 class ProvinciaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'provincia', 'cod_provincia')
+    list_display = ('provincia', 'cod_provincia')
+
+    inlines = [
+        LocalidadInline,
+    ]
 
 
 @admin.register(Localidad)
 class LocalidadAdmin(admin.ModelAdmin):
-    list_display = ('id', 'localidad', 'provincia')
+    list_display = ('cod_postal', 'localidad', 'provincia')
     list_filter = ('provincia',)
 
 
@@ -50,7 +62,8 @@ class ClienteAdmin(admin.ModelAdmin):
         'numero',
         'localidad',
     )
-    list_filter = ('localidad',)
+    search_fields = ('nombre', 'apellido',)
+    list_display_links = ('nombre',)
 
 
 @admin.register(Proveedor)
@@ -59,15 +72,15 @@ class ProveedorAdmin(admin.ModelAdmin):
         'id',
         'cuit',
         'razon_social',
-        'nombre_fantasia',
         'telefono',
         'email',
         'calle',
         'numero',
         'localidad',
     )
-    list_filter = ('localidad',)
-
+    search_fields = ('cuit', 'razon_social',)
+    list_display_links = ('cuit',)
+    ordering = ('razon_social',)
 
 @admin.register(Insumo)
 class InsumoAdmin(admin.ModelAdmin):

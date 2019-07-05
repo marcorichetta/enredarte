@@ -1,6 +1,5 @@
 from django.db import models
 from django.urls import reverse
-
 # Create your models here.
 
 
@@ -28,12 +27,14 @@ class Provincia(models.Model):
 
 
 class Localidad(models.Model):
+    cod_postal = models.CharField(max_length=10)
     localidad = models.CharField(max_length=128)
     provincia = models.ForeignKey(
         Provincia, on_delete=models.CASCADE, related_name='provincias')
 
     class Meta:
         verbose_name_plural = 'Localidades'
+        ordering = ['localidad']
 
     def __str__(self):
         return self.localidad
@@ -58,6 +59,9 @@ class Cliente(models.Model):
         Localidad, on_delete=models.CASCADE, related_name='clientes')
     detalles = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ['nombre', 'apellido']
+
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
 
@@ -68,7 +72,6 @@ class Cliente(models.Model):
 class Proveedor(models.Model):
     cuit = models.CharField(max_length=13, unique=True)  # 20-37524377-7
     razon_social = models.CharField(max_length=64)
-    nombre_fantasia = models.CharField(max_length=128, blank=True)
     telefono = models.CharField(max_length=64)
     email = models.EmailField()
     calle = models.CharField(max_length=64)
@@ -84,7 +87,7 @@ class Proveedor(models.Model):
         return f"{self.razon_social}"
 
     def get_absolute_url(self):
-        return reverse('index')
+        return reverse('proveedor')
 
 
 class Insumo(models.Model):
