@@ -9,11 +9,13 @@ from .views import (
 from . import views
 
 urlpatterns = [
-    path('', ProveedorListView.as_view(), name='index'),
-    path('proveedor/new/', ProveedorCreateView.as_view(), name='create'),
-    path('proveedor/<int:pk>/', ProveedorDetailView.as_view(), name='detail'),
-    path('proveedor/<int:pk>/delete',
-         ProveedorDeleteView.as_view(), name='delete'),
-    path('proveedor/<int:pk>/update/',
-         ProveedorUpdateView.as_view(), name='update'),
+    path('', ProveedorListView.as_view(), name='proveedor'),
+    path('proveedores/new/',
+         ProveedorCreateView.as_view(), name='createProveedor'),
+    path('proveedores/<int:pk>/',
+         ProveedorDetailView.as_view(), name='detailProveedor'),
+    path('proveedores/<int:pk>/delete',
+         ProveedorDeleteView.as_view(), name='deleteProveedor'),
+    path('proveedores/<int:pk>/update/',
+         ProveedorUpdateView.as_view(), name='updateProveedor'),
 ]

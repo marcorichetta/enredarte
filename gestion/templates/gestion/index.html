@@ -1,10 +1,10 @@
 {% extends "gestion/layout.html" %}
 {% block content %}
 <div class="container">
-    <legend class="border-bottom mb-4">Proveedores <a href="{% url 'create' %}">+</a></legend>
+    <legend class="border-bottom mb-4">Proveedores <a href="{% url 'createProveedor' %}">+</a></legend>
 
     {% for prov in proveedores %}
-    <h4><a href="{% url 'detail' prov.id %}">{{prov.razon_social}}</a></h4>
+    <h4><a href="{% url 'detailProveedor' prov.id %}">{{prov.razon_social}}</a></h4>
         <ul class="list-group mb-4">
             <li>{{prov.email}}</li>
             <li>{{prov.telefono}}</li>
