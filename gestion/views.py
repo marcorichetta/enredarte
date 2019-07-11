@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     ListView,
     DetailView,
@@ -10,12 +11,17 @@ from .models import Proveedor
 # Create your views here.
 
 
+@login_required
+def index(request):
+
+    return render(request, 'gestion/index.html')
+
 class ProveedorListView(ListView):
     model = Proveedor
-    template_name = 'gestion/index.html'
+    template_name = 'gestion/proveedores.html'
     context_object_name = 'proveedores'
     ordering = ['razon_social']
-    paginate_by = 2
+    paginate_by = 3
 
 
 class ProveedorCreateView(CreateView):
