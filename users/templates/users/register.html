@@ -6,16 +6,16 @@
             {% csrf_token %}
 
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Create your user account</legend>
+                <legend class="border-bottom mb-4">Cree su nuevo usuario</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-primary" type="submit">Sign Up</button>
+                <button class="btn btn-outline-primary" type="submit">Crear usuario</button>
             </div>
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                Already have an account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+                ¿Ya tenés una cuenta? <a class="ml-2" href="{% url 'login' %}">Iniciar sesión</a>
             </small>
         </div>
     </div>
