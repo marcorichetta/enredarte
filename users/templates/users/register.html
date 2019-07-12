@@ -1,22 +1,21 @@
-{% extends "gestion/layout.html" %}
+{% extends "users/layout.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
+{% block title %}
+    Registrar usuario
+{% endblock title %}
+{% block inner %}
     <div>
         <form method="POST">
             {% csrf_token %}
 
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Cree su nuevo usuario</legend>
+                <legend class="border-bottom mb-4">Crear nuevo usuario</legend>
+                <p>Si ya tenés una cuenta, podes <a href="{% url 'login' %}">iniciar sesión</a>.</p>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-primary" type="submit">Crear usuario</button>
             </div>
         </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                ¿Ya tenés una cuenta? <a class="ml-2" href="{% url 'login' %}">Iniciar sesión</a>
-            </small>
-        </div>
     </div>
-{% endblock content %}
+{% endblock %}
