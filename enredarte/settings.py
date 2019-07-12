@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'gestion.apps.GestionConfig',
     'crispy_forms',
     'django_extensions',
+    'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,3 +137,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Override login redirect url
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
+
+# Debug Toolbar
+INTERNAL_IPS = ['127.0.0.1']
