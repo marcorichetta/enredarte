@@ -6,8 +6,9 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
+    TemplateView
 )
-from .models import Proveedor
+from .models import Proveedor, Cliente
 # Create your views here.
 
 
@@ -15,6 +16,19 @@ from .models import Proveedor
 def index(request):
 
     return render(request, 'gestion/index.html')
+
+
+class GeneralListView(TemplateView):
+    
+    template_name = "gestion/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GeneralListView, self).get_context_data(**kwargs)
+        context['clientes'] = Cliente.objects.all()
+        context['proveedores'] = Proveedor.objects.get_queryset()
+        return context
+    
+
 
 class ProveedorListView(ListView):
     model = Proveedor

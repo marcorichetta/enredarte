@@ -4,12 +4,14 @@ from .views import (
     ProveedorDetailView,
     ProveedorCreateView,
     ProveedorUpdateView,
-    ProveedorDeleteView
+    ProveedorDeleteView,
+    GeneralListView
 )
 from . import views
 
 urlpatterns = [
      path('', views.index, name='index'),
+     path('general', GeneralListView.as_view(), name='general'),
      path('proveedores', ProveedorListView.as_view(), name='proveedor'),
      path('proveedores/new/',
           ProveedorCreateView.as_view(), name='createProveedor'),

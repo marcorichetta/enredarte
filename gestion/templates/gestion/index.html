@@ -1,4 +1,22 @@
 {% extends "gestion/layout.html" %}
 {% block content %}
     <legend class="border-bottom mb-4">Enredarte</legend>
+
+    <h3>Clientes</h3>
+    <ul>
+        {% for c in clientes %}
+        <li>
+            {{ c }}
+        </li>
+        {% endfor %}
+    </ul>
+        
+    <h3>Proveedores</h3>
+    <ul>
+        {% for p in proveedores %}
+            <li>
+                {{ p }}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock content  %}
