@@ -5,13 +5,12 @@ from .views import (
     ProveedorCreateView,
     ProveedorUpdateView,
     ProveedorDeleteView,
-    GeneralListView
+    Dashboard
 )
 from . import views
 
 urlpatterns = [
-     path('', views.index, name='index'),
-     path('general', GeneralListView.as_view(), name='general'),
+     path('', Dashboard.as_view(), name='index'),
      path('proveedores', ProveedorListView.as_view(), name='proveedor'),
      path('proveedores/new/',
           ProveedorCreateView.as_view(), name='createProveedor'),

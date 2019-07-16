@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
     ListView,
     DetailView,
@@ -12,22 +12,16 @@ from .models import Proveedor, Cliente
 # Create your views here.
 
 
-@login_required
-def index(request):
+class Dashboard(LoginRequiredMixin, TemplateView):
+    """ Panel principal que contiene información útil para el usuario """
 
-    return render(request, 'gestion/index.html')
-
-
-class GeneralListView(TemplateView):
-    
-    template_name = "gestion/index.html"
+    template_name = "gestion/dashboard.html"
 
     def get_context_data(self, **kwargs):
-        context = super(GeneralListView, self).get_context_data(**kwargs)
+        context = super(Dashboard, self).get_context_data(**kwargs)
         context['clientes'] = Cliente.objects.all()
         context['proveedores'] = Proveedor.objects.get_queryset()
         return context
-    
 
 
 class ProveedorListView(ListView):
@@ -35,7 +29,7 @@ class ProveedorListView(ListView):
     template_name = 'gestion/proveedores.html'
     context_object_name = 'proveedores'
     ordering = ['razon_social']
-    paginate_by = 3
+    paginate_by = 10
 
 
 class ProveedorCreateView(CreateView):
