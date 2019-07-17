@@ -6,7 +6,7 @@
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{% url 'proveedor' %}">Proveedores</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Crear Proveedor</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social }}</li>
         </ol>
     </nav>
 
@@ -14,7 +14,7 @@
         <form method="POST">
             {% csrf_token %}
             <div class="row">
-                <legend class="border-bottom mb-3">Crear Proveedor</legend>
+                <legend class="border-bottom mb-3">Actualizar Proveedor</legend>
                 <div class="col-6">
                     {{ form|crispy }}
                 </div>

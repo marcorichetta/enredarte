@@ -26,26 +26,10 @@
           {% if request.user.is_authenticated %}
           <ul class="navbar-nav p-left">
             <li class="nav-item active">
-              <a class="nav-link" href="{% url 'index' %}">Inicio</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Menú
-                </a>
-                <div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores</a>
-                  <a class="dropdown-item" href="{% url 'proveedor' %}">Clientes</a>
-                </div>
-              </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
+              <a class="nav-link" href="{% url 'index' %}">Enredarte</a>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
-            <form class="form-inline">
-                <input class="form-control" type="search" placeholder="Ingrese su búsqueda" aria-label="Buscar">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-              </form>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{ user.username }}

@@ -34,7 +34,7 @@ class ProveedorListView(ListView):
 
 class ProveedorCreateView(CreateView):
     model = Proveedor
-    fields = ['razon_social', 'cuit', 'telefono', 'email',
+    fields = ['cuit', 'razon_social', 'telefono', 'email',
               'calle', 'numero', 'localidad']
 
 
@@ -45,6 +45,9 @@ class ProveedorDetailView(DetailView):
 class ProveedorUpdateView(UpdateView):
     model = Proveedor
     fields = '__all__'
+
+    # Modify the template used for update
+    template_name_suffix = '_update_form'
 
 
 class ProveedorDeleteView(DeleteView):

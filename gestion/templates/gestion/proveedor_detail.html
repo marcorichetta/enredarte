@@ -1,10 +1,33 @@
-{% extends "gestion/layout.html" %}
+{% extends "gestion/dashboard.html" %}
+{% load static %}
+
+
+{% block seccion %}
+    Información sobre {{ object.razon_social}}
+{% endblock seccion %}
+    
+
 {% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'proveedor' %}">Proveedores</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social}}</li>
+    </ol>
+  </nav>
+
 <div class="container">
     <legend class="border-bottom mb-4">
-        {{ object.razon_social}} 
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateProveedor' object.id %}">Editar información 🖉</a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteProveedor' object.id %}">Borrar X</a>
+        {{ object.razon_social}}
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateProveedor' object.id %}">
+            Editar información
+            <span data-feather="edit"></span>
+        </a>
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteProveedor' object.id %}">
+            Borrar
+            <span data-feather="trash"></span>
+        </a>
     </legend>
         <ul class="list-group mb-4">
             <li>{{object.email}}</li>

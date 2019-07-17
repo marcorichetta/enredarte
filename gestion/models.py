@@ -70,7 +70,8 @@ class Cliente(models.Model):
 
 
 class Proveedor(models.Model):
-    cuit = models.CharField(max_length=13, unique=True)  # 20-37524377-7
+    cuit = models.CharField(max_length=13, unique=True,
+        help_text="Ingrese el CUIT sin guíones")  # 20-37524377-7
     razon_social = models.CharField(max_length=64)
     telefono = models.CharField(max_length=64)
     email = models.EmailField()
