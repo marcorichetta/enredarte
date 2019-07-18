@@ -4,7 +4,6 @@ from .models import (
     Proveedor,
     Insumo,
     Unidad,
-    Cliente,
     Localidad,
     Provincia,
     EstadoPedido,
@@ -50,20 +49,6 @@ class EstadoPedidoAdmin(admin.ModelAdmin):
     list_display = ('id', 'descripcion', 'detalles')
 
 
-@admin.register(Cliente)
-class ClienteAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'nombre',
-        'apellido',
-        'email',
-        'telefono',
-        'calle',
-        'numero',
-        'localidad',
-    )
-    search_fields = ('nombre', 'apellido',)
-    list_display_links = ('nombre',)
 
 
 @admin.register(Proveedor)

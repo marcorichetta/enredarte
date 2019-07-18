@@ -41,3 +41,16 @@ python manage.py migrate
 
 python manage.py createsuperuser
 ```
+
+# Crear nueva App
+
+1. `python manage.py startapp <nombre>`
+2. Tratar de ir chequeando en el siguiente orden
+    1. `urls.py`
+    2. `views.py`
+    3. Templates
+    4. forms y `models.py`
+    5. Circular imports
+    6. db_table = "appvieja.nombre" Para mantener la misma tabla.
+    7. `makemigrations` y `migrate`
+    8. https://stackoverflow.com/questions/30981578/django-1-8-migrations-circulardependencyerror

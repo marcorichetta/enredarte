@@ -8,7 +8,7 @@ from django.views.generic import (
     DeleteView,
     TemplateView
 )
-from .models import Proveedor, Cliente
+from .models import Proveedor
 # Create your views here.
 
 
@@ -19,7 +19,6 @@ class Dashboard(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Dashboard, self).get_context_data(**kwargs)
-        context['clientes'] = Cliente.objects.all()
         context['proveedores'] = Proveedor.objects.get_queryset()
         return context
 

@@ -1,0 +1,17 @@
+{% extends "gestion/dashboard.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <legend class="border-bottom mb-4">Borrar Cliente</legend>
+                <h3>¿Seguro quiere eliminar <b>"{{ object.nombre }} {{ object.apellido }}"</b>?</h3>
+                <span class="form-text text-muted">Esta operación es irreversible.</span>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Borrar</button>
+                <a href="{% url 'detailCliente' object.id %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

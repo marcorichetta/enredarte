@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from .utils import validar_cuit
+from .helpers import validar_cuit
 
 # Create your models here.
 
@@ -50,25 +50,7 @@ class EstadoPedido(models.Model):
         return f"{self.descripcion}"
 
 
-class Cliente(models.Model):
-    nombre = models.CharField(max_length=64)
-    apellido = models.CharField(max_length=64)
-    email = models.EmailField()
-    telefono = models.CharField(max_length=64)
-    calle = models.CharField(max_length=64)
-    numero = models.CharField(max_length=6)
-    localidad = models.ForeignKey(
-        Localidad, on_delete=models.CASCADE, related_name='clientes')
-    detalles = models.TextField(blank=True)
 
-    class Meta:
-        ordering = ['nombre', 'apellido']
-
-    def __str__(self):
-        return f"{self.nombre} {self.apellido}"
-
-    def get_email(self):
-        return self.email
 
 
 class Proveedor(models.Model):
@@ -144,7 +126,7 @@ class InsumosProducto(models.Model):
 
 class Pedido(models.Model):
     fecha_pedido = models.DateField(auto_now_add=True)
-    cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE)
+    cliente = models.OneToOneField("clientes.Cliente", on_delete=models.CASCADE)
     estado_pedido = models.ForeignKey(
         EstadoPedido, on_delete=models.CASCADE, related_name='pedidos')
     productos_pedido = models.ManyToManyField(Producto)

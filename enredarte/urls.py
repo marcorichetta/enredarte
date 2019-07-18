@@ -17,8 +17,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
-from users import views as user_views
-
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
@@ -30,6 +28,8 @@ urlpatterns += [
 
     # Root
     path('', include('gestion.urls')),
+
+    path('clientes/', include('clientes.urls')),
 
     path('users/', include('users.urls')),
 ]
