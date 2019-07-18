@@ -28,7 +28,7 @@ class ProveedorListView(ListView):
     model = Proveedor
     template_name = 'gestion/proveedores.html'
     context_object_name = 'proveedores'
-    ordering = ['razon_social']
+    ordering = ['id']
     paginate_by = 10
 
 
@@ -46,7 +46,7 @@ class ProveedorUpdateView(UpdateView):
     model = Proveedor
     fields = '__all__'
 
-    # Modify the template used for update
+    # Modify the template used for this view
     template_name_suffix = '_update_form'
 
 

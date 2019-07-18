@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from .utils import validar_cuit
+
 # Create your models here.
 
 
@@ -71,7 +73,8 @@ class Cliente(models.Model):
 
 class Proveedor(models.Model):
     cuit = models.CharField(max_length=13, unique=True,
-        help_text="Ingrese el CUIT sin guíones")  # 20-37524377-7
+            validators=[validar_cuit],
+            help_text="Ingrese el CUIT con el siguiente formato: 20-12345678-9")
     razon_social = models.CharField(max_length=64)
     telefono = models.CharField(max_length=64)
     email = models.EmailField()

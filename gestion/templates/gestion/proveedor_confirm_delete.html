@@ -1,11 +1,12 @@
-{% extends "gestion/index.html" %}
+{% extends "gestion/dashboard.html" %}
 {% block content %}
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <legend class="border-bottom mb-4">Borrar Proveedor</legend>
-                <h3>¿Está seguro de eliminar <b>"{{ object.razon_social }}"</b>?</h3>
+                <h3>¿Seguro quiere eliminar <b>"{{ object.razon_social }}"</b>?</h3>
+                <span class="form-text text-muted">Esta operación es irreversible.</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-outline-danger" type="submit">Borrar</button>
