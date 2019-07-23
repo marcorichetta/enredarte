@@ -46,13 +46,29 @@ python manage.py createsuperuser
 
 1. `python manage.py startapp <nombre>`
 2. Añadir en `settings.py`
-3. Mover modelos principales
-4. Tratar de ir chequeando en el siguiente orden
+3. Modificar `urls.py` del proyecto
+4. Mover modelos principales
+5. Tratar de ir chequeando en el siguiente orden
     1. `views.py`
     2. `urls.py`
     3. Templates
     4. forms y `models.py`
-    5. Circular imports
-    6. db_table = "appvieja.nombre" Para mantener la misma tabla.
-    7. `makemigrations` y `migrate`
-    8. https://stackoverflow.com/questions/30981578/django-1-8-migrations-circulardependencyerror
+    5. `admin.py`
+    6. Circular imports
+    7. db_table = "appvieja.nombre" Para mantener la misma tabla.
+    8. `makemigrations` y `migrate`
+    9. https://stackoverflow.com/questions/30981578/django-1-8-migrations-circulardependencyerror
+
+## Errores
+***
+
+### AttributeError: 'ManyToManyField' object has no attribute 'm2m_reverse_field_name' (**Pérdida de datos**)
+[Solución](https://stackoverflow.com/a/37701209/6389248)
+
+### ValueError: Related model 'proveedores.Proveedor' cannot be resolved (**Pérdida de datos**)
+El modelo Proveedor no fue creado en la app proveedores al momento de correr
+esta migración.
+1- Borrar archivos de migración (Todos los creados)
+2- Comentar el campo ManyToMany en cuestión
+3- `makemigrations`
+4- `migrate`

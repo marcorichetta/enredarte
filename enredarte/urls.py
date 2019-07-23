@@ -33,5 +33,7 @@ urlpatterns += [
 
     path('productos/', include('productos.urls')),
 
+    path('proveedores', include('proveedores.urls')),
+
     path('users/', include('users.urls')),
 ]

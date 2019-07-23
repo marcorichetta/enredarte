@@ -8,7 +8,7 @@ from django.views.generic import (
     DeleteView,
     TemplateView
 )
-from .models import Proveedor
+from proveedores.models import Proveedor
 # Create your views here.
 
 
@@ -21,43 +21,3 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         context = super(Dashboard, self).get_context_data(**kwargs)
         context['proveedores'] = Proveedor.objects.get_queryset()
         return context
-
-
-class ProveedorListView(ListView):
-    model = Proveedor
-    template_name = 'gestion/proveedores.html'
-    context_object_name = 'proveedores'
-    ordering = ['id']
-    paginate_by = 10
-
-    def get_queryset(self):
-        """ Override queryset method to be able to respond
-            to search forms in proveedores.html """
-        queryset = super(ProveedorListView, self).get_queryset()
-
-        q = self.request.GET.get("q")
-        if q:
-            return queryset.filter(razon_social__icontains=q)
-        return queryset
-
-class ProveedorCreateView(CreateView):
-    model = Proveedor
-    fields = ['cuit', 'razon_social', 'telefono', 'email',
-              'calle', 'numero', 'localidad']
-
-
-class ProveedorDetailView(DetailView):
-    model = Proveedor
-
-
-class ProveedorUpdateView(UpdateView):
-    model = Proveedor
-    fields = '__all__'
-
-    # Modify the template used for this view
-    template_name_suffix = '_update_form'
-
-
-class ProveedorDeleteView(DeleteView):
-    model = Proveedor
-    success_url = '/'

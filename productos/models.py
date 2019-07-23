@@ -22,7 +22,7 @@ class Insumo(models.Model):
         Unidad, on_delete=models.CASCADE, default=3, related_name='unidades')
     precio = models.DecimalField(
         help_text='Precio en $', max_digits=6, decimal_places=2)
-    proveedores = models.ManyToManyField('gestion.Proveedor')
+    proveedores = models.ManyToManyField('proveedores.Proveedor')
 
     def __str__(self):
         if self.descripcion:
