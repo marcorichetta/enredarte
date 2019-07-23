@@ -9,6 +9,10 @@
     <h1 class="h2">Proveedores</h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
+        <form class="form-inline" action="{% url 'proveedor' %}" method="get">
+        <input class="form-control form-control-light w-100 ml-auto rounded-lg" name="q" type="text" placeholder="Buscar"
+        aria-label="Buscar Proveedores">
+            </form>
         <div class="btn-group mr-2">
           <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'createProveedor' %}">Crear</a>
           <button type="button" class="btn btn-sm btn-outline-secondary">Exportar</button>

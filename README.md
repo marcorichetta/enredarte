@@ -45,9 +45,11 @@ python manage.py createsuperuser
 # Crear nueva App
 
 1. `python manage.py startapp <nombre>`
-2. Tratar de ir chequeando en el siguiente orden
-    1. `urls.py`
-    2. `views.py`
+2. Añadir en `settings.py`
+3. Mover modelos principales
+4. Tratar de ir chequeando en el siguiente orden
+    1. `views.py`
+    2. `urls.py`
     3. Templates
     4. forms y `models.py`
     5. Circular imports

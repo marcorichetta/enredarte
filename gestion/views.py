@@ -30,6 +30,15 @@ class ProveedorListView(ListView):
     ordering = ['id']
     paginate_by = 10
 
+    def get_queryset(self):
+        """ Override queryset method to be able to respond
+            to search forms in proveedores.html """
+        queryset = super(ProveedorListView, self).get_queryset()
+
+        q = self.request.GET.get("q")
+        if q:
+            return queryset.filter(razon_social__icontains=q)
+        return queryset
 
 class ProveedorCreateView(CreateView):
     model = Proveedor

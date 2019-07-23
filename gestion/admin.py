@@ -2,23 +2,14 @@ from django.contrib import admin
 
 from .models import (
     Proveedor,
-    Insumo,
-    Unidad,
     Localidad,
     Provincia,
-    EstadoPedido,
-    Pedido,
-    Producto,
-    StockInsumo,
-    InsumosProducto
 )
 # Register your models here.
 # Password: enredarte
 
 
-@admin.register(Unidad)
-class UnidadAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre', 'descripcion')
+
 
 class LocalidadInline(admin.TabularInline):
     '''Tabular Inline View for Localidad'''
@@ -44,13 +35,6 @@ class LocalidadAdmin(admin.ModelAdmin):
     list_filter = ('provincia',)
 
 
-@admin.register(EstadoPedido)
-class EstadoPedidoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'descripcion', 'detalles')
-
-
-
-
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):
     list_display = (
@@ -67,39 +51,7 @@ class ProveedorAdmin(admin.ModelAdmin):
     list_display_links = ('cuit',)
     ordering = ('razon_social',)
 
-@admin.register(Insumo)
-class InsumoAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'nombre',
-        'descripcion',
-        'medida',
-        'unidad_medida',
-        'precio',
-    )
-    list_filter = ('unidad_medida',)
-    raw_id_fields = ('proveedores',)
-
-
-@admin.register(StockInsumo)
-class StockInsumoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'insumo', 'cantidad', 'detalles')
-    list_filter = ('insumo',)
-
-
-@admin.register(Producto)
-class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre', 'descripcion', 'precio')
-    raw_id_fields = ('insumos',)
-
-
-@admin.register(InsumosProducto)
-class InsumosProductoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'producto', 'insumo', 'cantidad')
-    list_filter = ('producto', 'insumo')
-
-
-@admin.register(Pedido)
+""" @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -109,4 +61,4 @@ class PedidoAdmin(admin.ModelAdmin):
         'precio_final',
     )
     list_filter = ('fecha_pedido', 'cliente', 'estado_pedido')
-    raw_id_fields = ('productos_pedido',)
+    raw_id_fields = ('productos_pedido',) """
