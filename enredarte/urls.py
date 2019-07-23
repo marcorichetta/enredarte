@@ -31,5 +31,7 @@ urlpatterns += [
 
     path('clientes/', include('clientes.urls')),
 
+    path('productos/', include('productos.urls')),
+
     path('users/', include('users.urls')),
 ]

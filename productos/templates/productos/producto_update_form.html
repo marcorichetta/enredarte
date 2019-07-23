@@ -1,0 +1,28 @@
+{% extends "gestion/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="d-grid p-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'producto' %}">Productos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social }}</li>
+        </ol>
+    </nav>
+
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <legend class="border-bottom mb-3">Actualizar Producto</legend>
+                <div class="col-6">
+                    {{ form|crispy }}
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

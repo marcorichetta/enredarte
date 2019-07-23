@@ -1,0 +1,40 @@
+{% extends "gestion/dashboard.html" %}
+{% load static %}
+
+
+{% block seccion %}
+    Información sobre {{ object.nombre }}
+{% endblock seccion %}
+    
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'producto' %}">Productos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }}</li>
+    </ol>
+  </nav>
+
+<div class="container">
+    <legend class="border-bottom mb-4">
+        {{ object.cod_producto }} - {{ object.nombre }}
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' object.id %}">
+            Editar información
+            <span data-feather="edit"></span>
+        </a>
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteProducto' object.id %}">
+            Borrar
+            <span data-feather="trash"></span>
+        </a>
+    </legend>
+        <ul class="list-group mb-4">
+            <li>{{object.estructura}}</li>
+            <li>{{object.precio}}</li>
+            {% if object.detalles %}
+                <li>{{object.detalles}}</li>
+            {% endif %}
+        </ul>
+</div>
+{% endblock content  %}
