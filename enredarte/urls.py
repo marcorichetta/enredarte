@@ -35,5 +35,7 @@ urlpatterns += [
 
     path('proveedores', include('proveedores.urls')),
 
+    path('pedidos', include('pedidos.urls')),
+
     path('users/', include('users.urls')),
 ]

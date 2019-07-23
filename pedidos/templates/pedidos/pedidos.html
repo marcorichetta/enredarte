@@ -2,19 +2,15 @@
 {% load static %}
 
 {% block title %}
-    Productos
+    Pedidos
 {% endblock title %}
 
 {% block content %}
-    <h1 class="h2">Productos</h1>
+    <h1 class="h2">Pedidos</h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <form action="{% url 'producto' %}" method="get">
-                <input type="text" name="q">
-                <button type="submit">Search</button>
-            </form>
-          <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'createProducto' %}">Crear</a>
+          <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'createPedido' %}">Crear</a>
           <button type="button" class="btn btn-sm btn-outline-secondary">Exportar</button>
         </div>
       </div>
@@ -24,19 +20,19 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Nombre</th>
-              <th>Tipo</th>
-              <th>Precio</th>
+              <th>Cliente</th>
+              <th>Estado</th>
+              <th>Actualizado</th>
             </tr>
           </thead>
           <tbody>
             
-            {% for prod in productos %}
+            {% for ped in pedidos %}
             <tr>
-              <td>{{ prod.cod_producto }}</td>
-              <td><a href="{% url 'detailProducto' prod.id %}">{{ prod.nombre }} </a></td>
-              <td>{{ prod.estructura }}</td>
-              <td>$ {{ prod.precio }}</td>
+              <td>{{ ped.id }}</td>
+              <td><a href="{% url 'detailPedido' ped.id %}">{{ ped.cliente }} </a></td>
+              <td>{{ ped.get_estado_display }}</td>
+              <td>{{ ped.actualizado }}</td>
             </tr>
             {% endfor %}
           </tbody>

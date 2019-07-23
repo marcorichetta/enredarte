@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 
 # Create your models here.
 
@@ -29,15 +28,3 @@ class Localidad(models.Model):
 
     def __str__(self):
         return self.localidad
-
-
-""" class Pedido(models.Model):
-    fecha_pedido = models.DateField(auto_now_add=True)
-    cliente = models.OneToOneField("clientes.Cliente", on_delete=models.CASCADE)
-    productos_pedido = models.ManyToManyField('productos.Producto')
-    precio_final = models.DecimalField(
-        help_text='Precio en $', max_digits=6, decimal_places=2)
-    detalles = models.TextField(blank=True)
-
-    def __str__(self):
-        return f"Pedido #{self.id}" """
