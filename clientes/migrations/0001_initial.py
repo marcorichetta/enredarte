@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('localidad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clientes', to='gestion.Localidad')),
             ],
             options={
-                'db_table': 'gestion_cliente',
+                'db_table': 'clientes_cliente',
                 'ordering': ['nombre', 'apellido'],
             },
         ),

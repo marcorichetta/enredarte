@@ -16,7 +16,6 @@ class Cliente(models.Model):
 
     class Meta:
         ordering = ['nombre', 'apellido']
-        db_table = "gestion_cliente"
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
