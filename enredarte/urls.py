@@ -33,9 +33,9 @@ urlpatterns += [
 
     path('productos/', include('productos.urls')),
 
-    path('proveedores', include('proveedores.urls')),
+    path('proveedores/', include('proveedores.urls')),
 
-    path('pedidos', include('pedidos.urls')),
+    path('pedidos/', include('pedidos.urls')),
 
     path('users/', include('users.urls')),
 ]
