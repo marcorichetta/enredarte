@@ -5,10 +5,15 @@ from .models import (
     Unidad,
     Producto,
     StockInsumo,
-    InsumosProducto
+    InsumosProducto,
+    ProductImage
 )
 # Register your models here.
 
+
+@admin.register(ProductImage)
+class ProductImage(admin.ModelAdmin):
+    list_display = ('producto', 'imagen')
 @admin.register(Unidad)
 class UnidadAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion')

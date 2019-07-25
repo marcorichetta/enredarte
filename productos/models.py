@@ -40,9 +40,11 @@ class StockInsumo(models.Model):
     def __str__(self):
         return f"{self.cantidad} - {self.insumo}"
 
-class Producto(AbstractProduct):
-    precio = models.DecimalField(
-        help_text='Precio en $', max_digits=6, decimal_places=2)
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=128)
+    descripcion = models.TextField(blank=True)
+    precio = models.PositiveIntegerField(help_text='Precio en $')
     insumos = models.ManyToManyField(Insumo, through='InsumosProducto')
 
     class Meta:
@@ -51,6 +53,65 @@ class Producto(AbstractProduct):
 
     def __str__(self):
         return f"{self.nombre} - {self.descripcion}"
+
+    def __unicode__(self):
+        return self.nombre
+    
+    def get_absolute_url(self):
+        return reverse('detailProducto', kwargs={'pk': self.pk})
+
+    def get_image_url(self):
+        img = self.productimage_set.first()
+        return img.imagen.url if img else img
+    
+    def save(self, *args, **kwargs):
+        super(Producto, self).save(*args, **kwargs)
+        if self.Variante_set.all().count() == 0:
+            Variante.objects.create(producto=self, precio=self.precio, nombre='Base')
+
+class Variante(models.Model):
+    """ Una variante esta asociada a un Producto Base.
+        Producto = Bandeja
+        Variante = Bandeja 30 * 20 * 50 
+    """
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=100)
+    precio = models.PositiveIntegerField()
+    precio_venta = models.PositiveIntegerField(null=True, blank=True)
+    stock = models.IntegerField(null=True, blank=True)  # None is unlimited
+
+    def __unicode__(self):
+        return self.nombre
+
+    def get_precio(self):
+        """
+        Devuelve el precio de venta si existe, sino devuelve el precio normal
+        """
+        return self.precio_venta if self.precio_venta else self.precio
+
+    def get_absolute_url(self):
+        # URL del Producto(FK)
+        return self.producto.get_absolute_url()
+
+    def get_nombre(self):
+        return f"{self.producto.nombre} - {self.nombre}"
+
+class ProductImage(models.Model):
+    """Model definition for ProductImage."""
+
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='productos/', null=True)
+
+    class Meta:
+        """Meta definition for ProductImage."""
+
+        verbose_name = 'Imagen de Producto'
+        verbose_name_plural = 'Imágenes de Producto'
+
+    def __str__(self):
+        """Unicode representation of ProductImage."""
+        return self.producto.nombre
+
 
 class InsumosProducto(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)

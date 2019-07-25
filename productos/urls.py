@@ -5,10 +5,13 @@ from .views import (
     ProductoCreateView,
     ProductoUpdateView,
     ProductoDeleteView,
+    VarianteListView
 )
 
 urlpatterns = [
      path('', ProductoListView.as_view(), name='producto'),
+     path('variantes/',
+         VarianteListView.as_view(), name='createVariante'),
      path('new/',
           ProductoCreateView.as_view(), name='createProducto'),
      path('<int:pk>/',

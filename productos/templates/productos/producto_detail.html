@@ -19,7 +19,7 @@
 
 <div class="container">
     <legend class="border-bottom mb-4">
-        {{ object.cod_producto }} - {{ object.nombre }}
+        {{ object.id }} - {{ object.nombre }}
         <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' object.id %}">
             Editar información
             <span data-feather="edit"></span>
@@ -29,12 +29,19 @@
             <span data-feather="trash"></span>
         </a>
     </legend>
-        <ul class="list-group mb-4">
-            <li>{{object.estructura}}</li>
-            <li>{{object.precio}}</li>
-            {% if object.detalles %}
-                <li>{{object.detalles}}</li>
-            {% endif %}
+
+    <div class="card" style="width: 18rem;">
+        {% if object.get_image_url %}
+            <img class="card-img-top" src="{{object.get_image_url}}" alt="{{object.nombre}}">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{object.nombre}}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{object.descripcion}}</li>
+            <li class="list-group-item">$ {{object.precio}}</li>
+            <li class="list-group-item">{{object.insumos}}</li>
         </ul>
+    </div>
 </div>
 {% endblock content  %}

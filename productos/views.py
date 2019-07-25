@@ -7,9 +7,9 @@ from django.views.generic import (
     DeleteView,
     TemplateView
 )
-from .models import Producto, Unidad, Insumo, InsumosProducto
+from .models import Producto, Unidad, Insumo, InsumosProducto, Variante
 
-from .forms import InsumosProductoFormset
+from .forms import InsumosProductoFormset, VarianteFormSet
 # Create your views here.
 
 class ProductoListView(ListView):
@@ -27,10 +27,23 @@ class ProductoListView(ListView):
             return queryset.filter(title__icontains=q)
         return queryset
 
+class VarianteListView(ListView):
+    model = Variante
+    template_name = 'productos/variantes.html'
+
+    def get_queryset(self, *args, **kwargs):
+        return Variante.objects.filter(producto_id=self.kwargs.get('id'))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VarianteListView, self).get_context_data(*args, **kwargs)
+        context['formset'] = VarianteFormSet(queryset=self.get_queryset())
+
+        return context
+
 class ProductoCreateView(CreateView):
     model = Producto
     fields = '__all__'
-    exclude = ['insumos']
+    """ exclude = ['insumos']
 
     def get_context_data(self, **kwargs):
         context = super(ProductoCreateView, self).get_context_data(**kwargs)
@@ -38,11 +51,15 @@ class ProductoCreateView(CreateView):
             context['insumos'] = InsumosProductoFormset(self.request.POST)
         else:
             context['insumos'] = InsumosProductoFormset()
-        return context
+        return context """
 
 
 class ProductoDetailView(DetailView):
     model = Producto
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductoDetailView, self).get_context_data(*args, **kwargs)
+        return context
 
 class ProductoUpdateView(UpdateView):
     model = Producto
