@@ -26,8 +26,15 @@ class Pedido(models.Model):
     class Meta:
         ordering = ['-fecha_pedido', '-actualizado']
 
-    """ def get_absolute_url(self):
-        return reverse("orders:detail", kwargs={'order_id': self.order_id}) """
+    def get_absolute_url(self):
+        return reverse('detailPedido', kwargs={'pk': self.id})
+
+    @property
+    def get_productos(self):
+        ''' Devuelve los productos relacionados a este pedido '''
+        productos = Pedido.objects.get(id=self.id).productos_pedido.all()
+
+        return productos
 
     def get_status(self):
         if self.estado == "pagado":

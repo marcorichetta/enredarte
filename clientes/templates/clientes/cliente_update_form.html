@@ -6,7 +6,7 @@
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{% url 'cliente' %}">Clientes</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }} {{ object.apellido }}</li>
         </ol>
     </nav>
 
