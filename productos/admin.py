@@ -6,10 +6,9 @@ from .models import (
     Producto,
     StockInsumo,
     InsumosProducto,
-    ProductImage
+    ProductImage,
 )
 # Register your models here.
-
 
 @admin.register(ProductImage)
 class ProductImage(admin.ModelAdmin):
@@ -51,7 +50,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion', 'precio')
     raw_id_fields = ('insumos',)
     inlines = [
-        InsumoInline,
+        InsumoInline
     ]
 
 

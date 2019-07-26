@@ -5,7 +5,6 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-    TemplateView
 )
 from .models import Producto, Unidad, Insumo, InsumosProducto, Variante
 
@@ -27,8 +26,9 @@ class ProductoListView(ListView):
             return queryset.filter(title__icontains=q)
         return queryset
 
-class VarianteListView(ListView):
+class VarianteListView(CreateView):
     model = Variante
+    fields = '__all__'
     template_name = 'productos/variantes.html'
 
     def get_queryset(self, *args, **kwargs):
@@ -40,18 +40,20 @@ class VarianteListView(ListView):
 
         return context
 
+    
+
 class ProductoCreateView(CreateView):
     model = Producto
     fields = '__all__'
-    """ exclude = ['insumos']
-
+    exclude = ['insumos']
+    
     def get_context_data(self, **kwargs):
         context = super(ProductoCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
             context['insumos'] = InsumosProductoFormset(self.request.POST)
         else:
             context['insumos'] = InsumosProductoFormset()
-        return context """
+        return context
 
 
 class ProductoDetailView(DetailView):
@@ -72,3 +74,20 @@ class ProductoUpdateView(UpdateView):
 class ProductoDeleteView(DeleteView):
     model = Producto
     success_url = '/'
+
+
+""" Armar views con un form de Producto y un formset para sus insumos
+    (Falta validar y guardar todo en su lugar)
+
+    class ProductoView(FormView):
+    template_name = 'productos/producto_test.html'
+    form_class = ProductoForm
+    success_url = 'producto'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductoView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['insumos'] = InsumosProductoFormset(self.request.POST)
+        else:
+            context['insumos'] = InsumosProductoFormset()
+        return context """

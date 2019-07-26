@@ -21,18 +21,22 @@
             <tr>
               <th>#</th>
               <th>Nombre</th>
-              <th>Tipo</th>
               <th>Precio</th>
+              <th>Imagen</th>
             </tr>
           </thead>
           <tbody>
             
             {% for prod in productos %}
             <tr>
-              <td>{{ prod.cod_producto }}</td>
+              <td>{{ prod.id }}</td>
               <td><a href="{% url 'detailProducto' prod.id %}">{{ prod.nombre }} </a></td>
-              <td>{{ prod.estructura }}</td>
               <td>$ {{ prod.precio }}</td>
+            {% if prod.get_image_url %}
+              <td><a href="{{prod.get_image_url}}">Ver imagen</a></td>
+            {% else %}
+              <td><a href="{% url 'imagenProducto' %}">Agregar imagen</a></td>  
+            {% endif %}
             </tr>
             {% endfor %}
           </tbody>

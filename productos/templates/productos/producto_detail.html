@@ -40,7 +40,9 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">{{object.descripcion}}</li>
             <li class="list-group-item">$ {{object.precio}}</li>
-            <li class="list-group-item">{{object.insumos}}</li>
+            {% for i in object.get_insumos %}
+                <li class="list-group-item">{{i}}</li>             
+            {% endfor %}
         </ul>
     </div>
 </div>

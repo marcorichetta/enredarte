@@ -12,7 +12,7 @@ VarianteFormSet = modelformset_factory(Variante, form=VarianteForm, extra=1)
 class ProductoForm(ModelForm):
     class Meta:
         model = Producto
-        exclude = ()
+        exclude = ('insumos',)
 
 InsumosProductoFormset = inlineformset_factory(
-    Producto, InsumosProducto, form=ProductoForm, extra=1)
+    Producto, InsumosProducto, form=ProductoForm, can_delete=False)
