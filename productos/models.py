@@ -50,6 +50,8 @@ class StockInsumo(models.Model):
 
 
 class Producto(models.Model):
+    """ Este modelo se refiere al Producto Genérico: Bandeja, Bastidor, Reloj """
+
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
     precio = models.PositiveIntegerField(help_text="Precio en $")
@@ -71,6 +73,13 @@ class Producto(models.Model):
     def get_image_url(self):
         img = self.productimage_set.first()
         return img.imagen.url if img else img
+    
+    def has_variants(self):
+        if self.variante_set.all().count == 0:
+            return False
+        variantes = self.variante_set.all()
+        
+        return variantes
 
     @property
     def get_insumos(self):
@@ -89,14 +98,16 @@ class Producto(models.Model):
 class Variante(models.Model):
     """ Una variante esta asociada a un Producto Base.
         Producto = Bandeja
-        Variante = Bandeja 30 * 20 * 50 
+        Variante = Bandeja 30 * 20 * 50
     """
 
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
     precio = models.PositiveIntegerField()
-    precio_venta = models.PositiveIntegerField(null=True, blank=True)
     stock = models.IntegerField(null=True, blank=True)  # None is unlimited
+
+    def __str__(self):
+        return self.nombre
 
     def __unicode__(self):
         return self.nombre
@@ -119,7 +130,7 @@ class ProductImage(models.Model):
     """Model definition for ProductImage."""
 
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    imagen = models.ImageField(upload_to="productos/", null=True)
+    imagen = models.ImageField(upload_to="productos/", blank=True)
 
     class Meta:
         """Meta definition for ProductImage."""

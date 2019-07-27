@@ -1,5 +1,4 @@
 {% extends "gestion/dashboard.html" %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 {% block title %}
@@ -7,18 +6,38 @@
 {% endblock title %}
 
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="row">
-            <legend class="border-bottom mb-3">Crear Variante de Producto</legend>
-            <div class="col-6">
-                {{ formset|crispy }}
-            </div>
-        </div>
-        
-        <input type="submit" class="btn btn-outline-success" value="Update">
+    <h1 class="h2">Variantes</h1>
 
-    </form>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'createVariante' %}">Crear</a>
+          <button type="button" class="btn btn-sm btn-outline-secondary">Exportar</button>
+        </div>
+      </div>
+    </div>
+<div class="table-responsive">
+        <table class="table table-striped table-md">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Producto Base</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            {% for var in variantes %}
+            <tr>
+              <td>{{ var.id }}</td>
+              <td>{{ var.producto }}</td>
+              <td><a href="{% url 'detailProducto' var.producto_id %}">{{ var.nombre }} </a></td>
+              <td>$ {{ var.precio }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
 
     <!-- PAGINATION -->
     {% if is_paginated %}

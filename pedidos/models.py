@@ -8,7 +8,7 @@ class Pedido(models.Model):
     ESTADO_PEDIDO_CHOICES = (
         ('creado', 'Creado'),    
         ('pagado', 'Pagado'),
-        ('enviado', 'Enviado'),
+        ('entregado', 'Entregado'),
     )
 
     cliente = models.ForeignKey("clientes.Cliente", on_delete=models.CASCADE)
@@ -39,6 +39,6 @@ class Pedido(models.Model):
     def get_status(self):
         if self.estado == "pagado":
             return "Pedido pagado"
-        elif self.estado == "enviado":
-            return "Pedido enviado"
+        elif self.estado == "entregado":
+            return "Pedido entregado"
         return "En proceso"

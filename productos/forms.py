@@ -5,7 +5,7 @@ from .models import *
 class VarianteForm(ModelForm):
     class Meta:
         model = Variante
-        fields = ('producto', 'nombre', 'precio', 'precio_venta', 'stock')
+        fields = ('producto', 'nombre', 'precio', 'stock')
 
 VarianteFormSet = modelformset_factory(Variante, form=VarianteForm, extra=1)
 
