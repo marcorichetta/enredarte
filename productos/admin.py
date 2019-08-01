@@ -7,24 +7,12 @@ from .models import (
     StockInsumo,
     InsumosProducto,
     ProductImage,
-    Variante
 )
 # Register your models here.
 
 @admin.register(ProductImage)
 class ProductImage(admin.ModelAdmin):
     list_display = ('producto', 'imagen')
-
-@admin.register(Variante)
-class VarianteAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'nombre',
-        'producto',
-        'precio',
-        'stock',
-    )
-    list_filter = ('producto',)
 
 @admin.register(Unidad)
 class UnidadAdmin(admin.ModelAdmin):

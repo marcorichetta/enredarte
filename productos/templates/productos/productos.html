@@ -22,7 +22,7 @@
               <th>#</th>
               <th>Nombre</th>
               <th>Precio</th>
-              <th>Variantes</th>
+              <th>Stock</th>
             </tr>
           </thead>
           <tbody>
@@ -32,11 +32,7 @@
               <td>{{ prod.id }}</td>
               <td><a href="{% url 'detailProducto' prod.id %}">{{ prod.nombre }} </a></td>
               <td>$ {{ prod.precio }}</td>
-            {% if prod.has_variants %}
-              <td><a href="{% url 'variante' prod.id %}">Ver variantes</a></td>
-            {% else %}
-              <td><a href="{% url 'createVariante' %}">Agregar variante</a></td>  
-            {% endif %}
+              <td>12</td>
             </tr>
             {% endfor %}
           </tbody>

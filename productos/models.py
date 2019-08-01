@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 from .abstract_models import *
 
@@ -34,7 +35,6 @@ class Insumo(models.Model):
             return f"{self.nombre} - {self.descripcion}"
         else:
             return self.nombre
-
 
 class StockInsumo(models.Model):
     """ Contiene la cantidad de insumos """
@@ -73,57 +73,12 @@ class Producto(models.Model):
     def get_image_url(self):
         img = self.productimage_set.first()
         return img.imagen.url if img else img
-    
-    def has_variants(self):
-        if self.variante_set.all().count == 0:
-            return False
-        variantes = self.variante_set.all()
-        
-        return variantes
 
     @property
     def get_insumos(self):
         insumos_producto = self.insumosproducto_set.all()
 
         return insumos_producto
-
-    def save(self, *args, **kwargs):
-        super(Producto, self).save(*args, **kwargs)
-        """ Si no existe una variante del producto, crear
-            una con ciertos parámetros."""
-        if self.variante_set.all().count() == 0:
-            Variante.objects.create(producto=self, precio=self.precio, nombre="Default")
-
-
-class Variante(models.Model):
-    """ Una variante esta asociada a un Producto Base.
-        Producto = Bandeja
-        Variante = Bandeja 30 * 20 * 50
-    """
-
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=100)
-    precio = models.PositiveIntegerField()
-    stock = models.IntegerField(null=True, blank=True)  # None is unlimited
-
-    def __str__(self):
-        return self.nombre
-
-    def __unicode__(self):
-        return self.nombre
-
-    def get_precio(self):
-        """
-        Devuelve el precio de venta si existe, sino devuelve el precio normal
-        """
-        return self.precio_venta if self.precio_venta else self.precio
-
-    def get_absolute_url(self):
-        # URL del Producto(FK)
-        return self.producto.get_absolute_url()
-
-    def get_nombre(self):
-        return f"{self.producto.nombre} - {self.nombre}"
 
 
 class ProductImage(models.Model):
@@ -156,3 +111,5 @@ class InsumosProducto(models.Model):
 # TODO
 # `forms.py` para crear productos que se relacionen
 # con los inusmos mediante InsumosProducto
+# porque ahora se crean los productos pero los insumos 
+# no se guardan.
