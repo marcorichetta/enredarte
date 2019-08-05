@@ -1,7 +1,14 @@
 from django.contrib import admin
 
-from .models import Pedido
+from .models import Pedido, ProductosPedido
 
+class ProductoInline(admin.TabularInline):
+    '''Tabular Inline View for Producto'''
+
+    model = ProductosPedido
+    min_num = 1
+    max_num = 20
+    extra = 1
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
@@ -16,3 +23,7 @@ class PedidoAdmin(admin.ModelAdmin):
     )
     list_filter = ('cliente', 'actualizado', 'fecha_pedido')
     raw_id_fields = ('productos_pedido',)
+
+    inlines = [
+        ProductoInline
+    ]

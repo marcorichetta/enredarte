@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.views.generic import (
     ListView,
     DetailView,
@@ -8,9 +9,14 @@ from django.views.generic import (
     TemplateView
 )
 
-from .models import Pedido
-# Create your views here.
+from .models import Pedido, ProductosPedido
+from extra_views import (
+    CreateWithInlinesView,
+    UpdateWithInlinesView,
+    InlineFormSetFactory,
+)
 
+# Create your views here.
 
 class PedidoListView(ListView):
     model = Pedido
@@ -27,20 +33,26 @@ class PedidoListView(ListView):
             return queryset.filter(title__icontains=q)
         return queryset
 
+class ProductosPedidoInline(InlineFormSetFactory):
+    model = ProductosPedido
+    fields = ['producto', 'cantidad']
+    factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
 
-class PedidoCreateView(CreateView):
+class PedidoCreateView(CreateWithInlinesView):
     model = Pedido
-    fields = '__all__'
+    inlines = [ProductosPedidoInline]
+    fields = ['cliente', 'precio_final', 'detalles', 'estado']
+    template_name = 'pedidos/pedido_form.html'
+
+class PedidoUpdateView(UpdateWithInlinesView):
+    model = Pedido
+    inlines = [ProductosPedidoInline]
+    fields = ['cliente', 'precio_final', 'detalles', 'estado']
+    template_name = 'pedidos/pedido_update_form.html'
+
 
 class PedidoDetailView(DetailView):
     model = Pedido
-
-class PedidoUpdateView(UpdateView):
-    model = Pedido
-    fields = '__all__'
-
-    # Modify the template used for this view
-    template_name_suffix = '_update_form'
 
 class PedidoDeleteView(DeleteView):
     model = Pedido

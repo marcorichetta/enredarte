@@ -55,7 +55,11 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
     precio = models.PositiveIntegerField(help_text="Precio en $")
-    insumos = models.ManyToManyField(Insumo, through="InsumosProducto")
+    
+    # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
+    insumos = models.ManyToManyField(Insumo, 
+                through="InsumosProducto", 
+                through_fields=('producto', 'insumo'))
 
     class Meta:
         verbose_name = "Producto"

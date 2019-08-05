@@ -12,7 +12,7 @@ class Pedido(models.Model):
     )
 
     cliente = models.ForeignKey("clientes.Cliente", on_delete=models.CASCADE)
-    productos_pedido = models.ManyToManyField('productos.Producto')
+    productos_pedido = models.ManyToManyField('productos.Producto', through="ProductosPedido")
     precio_final = models.DecimalField(
         help_text='Precio en $', max_digits=6, decimal_places=2)
     detalles = models.TextField(blank=True)
@@ -42,3 +42,11 @@ class Pedido(models.Model):
         elif self.estado == "entregado":
             return "Pedido entregado"
         return "En proceso"
+
+class ProductosPedido(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    producto = models.ForeignKey('productos.Producto', on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.cantidad} - {self.producto.nombre}"
