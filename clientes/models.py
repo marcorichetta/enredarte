@@ -6,10 +6,10 @@ from django.urls import reverse
 class Cliente(models.Model):
     nombre = models.CharField(max_length=64)
     apellido = models.CharField(max_length=64)
-    email = models.EmailField()
-    telefono = models.CharField(max_length=64)
-    calle = models.CharField(max_length=64)
-    numero = models.CharField(max_length=6)
+    email = models.EmailField(blank=True)
+    telefono = models.CharField(max_length=64, blank=True)
+    calle = models.CharField(max_length=64, blank=True)
+    numero = models.CharField(max_length=6, blank=True)
     localidad = models.ForeignKey(
         "gestion.Localidad", on_delete=models.CASCADE, related_name='clientes')
     detalles = models.TextField(blank=True)
