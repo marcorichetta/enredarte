@@ -22,7 +22,7 @@ class PedidoAdmin(admin.ModelAdmin):
         'fecha_pedido',
     )
     list_filter = ('cliente', 'actualizado', 'fecha_pedido')
-    raw_id_fields = ('productos_pedido',)
+    autocomplete_fields = ['productos_pedido']
 
     inlines = [
         ProductoInline

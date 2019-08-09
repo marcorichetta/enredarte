@@ -49,7 +49,9 @@ class InsumoInline(admin.TabularInline):
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion', 'precio')
+
     raw_id_fields = ('insumos',)
+    search_fields = ['id']
     inlines = [
         InsumoInline
     ]

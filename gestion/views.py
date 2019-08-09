@@ -22,6 +22,6 @@ class Dashboard(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Dashboard, self).get_context_data(**kwargs)
-        context['pedidos'] = Pedido.objects.get_queryset()
+        context['pedidos'] = Pedido.objects.get_queryset()[:5]
         context['clientes'] = Cliente.objects.get_queryset()
         return context

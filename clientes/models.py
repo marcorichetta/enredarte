@@ -13,6 +13,7 @@ class Cliente(models.Model):
     localidad = models.ForeignKey(
         "gestion.Localidad", on_delete=models.CASCADE, related_name='clientes')
     detalles = models.TextField(blank=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
 
     class Meta:
         ordering = ['nombre', 'apellido']

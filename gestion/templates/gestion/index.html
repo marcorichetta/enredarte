@@ -20,7 +20,7 @@ Enredarte
                 </div>
                 <ul class="list-group list-group-flush">
                     {% for p in pedidos %}
-                    <li class="list-group-item">Pedido #{{ p.id }}</li>
+                    <li class="list-group-item">Pedido #{{ p.id }} {{ p.estado }}</li>
                     {% endfor %}
 
                 </ul>

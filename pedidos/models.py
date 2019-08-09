@@ -17,7 +17,7 @@ class Pedido(models.Model):
         help_text='Precio en $', max_digits=6, decimal_places=2)
     detalles = models.TextField(blank=True)
     estado = models.CharField(max_length=64, default='creado', choices=ESTADO_PEDIDO_CHOICES)
-    actualizado = models.DateTimeField(auto_now=True)
+    actualizado = models.DateTimeField(auto_now=True, help_text="Última vez actualizado")
     fecha_pedido = models.DateField(auto_now_add=True)
 
     def __str__(self):

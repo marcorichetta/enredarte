@@ -14,6 +14,8 @@ class ClienteAdmin(admin.ModelAdmin):
         'calle',
         'numero',
         'localidad',
+        'fecha_creacion',
     )
     search_fields = ('nombre', 'apellido',)
+    list_filter = ('fecha_creacion',)
     list_display_links = ('nombre',)

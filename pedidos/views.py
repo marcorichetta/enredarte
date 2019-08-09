@@ -41,7 +41,7 @@ class ProductosPedidoInline(InlineFormSetFactory):
 class PedidoCreateView(CreateWithInlinesView):
     model = Pedido
     inlines = [ProductosPedidoInline]
-    fields = ['cliente', 'precio_final', 'detalles', 'estado']
+    fields = ['id', 'cliente', 'precio_final', 'detalles', 'estado']
     template_name = 'pedidos/pedido_form.html'
 
 class PedidoUpdateView(UpdateWithInlinesView):

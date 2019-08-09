@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 
 from django.views.generic import (
     ListView,
@@ -19,6 +20,19 @@ class ClienteListView(ListView):
     ordering = ['id']
     paginate_by = 10
 
+    def get_queryset(self):
+        queryset = super(ClienteListView, self).get_queryset()
+
+        # Permite buscar en un form dentro de la misma página
+        # con el formato q?<nombre-del-producto>
+        query = self.request.GET.get("q")
+        if query:
+            return queryset.filter(
+                Q(nombre__icontains=query) |
+                Q(apellido__icontains=query) |
+                Q(email__icontains=query)
+            )
+        return queryset
 
 class ClienteCreateView(CreateView):
     model = Cliente
