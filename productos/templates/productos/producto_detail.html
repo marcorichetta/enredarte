@@ -43,6 +43,10 @@
             {% for i in object.get_insumos %}
                 <li class="list-group-item">{{i}}</li>             
             {% endfor %}
+            <h5 class="alert alert-info">Medidas</h5>
+            {% for c in object.get_caracteristicas %}
+                <li class="list-group-item">{{c}}</li>
+            {% endfor %}
         </ul>
     </div>
 </div>

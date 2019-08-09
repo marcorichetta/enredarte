@@ -36,6 +36,23 @@ class Insumo(models.Model):
         else:
             return self.nombre
 
+class Caracteristica(models.Model):
+    """Model definition for Caracteristica."""
+
+    nombre = models.CharField(max_length=64, help_text="Ejemplo: Largo, Alto")
+    detalles = models.TextField(blank=True)
+
+    class Meta:
+        """Meta definition for Caracteristica."""
+
+        verbose_name = 'Caracteristica'
+        verbose_name_plural = 'Caracteristicas'
+
+    def __str__(self):
+        """Unicode representation of Caracteristica."""
+        return self.nombre
+
+
 class StockInsumo(models.Model):
     """ Contiene la cantidad de insumos """
 
@@ -57,9 +74,13 @@ class Producto(models.Model):
     precio = models.PositiveIntegerField(help_text="Precio en $")
     
     # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
-    insumos = models.ManyToManyField(Insumo, 
-                through="InsumosProducto", 
+    insumos = models.ManyToManyField(Insumo,
+                through="InsumosProducto",
                 through_fields=('producto', 'insumo'))
+
+    caracteristicas = models.ManyToManyField(Caracteristica,
+                through="CaracteristicasProducto",
+                through_fields=('producto', 'caracteristica'))
 
     class Meta:
         verbose_name = "Producto"
@@ -83,7 +104,14 @@ class Producto(models.Model):
         insumos_producto = self.insumosproducto_set.all()
 
         return insumos_producto
+    
+    @property
+    def get_caracteristicas(self):
+        """ Utilizado en template para obtener las caracteristicas del producto """ 
+        
+        caracteristicas_producto = self.caracteristicasproducto_set.all()
 
+        return caracteristicas_producto
 
 class ProductImage(models.Model):
     """Model definition for ProductImage."""
@@ -112,8 +140,10 @@ class InsumosProducto(models.Model):
             por cada {self.producto.nombre}"
 
 
-# TODO
-# `forms.py` para crear productos que se relacionen
-# con los inusmos mediante InsumosProducto
-# porque ahora se crean los productos pero los insumos 
-# no se guardan.
+class CaracteristicasProducto(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    caracteristica = models.ForeignKey(Caracteristica, on_delete=models.CASCADE)
+    valor = models.PositiveIntegerField(help_text="Valor de la medida en cm para el producto")
+
+    def __str__(self):
+        return f"{self.caracteristica.nombre}: {self.valor}"

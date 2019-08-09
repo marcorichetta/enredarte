@@ -7,6 +7,8 @@ from .models import (
     StockInsumo,
     InsumosProducto,
     ProductImage,
+    Caracteristica,
+    CaracteristicasProducto
 )
 # Register your models here.
 
@@ -46,6 +48,15 @@ class InsumoInline(admin.TabularInline):
     extra = 1
     raw_id_fields = ()
 
+class CaracteristicaInline(admin.TabularInline):
+    '''Tabular Inline View for Caracteristica'''
+
+    model = CaracteristicasProducto
+    min_num = 3
+    max_num = 20
+    extra = 1
+    raw_id_fields = ()
+
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion', 'precio')
@@ -53,12 +64,20 @@ class ProductoAdmin(admin.ModelAdmin):
     raw_id_fields = ('insumos',)
     search_fields = ['id']
     inlines = [
+        CaracteristicaInline,
         InsumoInline
     ]
-
-
 
 @admin.register(InsumosProducto)
 class InsumosProductoAdmin(admin.ModelAdmin):
     list_display = ('id', 'producto', 'insumo', 'cantidad')
     list_filter = ('producto', 'insumo')
+
+@admin.register(Caracteristica)
+class CaracteristicaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre', 'detalles')
+    
+@admin.register(CaracteristicasProducto)
+class CaracteristicasProductoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'producto', 'caracteristica', 'valor')
+    list_filter = ('producto', 'caracteristica')

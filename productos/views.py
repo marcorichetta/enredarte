@@ -6,7 +6,20 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Producto, Unidad, Insumo, InsumosProducto
+from .models import (
+    Producto,
+    Unidad,
+    Insumo,
+    InsumosProducto,
+    Caracteristica,
+    CaracteristicasProducto,
+)
+
+from extra_views import (
+    CreateWithInlinesView,
+    UpdateWithInlinesView,
+    InlineFormSetFactory,
+)
 
 from .forms import InsumosProductoFormset
 # Create your views here.
@@ -28,19 +41,24 @@ class ProductoListView(ListView):
             return queryset.filter(title__icontains=q)
         return queryset
 
-class ProductoCreateView(CreateView):
-    model = Producto
-    fields = '__all__'
-    exclude = ['insumos']
-    
-    def get_context_data(self, **kwargs):
-        context = super(ProductoCreateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['insumos'] = InsumosProductoFormset(self.request.POST)
-        else:
-            context['insumos'] = InsumosProductoFormset()
-        return context
+class CaracteristicasProductoInline(InlineFormSetFactory):
+    model = CaracteristicasProducto
+    fields = ['caracteristica', 'valor']
+    factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
 
+class InsumosProductoInline(InlineFormSetFactory):
+    model = InsumosProducto
+    fields = ['insumo', 'cantidad']
+    factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
+
+class ProductoCreateView(CreateWithInlinesView):
+    model = Producto
+    inlines = [
+        CaracteristicasProductoInline,
+        InsumosProductoInline
+        ]
+    fields = ['nombre', 'descripcion', 'precio']
+    template_name = 'productos/producto_form.html'
 
 class ProductoDetailView(DetailView):
     model = Producto
