@@ -1,0 +1,48 @@
+{% extends "gestion/dashboard.html" %}
+{% load static %}
+
+
+{% block seccion %}
+    Información sobre {{ object.nombre }}
+{% endblock seccion %}
+    
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'pedido' %}">Pedidos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Pedido #{{ object.id }}</li>
+    </ol>
+  </nav>
+
+<div class="container">
+    <legend class="border-bottom mb-4">
+        {{ object.id }} - {{ object.cliente }}
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updatePedido' object.id %}">
+            Editar información
+            <span data-feather="edit"></span>
+        </a>
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'deletePedido' object.id %}">
+            Borrar
+            <span data-feather="trash"></span>
+        </a>
+    </legend>
+        <ul class="list-group mb-4">
+            <li>Fecha: {{object.fecha_pedido}}</li>
+            
+            <h5>Productos</h5>
+            <!-- p es una referencia a cada producto -->
+            {% for p in object.get_productos %}
+                <li>{{p.nombre}} - {{p.descripcion}}</li>
+            {% endfor %}
+            
+            <h5>Estado</h5>
+            <li>{{object.estado}}</li>
+            {% if object.detalles %}
+                <li>{{object.detalles}}</li>
+            {% endif %}
+        </ul>
+</div>
+{% endblock content  %}

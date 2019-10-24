@@ -32,6 +32,9 @@ class InsumoAdmin(admin.ModelAdmin):
     )
     list_filter = ('unidad_medida',)
     raw_id_fields = ('proveedores',)
+    
+    ## Autocompletion on CompraAdmin
+    search_fields = ('nombre',)
 
 
 @admin.register(StockInsumo)

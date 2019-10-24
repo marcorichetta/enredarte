@@ -34,12 +34,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users.apps.UsersConfig',
-    'productos.apps.ProductosConfig',
-    'clientes.apps.ClientesConfig',
-    'proveedores.apps.ProveedoresConfig',
-    'pedidos.apps.PedidosConfig',
-    'gestion.apps.GestionConfig',
+    'users',
+    'productos',
+    'clientes',
+    'proveedores',
+    'pedidos',
+    'compras',
+    'gestion',
     'crispy_forms',
     'django_extensions',
     'debug_toolbar',
