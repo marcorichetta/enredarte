@@ -5,7 +5,7 @@
 {% block head %}
 {{ form.media.css }}
 <style type="text/css">
-    select {
+    .select2 {
         width: 200px;
     }
 </style>
@@ -21,7 +21,7 @@
         <div class="row">
             <legend class="border-bottom mb-3">Crear Variante de Producto</legend>
             <div class="col-6">
-                {{ form|crispy }}
+                {{ form.provincia }}
             </div>
         </div>
         

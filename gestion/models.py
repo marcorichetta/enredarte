@@ -2,8 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-
-
 class Provincia(models.Model):
     cod_provincia = models.CharField(max_length=10, blank=False, default='AR-')
     provincia = models.CharField(

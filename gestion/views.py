@@ -1,19 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView
+    TemplateView,
+    FormView
 )
 from proveedores.models import Proveedor
 from pedidos.models import Pedido
 from clientes.models import Cliente
 
-# Create your views here.
 
+# Create your views here.
 
 class Dashboard(LoginRequiredMixin, TemplateView):
     """ Panel principal que contiene información útil para el usuario """
@@ -25,3 +21,6 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         context['pedidos'] = Pedido.objects.get_queryset()[:5]
         context['clientes'] = Cliente.objects.get_queryset()
         return context
+
+class ViewPrueba(FormView):
+    template_name = 'gestion/prueba_select2.html'

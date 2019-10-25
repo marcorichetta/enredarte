@@ -3,6 +3,10 @@
 <html lang="en">
 
 <head>
+  
+  {% block head %}
+    <!-- Select2 -->
+  {% endblock head %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{% block title %}Enredarte{% endblock %}</title>
@@ -173,6 +177,12 @@
   <!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
  -->
   <script src="{% static 'js/dashboard.js' %}"></script>
+
+  
+  {% block endbody %}
+    <!-- Block for select2 -->
+  {% endblock endbody %}
+    
 </body>
 
 </html>
