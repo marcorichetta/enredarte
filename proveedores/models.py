@@ -14,8 +14,10 @@ class Proveedor(models.Model):
     email = models.EmailField()
     calle = models.CharField(max_length=64)
     numero = models.CharField(max_length=4)
+    """ Para eliminar una localidad, primero hay que
+        eliminar todos los proveedores de la misma """
     localidad = models.ForeignKey(
-        'gestion.Localidad', on_delete=models.CASCADE, related_name='proveedores')
+        'gestion.Localidad', on_delete=models.PROTECT, related_name='proveedores')
     detalles = models.TextField(blank=True)
 
     class Meta:

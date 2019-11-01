@@ -10,8 +10,10 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=64, blank=True)
     calle = models.CharField(max_length=64, blank=True)
     numero = models.CharField(max_length=6, blank=True)
+    """ Para eliminar una localidad, primero hay que
+        eliminar todos los clientes de la misma """
     localidad = models.ForeignKey(
-        "gestion.Localidad", on_delete=models.CASCADE, related_name='clientes')
+        "gestion.Localidad", on_delete=models.PROTECT, related_name='clientes')
     detalles = models.TextField(blank=True)
     fecha_creacion = models.DateField(auto_now_add=True)
 

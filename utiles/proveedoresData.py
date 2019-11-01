@@ -16,7 +16,7 @@
 # Also, don't forget to add the necessary Django imports.
 #
 # This file was generated with the following command:
-# ./manage.py dumpscript gestion.Proveedor
+# ./manage.py dumpscript proveedores.Proveedor
 #
 # to restore it, run
 # manage.py runscript module_name.this_script_name
@@ -129,106 +129,105 @@ def import_data():
     # Initial Imports
     from gestion.models import Localidad
 
-    # Processing model: gestion.models.Proveedor
+    # Processing model: proveedores.models.Proveedor
 
-    from gestion.models import Proveedor
+    from proveedores.models import Proveedor
 
-    gestion_proveedor_1 = Proveedor()
-    gestion_proveedor_1.cuit = '30-4219859-3'
-    gestion_proveedor_1.razon_social = 'ALEMANN S.R.L.'
-    gestion_proveedor_1.telefono = '123456789'
-    gestion_proveedor_1.email = 'empresa@proveedor.com'
-    gestion_proveedor_1.calle = 'Sarmiento'
-    gestion_proveedor_1.numero = '789'
-    gestion_proveedor_1.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 421, {'id': 421, 'cod_postal': '5000', 'localidad': 'CORDOBA', 'provincia_id': 6} ) 
-    gestion_proveedor_1.detalles = ''
-    gestion_proveedor_1 = importer.save_or_locate(gestion_proveedor_1)
+    proveedores_proveedor_1 = Proveedor()
+    proveedores_proveedor_1.cuit = '30-4219859-3'
+    proveedores_proveedor_1.razon_social = 'ALEMANN S.R.L.'
+    proveedores_proveedor_1.telefono = '123456789'
+    proveedores_proveedor_1.email = 'empresa@proveedor.com'
+    proveedores_proveedor_1.calle = 'Sarmiento'
+    proveedores_proveedor_1.numero = '789'
+    proveedores_proveedor_1.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 421, {'id': 421, 'cod_postal': '5000', 'localidad': 'CORDOBA', 'provincia_id': 6} ) 
+    proveedores_proveedor_1.detalles = ''
+    proveedores_proveedor_1 = importer.save_or_locate(proveedores_proveedor_1)
 
-    gestion_proveedor_2 = Proveedor()
-    gestion_proveedor_2.cuit = '30-59895662-2'
-    gestion_proveedor_2.razon_social = 'VIA PUBLICA CLAN S.A.'
-    gestion_proveedor_2.telefono = '123456789'
-    gestion_proveedor_2.email = 'empresa@proveedor.com'
-    gestion_proveedor_2.calle = 'Sarmiento'
-    gestion_proveedor_2.numero = '789'
-    gestion_proveedor_2.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 421, {'id': 421, 'cod_postal': '5000', 'localidad': 'CORDOBA', 'provincia_id': 6} ) 
-    gestion_proveedor_2.detalles = ''
-    gestion_proveedor_2 = importer.save_or_locate(gestion_proveedor_2)
+    proveedores_proveedor_2 = Proveedor()
+    proveedores_proveedor_2.cuit = '30-59895662-2'
+    proveedores_proveedor_2.razon_social = 'VIA PUBLICA CLAN S.A.'
+    proveedores_proveedor_2.telefono = '123456789'
+    proveedores_proveedor_2.email = 'empresa@proveedor.com'
+    proveedores_proveedor_2.calle = 'Sarmiento'
+    proveedores_proveedor_2.numero = '789'
+    proveedores_proveedor_2.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 421, {'id': 421, 'cod_postal': '5000', 'localidad': 'CORDOBA', 'provincia_id': 6} ) 
+    proveedores_proveedor_2.detalles = ''
+    proveedores_proveedor_2 = importer.save_or_locate(proveedores_proveedor_2)
 
-    gestion_proveedor_3 = Proveedor()
-    gestion_proveedor_3.cuit = '30-50259063-0'
-    gestion_proveedor_3.razon_social = 'ATACAMA SA DE PUBLICIDAD'
-    gestion_proveedor_3.telefono = '123456789'
-    gestion_proveedor_3.email = 'empresa@proveedor.com'
-    gestion_proveedor_3.calle = 'Sarmiento'
-    gestion_proveedor_3.numero = '789'
-    gestion_proveedor_3.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 421, {'id': 421, 'cod_postal': '5000', 'localidad': 'CORDOBA', 'provincia_id': 6} ) 
-    gestion_proveedor_3.detalles = ''
-    gestion_proveedor_3 = importer.save_or_locate(gestion_proveedor_3)
+    proveedores_proveedor_3 = Proveedor()
+    proveedores_proveedor_3.cuit = '30-50259063-0'
+    proveedores_proveedor_3.razon_social = 'ATACAMA SA DE PUBLICIDAD'
+    proveedores_proveedor_3.telefono = '123456789'
+    proveedores_proveedor_3.email = 'empresa@proveedor.com'
+    proveedores_proveedor_3.calle = 'Sarmiento'
+    proveedores_proveedor_3.numero = '789'
+    proveedores_proveedor_3.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 421, {'id': 421, 'cod_postal': '5000', 'localidad': 'CORDOBA', 'provincia_id': 6} ) 
+    proveedores_proveedor_3.detalles = ''
+    proveedores_proveedor_3 = importer.save_or_locate(proveedores_proveedor_3)
 
-    gestion_proveedor_4 = Proveedor()
-    gestion_proveedor_4.cuit = '30-60917843-0'
-    gestion_proveedor_4.razon_social = 'America TV S.A.'
-    gestion_proveedor_4.telefono = '123456789'
-    gestion_proveedor_4.email = 'empresa@proveedor.com'
-    gestion_proveedor_4.calle = 'San Juan'
-    gestion_proveedor_4.numero = '789'
-    gestion_proveedor_4.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1584, {'id': 1584, 'cod_postal': '5800', 'localidad': 'RIO CUARTO', 'provincia_id': 6} ) 
-    gestion_proveedor_4.detalles = ''
-    gestion_proveedor_4 = importer.save_or_locate(gestion_proveedor_4)
+    proveedores_proveedor_4 = Proveedor()
+    proveedores_proveedor_4.cuit = '30-60917843-0'
+    proveedores_proveedor_4.razon_social = 'America TV S.A.'
+    proveedores_proveedor_4.telefono = '123456789'
+    proveedores_proveedor_4.email = 'empresa@proveedor.com'
+    proveedores_proveedor_4.calle = 'San Juan'
+    proveedores_proveedor_4.numero = '789'
+    proveedores_proveedor_4.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1584, {'id': 1584, 'cod_postal': '5800', 'localidad': 'RIO CUARTO', 'provincia_id': 6} ) 
+    proveedores_proveedor_4.detalles = ''
+    proveedores_proveedor_4 = importer.save_or_locate(proveedores_proveedor_4)
 
-    gestion_proveedor_5 = Proveedor()
-    gestion_proveedor_5.cuit = '30-64391342-5'
-    gestion_proveedor_5.razon_social = 'Red Celeste y Blanca S.A.'
-    gestion_proveedor_5.telefono = '123456789'
-    gestion_proveedor_5.email = 'empresa@proveedor.com'
-    gestion_proveedor_5.calle = 'San Juan'
-    gestion_proveedor_5.numero = '789'
-    gestion_proveedor_5.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1584, {'id': 1584, 'cod_postal': '5800', 'localidad': 'RIO CUARTO', 'provincia_id': 6} ) 
-    gestion_proveedor_5.detalles = ''
-    gestion_proveedor_5 = importer.save_or_locate(gestion_proveedor_5)
+    proveedores_proveedor_5 = Proveedor()
+    proveedores_proveedor_5.cuit = '30-64391342-5'
+    proveedores_proveedor_5.razon_social = 'Red Celeste y Blanca S.A.'
+    proveedores_proveedor_5.telefono = '123456789'
+    proveedores_proveedor_5.email = 'empresa@proveedor.com'
+    proveedores_proveedor_5.calle = 'San Juan'
+    proveedores_proveedor_5.numero = '789'
+    proveedores_proveedor_5.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1584, {'id': 1584, 'cod_postal': '5800', 'localidad': 'RIO CUARTO', 'provincia_id': 6} ) 
+    proveedores_proveedor_5.detalles = ''
+    proveedores_proveedor_5 = importer.save_or_locate(proveedores_proveedor_5)
 
-    gestion_proveedor_6 = Proveedor()
-    gestion_proveedor_6.cuit = '30-54257223-6'
-    gestion_proveedor_6.razon_social = 'Junin TV S.A.'
-    gestion_proveedor_6.telefono = '123456789'
-    gestion_proveedor_6.email = 'empresa@proveedor.com'
-    gestion_proveedor_6.calle = 'San Juan'
-    gestion_proveedor_6.numero = '123'
-    gestion_proveedor_6.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1584, {'id': 1584, 'cod_postal': '5800', 'localidad': 'RIO CUARTO', 'provincia_id': 6} ) 
-    gestion_proveedor_6.detalles = ''
-    gestion_proveedor_6 = importer.save_or_locate(gestion_proveedor_6)
+    proveedores_proveedor_6 = Proveedor()
+    proveedores_proveedor_6.cuit = '30-54257223-6'
+    proveedores_proveedor_6.razon_social = 'Junin TV S.A.'
+    proveedores_proveedor_6.telefono = '123456789'
+    proveedores_proveedor_6.email = 'empresa@proveedor.com'
+    proveedores_proveedor_6.calle = 'San Juan'
+    proveedores_proveedor_6.numero = '123'
+    proveedores_proveedor_6.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1584, {'id': 1584, 'cod_postal': '5800', 'localidad': 'RIO CUARTO', 'provincia_id': 6} ) 
+    proveedores_proveedor_6.detalles = ''
+    proveedores_proveedor_6 = importer.save_or_locate(proveedores_proveedor_6)
 
-    gestion_proveedor_7 = Proveedor()
-    gestion_proveedor_7.cuit = '30-68296025-2'
-    gestion_proveedor_7.razon_social = 'e.a. carnevale y cia s.a.'
-    gestion_proveedor_7.telefono = '123456789'
-    gestion_proveedor_7.email = 'empresa@proveedor.com'
-    gestion_proveedor_7.calle = 'Belgrano'
-    gestion_proveedor_7.numero = '123'
-    gestion_proveedor_7.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1932, {'id': 1932, 'cod_postal': '5900', 'localidad': 'VILLA MARIA', 'provincia_id': 6} ) 
-    gestion_proveedor_7.detalles = ''
-    gestion_proveedor_7 = importer.save_or_locate(gestion_proveedor_7)
+    proveedores_proveedor_7 = Proveedor()
+    proveedores_proveedor_7.cuit = '30-68296025-2'
+    proveedores_proveedor_7.razon_social = 'e.a. carnevale y cia s.a.'
+    proveedores_proveedor_7.telefono = '123456789'
+    proveedores_proveedor_7.email = 'empresa@proveedor.com'
+    proveedores_proveedor_7.calle = 'Belgrano'
+    proveedores_proveedor_7.numero = '123'
+    proveedores_proveedor_7.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1932, {'id': 1932, 'cod_postal': '5900', 'localidad': 'VILLA MARIA', 'provincia_id': 6} ) 
+    proveedores_proveedor_7.detalles = ''
+    proveedores_proveedor_7 = importer.save_or_locate(proveedores_proveedor_7)
 
-    gestion_proveedor_8 = Proveedor()
-    gestion_proveedor_8.cuit = '30-71083174-9'
-    gestion_proveedor_8.razon_social = 'GRUPO INVERSOR PUBLICITARIO SA'
-    gestion_proveedor_8.telefono = '123456789'
-    gestion_proveedor_8.email = 'empresa@proveedor.com'
-    gestion_proveedor_8.calle = 'Belgrano'
-    gestion_proveedor_8.numero = '123'
-    gestion_proveedor_8.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1932, {'id': 1932, 'cod_postal': '5900', 'localidad': 'VILLA MARIA', 'provincia_id': 6} ) 
-    gestion_proveedor_8.detalles = ''
-    gestion_proveedor_8 = importer.save_or_locate(gestion_proveedor_8)
+    proveedores_proveedor_8 = Proveedor()
+    proveedores_proveedor_8.cuit = '30-71083174-9'
+    proveedores_proveedor_8.razon_social = 'GRUPO INVERSOR PUBLICITARIO SA'
+    proveedores_proveedor_8.telefono = '123456789'
+    proveedores_proveedor_8.email = 'empresa@proveedor.com'
+    proveedores_proveedor_8.calle = 'Belgrano'
+    proveedores_proveedor_8.numero = '123'
+    proveedores_proveedor_8.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1932, {'id': 1932, 'cod_postal': '5900', 'localidad': 'VILLA MARIA', 'provincia_id': 6} ) 
+    proveedores_proveedor_8.detalles = ''
+    proveedores_proveedor_8 = importer.save_or_locate(proveedores_proveedor_8)
 
-    gestion_proveedor_9 = Proveedor()
-    gestion_proveedor_9.cuit = '30-70863046-9'
-    gestion_proveedor_9.razon_social = 'Latin Outdoor SA'
-    gestion_proveedor_9.telefono = '123456789'
-    gestion_proveedor_9.email = 'empresa@proveedor.com'
-    gestion_proveedor_9.calle = 'Belgrano'
-    gestion_proveedor_9.numero = '123'
-    gestion_proveedor_9.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1932, {'id': 1932, 'cod_postal': '5900', 'localidad': 'VILLA MARIA', 'provincia_id': 6} ) 
-    gestion_proveedor_9.detalles = ''
-    gestion_proveedor_9 = importer.save_or_locate(gestion_proveedor_9)
-
+    proveedores_proveedor_9 = Proveedor()
+    proveedores_proveedor_9.cuit = '30-70863046-9'
+    proveedores_proveedor_9.razon_social = 'Latin Outdoor SA'
+    proveedores_proveedor_9.telefono = '123456789'
+    proveedores_proveedor_9.email = 'empresa@proveedor.com'
+    proveedores_proveedor_9.calle = 'Belgrano'
+    proveedores_proveedor_9.numero = '123'
+    proveedores_proveedor_9.localidad =  importer.locate_object(Localidad, "id", Localidad, "id", 1932, {'id': 1932, 'cod_postal': '5900', 'localidad': 'VILLA MARIA', 'provincia_id': 6} ) 
+    proveedores_proveedor_9.detalles = ''
+    proveedores_proveedor_9 = importer.save_or_locate(proveedores_proveedor_9)

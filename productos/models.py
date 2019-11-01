@@ -22,8 +22,10 @@ class Insumo(models.Model):
     nombre = models.CharField(max_length=64, unique=True)
     descripcion = models.TextField(blank=True)
     medida = models.CharField(max_length=64)
+    # Si se elimina una Unidad de medida asociada 
+    # a un Insumo se pone el Id de la medida por defecto
     unidad_medida = models.ForeignKey(
-        Unidad, on_delete=models.CASCADE, default=3, related_name="unidades"
+        Unidad, on_delete=models.SET_DEFAULT, default=3, related_name="unidades"
     )
     precio = models.DecimalField(
         help_text="Precio en $", max_digits=6, decimal_places=2
@@ -56,6 +58,7 @@ class Caracteristica(models.Model):
 class StockInsumo(models.Model):
     """ Contiene la cantidad de insumos """
 
+    # Si se elimina un insumo su stock también es borrado
     insumo = models.OneToOneField(Insumo, on_delete=models.CASCADE)
     cantidad = models.DecimalField(
         max_digits=5, decimal_places=2, verbose_name="Cantidad en Stock"
@@ -72,7 +75,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
     precio = models.PositiveIntegerField(help_text="Precio en $")
-    
+
     # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
     insumos = models.ManyToManyField(Insumo,
                 through="InsumosProducto",
@@ -104,11 +107,11 @@ class Producto(models.Model):
         insumos_producto = self.insumosproducto_set.all()
 
         return insumos_producto
-    
+
     @property
     def get_caracteristicas(self):
-        """ Utilizado en template para obtener las caracteristicas del producto """ 
-        
+        """ Utilizado en template para obtener las caracteristicas del producto """
+
         caracteristicas_producto = self.caracteristicasproducto_set.all()
 
         return caracteristicas_producto
@@ -116,6 +119,7 @@ class Producto(models.Model):
 class ProductImage(models.Model):
     """Model definition for ProductImage."""
 
+    # Si se elimina un Producto su imagen también se borra
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to="productos/", blank=True)
 
@@ -131,6 +135,8 @@ class ProductImage(models.Model):
 
 
 class InsumosProducto(models.Model):
+
+    # Misma lógica que ProductosPedido y CaracterísticasPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
@@ -141,7 +147,13 @@ class InsumosProducto(models.Model):
 
 
 class CaracteristicasProducto(models.Model):
+
+    # Si un producto se elimina, se borran también los
+    # registros sobre sus Características asociadas
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+
+    # Si se elimina una Característica, sólo se eliminan
+    # los registros con esa característica
     caracteristica = models.ForeignKey(Caracteristica, on_delete=models.CASCADE)
     valor = models.PositiveIntegerField(help_text="Valor de la medida en cm para el producto")
 

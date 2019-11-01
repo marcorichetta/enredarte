@@ -28,3 +28,14 @@ class CompraAdmin(admin.ModelAdmin):
     ]
 
     autocomplete_fields = ['insumos_compra']
+
+@admin.register(InsumosCompra)
+class InsumosCompraAdmin(admin.ModelAdmin):
+    '''Admin View for InsumosCompra'''
+
+    list_display = (
+        'compra',
+        'insumo',
+        'cantidad',
+        'precio_compra'
+    )

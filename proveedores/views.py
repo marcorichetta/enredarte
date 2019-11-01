@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import ProtectedError
 from django.views.generic import (
     ListView,
     DetailView,
@@ -50,4 +51,19 @@ class ProveedorUpdateView(UpdateView):
 
 class ProveedorDeleteView(DeleteView):
     model = Proveedor
-    success_url = '/'
+    success_url = 'proveedor'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        try:
+            self.object.delete()
+            # Redirect to success_url
+        except ProtectedError:
+            context = self.get_context_data(
+                object=self.object,
+                error=f'{self.object} no puede ser eliminado porque tiene dependencias'
+            )
+            return self.render_to_response(context)
+        return HttpResponseRedirect(success_url)

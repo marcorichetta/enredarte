@@ -17,8 +17,9 @@ class Provincia(models.Model):
 class Localidad(models.Model):
     cod_postal = models.CharField(max_length=10)
     localidad = models.CharField(max_length=128)
+    # Una provincia no se puede eliminar si tiene localidades asociadas
     provincia = models.ForeignKey(
-        Provincia, on_delete=models.CASCADE, related_name='provincias')
+        Provincia, on_delete=models.PROTECT, related_name='provincias')
 
     class Meta:
         verbose_name_plural = 'Localidades'

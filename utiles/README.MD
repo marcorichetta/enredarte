@@ -10,7 +10,7 @@
 Correr los scripts con la data extraída
 
 ```bash
-./manage.py runscript localidadesData
+./manage.py runscript localidadesData # Sin el .py
 ```
 
 ## [Proveedores](https://renappo.argentina.gob.ar/data.json?_=1562363482662)
