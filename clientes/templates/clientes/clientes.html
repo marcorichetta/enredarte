@@ -9,13 +9,13 @@
     <h1 class="h2">Clientes</h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <a type="button" class="btn btn-outline-success" href="{% url 'createCliente' %}">Crear</a>
+        </div>
         <form class="form-inline" action="{% url 'cliente' %}" method="GET">
             <input class="form-control form-control-light w-100 ml-auto rounded-lg" name="q" type="text" placeholder="Buscar clientes"
                 aria-label="Buscar Clientes">
         </form>
-        <div class="btn-group mr-2">
-          <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'createCliente' %}">Crear</a>
-        </div>
       </div>
     </div>
 <div class="table-responsive">

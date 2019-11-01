@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.db.models import Q
+
 from django.views.generic import (
     ListView,
 )
@@ -18,7 +19,10 @@ class CompraListView(ListView):
     def get_queryset(self):
         queryset = super(CompraListView, self).get_queryset()
 
-        q = self.request.GET.get("q")
-        if q:
-            return queryset.filter(title__icontains=q)
+        # Permite buscar en un form dentro de la misma página
+        # con el formato q?<nombre-del-producto>
+        query = self.request.GET.get("q")
+        if query:
+            return queryset.filter(
+                Q(proveedor__razon_social__icontains=query))
         return queryset
