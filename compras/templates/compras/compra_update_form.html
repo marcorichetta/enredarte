@@ -6,7 +6,12 @@
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{% url 'pedido' %}">Pedidos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Pedido #{{ object.id }}</li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'detailCliente' object.id %}">
+                Compra #{{ object.nombre }}
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
         </ol>
     </nav>
 

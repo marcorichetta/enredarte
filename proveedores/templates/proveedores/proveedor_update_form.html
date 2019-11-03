@@ -6,7 +6,13 @@
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{% url 'proveedor' %}">Proveedores</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social }}</li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'detailProveedor' object.id %}">
+                {{ object.razon_social }}
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+
         </ol>
     </nav>
 
@@ -20,7 +26,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Guardar</button>
+                <button class="btn btn-outline-info" type="submit">Actualizar</button>
+                <a href="{% url 'detailProveedor' object.id %}" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </form>
     </div>
