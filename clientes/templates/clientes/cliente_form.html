@@ -1,6 +1,47 @@
 {% extends "gestion/dashboard.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear una nueva localidad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="localidad-form">
+                    <div class="form-group">
+                        <label for="InputCodPostal">Código Postal</label>
+                        <input type="number" class="form-control" style="width: 120px" id="InputCodPostal">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputLocalidad">Localidad</label>
+                        <input type="text" class="form-control" id="InputLocalidad" placeholder="Ingrese una localidad">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputProvincia">Provincia</label>
+                        <select autocapitalize="characters" class="form-control" id="InputProvincia">
+                            
+                            {% for p in provincias %}
+                                <option value="{{ p.pk }}">{{ p.provincia }}</option>
+                            {% endfor %}
+                                
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Area -->
 <div class="d-grid p-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -15,8 +56,39 @@
             {% csrf_token %}
             <div class="row">
                 <legend class="border-bottom mb-3">Crear Cliente</legend>
-                <div class="col-6">
-                    {{ form|crispy }}
+                <div class="">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.nombre|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.apellido|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.telefono|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.calle|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.numero|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.localidad|as_crispy_field }}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Agregar localidad
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -27,4 +99,5 @@
         </form>
     </div>
 </div>
+
 {% endblock content %}

@@ -10,6 +10,7 @@ from django.views.generic import (
     TemplateView
 )
 
+from gestion.models import Provincia
 from .models import Cliente
 # Create your views here.
 
@@ -39,6 +40,10 @@ class ClienteCreateView(CreateView):
     fields = ['nombre', 'apellido', 'telefono', 'email',
               'calle', 'numero', 'localidad']
 
+    def get_context_data(self, **kwargs):
+        context = super(ClienteCreateView, self).get_context_data(**kwargs)
+        context['provincias'] = Provincia.objects.get_queryset()
+        return context
 
 class ClienteDetailView(DetailView):
     model = Cliente
