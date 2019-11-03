@@ -148,3 +148,7 @@ LOGIN_URL = 'login'
 
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1']
+
+# SELECT2
+SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), 'js/select2.min.js')
+SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), 'css/select2.min.css')

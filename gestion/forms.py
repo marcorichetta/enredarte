@@ -20,6 +20,6 @@ class FormPrueba(forms.Form):
             model=Localidad,
             search_fields=['localidad__icontains'],
             dependent_fields={'provincia': 'provincia'},
-            max_results=10
+            max_results=10,
         )
     )

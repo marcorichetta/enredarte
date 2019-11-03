@@ -6,7 +6,7 @@
 {{ form.media.css }}
 <style type="text/css">
     .select2 {
-        width: 200px;
+        width: 200px !important;
     }
 </style>
 {% endblock head %}
@@ -21,7 +21,7 @@
         <div class="row">
             <legend class="border-bottom mb-3">Crear Variante de Producto</legend>
             <div class="col-6">
-                {{ form.provincia }}
+                {{ form|crispy }}
             </div>
         </div>
         

@@ -27,6 +27,9 @@ if settings.DEBUG:
 urlpatterns += [
     path('admin/', admin.site.urls),
 
+    # Django Select2
+    path('select2/', include('django_select2.urls')),
+
     # Root
     path('', include('gestion.urls')),
 
