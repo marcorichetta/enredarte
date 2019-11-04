@@ -1,6 +1,9 @@
+from django.contrib import messages
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import ProtectedError
+from django.urls import reverse_lazy
+
 from django.views.generic import (
     ListView,
     DetailView,
@@ -51,7 +54,7 @@ class ProveedorUpdateView(UpdateView):
 
 class ProveedorDeleteView(DeleteView):
     model = Proveedor
-    success_url = 'proveedor'
+    success_url = reverse_lazy('proveedor')
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -59,11 +62,16 @@ class ProveedorDeleteView(DeleteView):
 
         try:
             self.object.delete()
+            # Enviar mensaje para mostrar alerta
+            messages.success(
+                request, f'{self.object} fue eliminado.')
+
             # Redirect to success_url
         except ProtectedError:
             context = self.get_context_data(
                 object=self.object,
-                error=f'{self.object} no puede ser eliminado porque tiene dependencias'
+                error=f'{self.object} no puede ser eliminado porque \
+                    tiene dependencias. Consulte al administrador.',
             )
             return self.render_to_response(context)
         return HttpResponseRedirect(success_url)

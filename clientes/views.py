@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
 from django.db.models import Q
+from django.db.models import ProtectedError
+from django.contrib import messages
+from django.urls import reverse_lazy
+
 
 from django.views.generic import (
     ListView,
@@ -13,6 +17,7 @@ from django.views.generic import (
 from gestion.models import Provincia
 from .models import Cliente
 # Create your views here.
+
 
 class ClienteListView(ListView):
     model = Cliente
@@ -35,6 +40,7 @@ class ClienteListView(ListView):
             )
         return queryset
 
+
 class ClienteCreateView(CreateView):
     model = Cliente
     fields = ['nombre', 'apellido', 'telefono', 'email',
@@ -44,6 +50,7 @@ class ClienteCreateView(CreateView):
         context = super(ClienteCreateView, self).get_context_data(**kwargs)
         context['provincias'] = Provincia.objects.get_queryset()
         return context
+
 
 class ClienteDetailView(DetailView):
     model = Cliente
@@ -59,4 +66,24 @@ class ClienteUpdateView(UpdateView):
 
 class ClienteDeleteView(DeleteView):
     model = Cliente
-    success_url = '/'
+    success_url = reverse_lazy('cliente')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        try:
+            self.object.delete()
+            # Enviar mensaje para mostrar alerta
+            messages.success(
+                request, f'El cliente {self.object} fue eliminado.')
+
+            # Redirect to success_url
+        except ProtectedError:
+            context = self.get_context_data(
+                object=self.object,
+                error=f'{self.object} no puede ser eliminado porque \
+                    tiene dependencias. Consulte al administrador.',
+            )
+            return self.render_to_response(context)
+        return HttpResponseRedirect(success_url)

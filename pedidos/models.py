@@ -33,7 +33,10 @@ class Pedido(models.Model):
         ordering = ['-fecha_pedido', '-actualizado']
 
     def get_absolute_url(self):
-        return reverse('detailPedido', kwargs={'pk': self.id})
+        """ Utilizada después de actualizar o eliminar un pedido"""
+        return reverse('pedido')
+        
+        # return reverse('detailPedido', kwargs={'pk': self.id})
 
     @property
     def get_productos(self):

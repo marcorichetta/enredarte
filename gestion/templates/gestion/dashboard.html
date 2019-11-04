@@ -10,6 +10,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{% block title %}Enredarte{% endblock %}</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -61,14 +62,6 @@
 
 
   <div class="container-fluid">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-
     <div class="row">
       <!-- Sidebar -->
       <nav class="col-md-2 d-none d-md-block bg-light sidebar">
@@ -163,9 +156,20 @@
       <!-- Contenido principal -->
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <!-- Alertas -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} mt-3 mb-0">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          <!-- Alertas end -->
+
         <div class="main-content">
           {% block content %}
           {% endblock content %}
+        </div>
       </main>
       <!-- Contenido principal end -->
     </div>

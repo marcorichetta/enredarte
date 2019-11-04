@@ -16,7 +16,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# /home/rich/programming/enredarte
+BASE_DIR = os.path.dirname((os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,7 +29,7 @@ SECRET_KEY = 'b#wl^43)ex+jojc@wr_0i_hvwc7y&$cwbe)&bv=z11k7d!r+%+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -136,9 +137,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# BASE_DIR = /home/rich/programming/enredarte
+
+#STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+MEDIA_URL = '/media/'
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.db.models import ProtectedError
+from django.contrib import messages
+from django.urls import reverse_lazy
+
 from django.views.generic import (
     ListView,
     DetailView,
@@ -56,4 +60,24 @@ class PedidoDetailView(DetailView):
 
 class PedidoDeleteView(DeleteView):
     model = Pedido
-    success_url = '/'
+    success_url = reverse_lazy('pedido')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        try:
+            self.object.delete()
+            # Enviar mensaje para mostrar alerta
+            messages.success(
+                request, f'{self.object} fue eliminado.')
+
+            # Redirect to success_url
+        except ProtectedError:
+            context = self.get_context_data(
+                object=self.object,
+                error=f'{self.object} no puede ser eliminado porque \
+                    tiene dependencias. Consulte al administrador.',
+            )
+            return self.render_to_response(context)
+        return HttpResponseRedirect(success_url)
