@@ -4,9 +4,9 @@
 
 <head>
   
-  {% block head %}
+  {% block select2 %}
     <!-- Select2 -->
-  {% endblock head %}
+  {% endblock select2 %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{% block title %}Enredarte{% endblock %}</title>
@@ -43,9 +43,9 @@
   {% block navbar %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top flex-md-nowrap p-0 shadow custom-gradient">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url 'index' %}">Enredarte</a>
-    <input class="form-control form-control-light w-25 ml-auto rounded-lg" type="text" placeholder="Buscar"
-      aria-label="Buscar" name="q">
-    <ul class="navbar-nav px-3">
+    <!-- <input class="form-control form-control-light w-25 ml-auto rounded-lg" type="text" placeholder="Buscar"
+      aria-label="Buscar" name="q"> -->
+    <ul class="navbar-nav px-3 ml-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
@@ -60,98 +60,11 @@
   </nav>
   {% endblock navbar %}
 
-
+  
   <div class="container-fluid">
     <div class="row">
-      <!-- Sidebar -->
-      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-        <div class="sidebar-sticky">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'index' %}">
-                <span data-feather="home"></span>
-                Inicio <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'pedido' %}">
-                <span data-feather="file"></span>
-                Pedidos
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'producto' %}">
-                <span data-feather="shopping-cart"></span>
-                Productos
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'cliente' %}">
-                <span data-feather="users"></span>
-                Clientes
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'proveedor' %}">
-                <span data-feather="package"></span>
-                Proveedores
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'compra' %}">
-                <span data-feather="dollar-sign"></span>
-                Compras
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="bar-chart-2"></span>
-                Informes
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="calendar"></span>
-                Agenda
-              </a>
-            </li>
-          </ul>
-
-          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Saved reports</span>
-            <a class="d-flex align-items-center text-muted" href="#">
-              <span data-feather="plus-circle"></span>
-            </a>
-          </h6>
-          <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Current month
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Last quarter
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Social engagement
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Year-end sale
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <!-- Sidebar end -->
+      
+      {% include 'gestion/sidebar.html' %}
 
       <!-- Contenido principal -->
 

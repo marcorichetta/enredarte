@@ -83,7 +83,7 @@ class ProductoDeleteView(DeleteView):
 """ Armar views con un form de Producto y un formset para sus insumos
     (Falta validar y guardar todo en su lugar)
 
-    class ProductoView(FormView):
+class ProductoView(FormView):
     template_name = 'productos/producto_test.html'
     form_class = ProductoForm
     success_url = 'producto'
