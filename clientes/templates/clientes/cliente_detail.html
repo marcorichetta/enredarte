@@ -1,12 +1,6 @@
 {% extends "gestion/dashboard.html" %}
 {% load static %}
 
-
-{% block seccion %}
-    Información sobre {{ object.nombre }}
-{% endblock seccion %}
-    
-
 {% block content %}
 
 <nav aria-label="breadcrumb">
@@ -22,7 +16,7 @@
         {{ object.nombre }} {{ object.apellido }}
         <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateCliente' object.id %}">
             Editar información
-            <span data-feather="edit"></span>
+            <span data-feather="edit-3"></span>
         </a>
         <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteCliente' object.id %}">
             Borrar
