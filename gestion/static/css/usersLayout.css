@@ -1,4 +1,4 @@
-/* Global CSS rules */
+/* CSS aplicado a los templates de la app Users */
 
 main .form-control
 {
@@ -22,21 +22,4 @@ main img
 {
     /* constrain images on small screens */
     max-width: 100%;
-}
-
-.main-content {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: center;
-    padding-bottom: .5rem;
-    padding-top: 1.5rem;
-}
-
-.card {
-    width: 14rem;
-}
-
-.asteriskField {
-    color: red;
 }

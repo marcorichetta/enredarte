@@ -56,7 +56,7 @@ class AbstractProduct(models.Model):
     nombre = models.CharField(max_length=255, blank=True)
     descripcion = models.TextField(blank=True)
 
-    """ product_class = models.ForeignKey(
+    product_class = models.ForeignKey(
         'productos.ProductClass',
         null=True,
         blank=True,
@@ -71,7 +71,7 @@ class AbstractProduct(models.Model):
         verbose_name="Atributos",
         help_text='Un atributo de producto es algo que este producto \
                     puede tener, como la altura, especificada por su clase'
-    ) """
+    )
 
     class Meta:
         """Meta definition for AbstractProduct."""
