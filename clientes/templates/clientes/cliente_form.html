@@ -51,7 +51,7 @@
         </ol>
     </nav>
 
-    <div class="content-section">
+    <div class="form-container">
         <form method="POST">
             {% csrf_token %}
             <div class="row">
@@ -82,8 +82,17 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            {{ form.localidad|as_crispy_field }}
-                            <!-- Button trigger modal -->
+                            <datalist id="localidades">
+                                {% for l in localidades %}
+                                    <option label="{{ l.localidad }}" value="{{ l.cod_postal }}">{{ l.localidad }}</option>
+                                {% endfor %}
+                            </datalist>
+
+                            <label for="localidad">Localidad</label>
+                            <input class="textinput textInput form-control" list="localidades" id="localidad" name="localidad" placeholder="Ingrese la localidad" />
+
+                            <br>
+                            <!-- MODIFICAR EL REEMPLAZO DE CUANDO SE CREA UNA NUEVA LOCALIDAD -->
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                 Agregar localidad
                             </button>
@@ -98,5 +107,50 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        document.querySelector('#localidad-form').addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            let token = $('input[name=csrfmiddlewaretoken]').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/localidad/new/',
+                data: {
+                    csrfmiddlewaretoken: token,
+                    cod_postal: $('#InputCodPostal').val(),
+                    localidad: $('#InputLocalidad').val(),
+                    provincia: $('#InputProvincia').val(),
+                },
+                dataType: 'json',
+                success: (nuevaLocalidad) => {
+                    window.alert('Se creó la nueva localidad con éxito');
+
+                    // Esconder modal
+                    $('#exampleModal').modal('hide');
+
+                    // Seleccionar select del formulario de cliente
+                    localidadSelect = document.getElementById('id_localidad');
+
+                    // Crear una nueva opción para ese select
+                    localidadSelect.options.add(
+                        new Option(
+                            nuevaLocalidad.localidad,
+                            nuevaLocalidad.cod_postal
+                        )
+                    )
+
+                    // Actualizar el select con la opción creada
+                    localidadSelect.value = nuevaLocalidad.cod_postal
+
+                }
+            })
+        })
+
+    })
+</script>
 
 {% endblock content %}
