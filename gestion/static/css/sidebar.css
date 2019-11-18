@@ -5,7 +5,7 @@
 }
   
 #sidebar {
-  width: 230px;
+  width: 226px; /* Igual que width de navbar 'Enredarte' */
   position: fixed;
   top: 0;
   left: 0;
@@ -57,18 +57,18 @@
 
 /* Mediaqueries */
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     #sidebar {
-        margin-left: -250px;
+        width: 169px;
     }
     #sidebar.hide {
-        margin-left: 0;
+        margin-left: -250px;
     }
     #principal {
-        width: 100%;
+        width: calc(100% - 250px);
     }
     #principal.fullPage {
-        width: calc(100% - 250px);
+        width: 100%;
     }
     #sidebarCollapse span {
         display: none;
