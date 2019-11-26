@@ -11,8 +11,6 @@ from .models import (
     Unidad,
     Insumo,
     InsumosProducto,
-    Caracteristica,
-    CaracteristicasProducto,
 )
 
 from extra_views import (
@@ -41,10 +39,6 @@ class ProductoListView(ListView):
             return queryset.filter(title__icontains=q)
         return queryset
 
-class CaracteristicasProductoInline(InlineFormSetFactory):
-    model = CaracteristicasProducto
-    fields = ['caracteristica', 'valor']
-    factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
 
 class InsumosProductoInline(InlineFormSetFactory):
     model = InsumosProducto
@@ -54,7 +48,6 @@ class InsumosProductoInline(InlineFormSetFactory):
 class ProductoCreateView(CreateWithInlinesView):
     model = Producto
     inlines = [
-        CaracteristicasProductoInline,
         InsumosProductoInline
         ]
     fields = ['nombre', 'descripcion', 'precio']

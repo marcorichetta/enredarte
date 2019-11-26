@@ -1,10 +1,23 @@
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
+from decimal import Decimal
+
+from variables.models import Variable
 
 from .abstract_models import *
 
-# Create your models here.
+### Variables
+
+v = Variable.objects.first()
+
+precio_hora = v.precio_hora
+precio_pintado = v.precio_pintado
+ganancia_por_mayor = v.ganancia_por_mayor
+ganancia_por_menor = v.ganancia_por_menor
+ganancia_fibrofacil = v.ganancia_fibrofacil
+
+### Modelos
+
 class Unidad(models.Model):
     """ Tabla de referencia para unidades de medida de insumos. """
 
@@ -22,13 +35,13 @@ class Insumo(models.Model):
     nombre = models.CharField(max_length=64, unique=True)
     descripcion = models.TextField(blank=True)
     medida = models.CharField(max_length=64)
-    # Si se elimina una Unidad de medida asociada 
+    # Si se elimina una Unidad de medida asociada
     # a un Insumo se pone el Id de la medida por defecto
     unidad_medida = models.ForeignKey(
         Unidad, on_delete=models.SET_DEFAULT, default=3, related_name="unidades"
     )
     precio = models.DecimalField(
-        help_text="Precio en $", max_digits=6, decimal_places=2
+        help_text="Precio de compra al proveedor en $", max_digits=6, decimal_places=2
     )
     proveedores = models.ManyToManyField("proveedores.Proveedor")
 
@@ -38,21 +51,19 @@ class Insumo(models.Model):
         else:
             return self.nombre
 
-class Caracteristica(models.Model):
-    """Model definition for Caracteristica."""
+    @property
+    def get_precio_m2(self):
+        """ Precio Insumo x Ganancia FF / m2 de una plancha (380x280cm)
 
-    nombre = models.CharField(max_length=64, help_text="Ejemplo: Largo, Alto")
-    detalles = models.TextField(blank=True)
+            Devuelve el precio redondeado de m2 del insumo"""
+        return round(self.precio * ganancia_fibrofacil / Decimal(10.64))
 
-    class Meta:
-        """Meta definition for Caracteristica."""
+    @property
+    def get_precio_recorte(self):
+        """ Precio del m2 * 2
 
-        verbose_name = 'Caracteristica'
-        verbose_name_plural = 'Caracteristicas'
-
-    def __str__(self):
-        """Unicode representation of Caracteristica."""
-        return self.nombre
+            Utilizado para la venta de recortes de Fibrofacil """
+        return self.get_precio_m2 * 2
 
 
 class StockInsumo(models.Model):
@@ -78,12 +89,8 @@ class Producto(models.Model):
 
     # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
     insumos = models.ManyToManyField(Insumo,
-                through="InsumosProducto",
-                through_fields=('producto', 'insumo'))
-
-    caracteristicas = models.ManyToManyField(Caracteristica,
-                through="CaracteristicasProducto",
-                through_fields=('producto', 'caracteristica'))
+                                     through="InsumosProducto",
+                                     through_fields=('producto', 'insumo'))
 
     class Meta:
         verbose_name = "Producto"
@@ -108,14 +115,6 @@ class Producto(models.Model):
 
         return insumos_producto
 
-    @property
-    def get_caracteristicas(self):
-        """ Utilizado en template para obtener las caracteristicas del producto """
-
-        caracteristicas_producto = self.caracteristicasproducto_set.all()
-
-        return caracteristicas_producto
-
 class ProductImage(models.Model):
     """Model definition for ProductImage."""
 
@@ -136,7 +135,7 @@ class ProductImage(models.Model):
 
 class InsumosProducto(models.Model):
 
-    # Misma lógica que ProductosPedido y CaracterísticasPedido
+    # Misma lógica que ProductosPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
@@ -144,18 +143,3 @@ class InsumosProducto(models.Model):
     def __str__(self):
         return f"{self.cantidad} de {self.insumo.nombre}\
             por cada {self.producto.nombre}"
-
-
-class CaracteristicasProducto(models.Model):
-
-    # Si un producto se elimina, se borran también los
-    # registros sobre sus Características asociadas
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-
-    # Si se elimina una Característica, sólo se eliminan
-    # los registros con esa característica
-    caracteristica = models.ForeignKey(Caracteristica, on_delete=models.CASCADE)
-    valor = models.PositiveIntegerField(help_text="Valor de la medida en cm para el producto")
-
-    def __str__(self):
-        return f"{self.caracteristica.nombre}: {self.valor}"

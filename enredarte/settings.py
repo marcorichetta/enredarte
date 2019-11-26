@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'proveedores',
     'pedidos',
     'compras',
+    'variables',
     'gestion',
     'crispy_forms',
     'django_extensions',

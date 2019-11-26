@@ -7,18 +7,19 @@ from .models import (
     StockInsumo,
     InsumosProducto,
     ProductImage,
-    Caracteristica,
-    CaracteristicasProducto
 )
 # Register your models here.
+
 
 @admin.register(ProductImage)
 class ProductImage(admin.ModelAdmin):
     list_display = ('producto', 'imagen')
 
+
 @admin.register(Unidad)
 class UnidadAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion')
+
 
 @admin.register(Insumo)
 class InsumoAdmin(admin.ModelAdmin):
@@ -32,8 +33,8 @@ class InsumoAdmin(admin.ModelAdmin):
     )
     list_filter = ('unidad_medida',)
     raw_id_fields = ('proveedores',)
-    
-    ## Autocompletion on CompraAdmin
+
+    # Autocompletion on CompraAdmin
     search_fields = ('nombre',)
 
 
@@ -41,6 +42,7 @@ class InsumoAdmin(admin.ModelAdmin):
 class StockInsumoAdmin(admin.ModelAdmin):
     list_display = ('id', 'insumo', 'cantidad', 'detalles')
     list_filter = ('insumo',)
+
 
 class InsumoInline(admin.TabularInline):
     '''Tabular Inline View for Insumo'''
@@ -51,14 +53,6 @@ class InsumoInline(admin.TabularInline):
     extra = 1
     raw_id_fields = ()
 
-class CaracteristicaInline(admin.TabularInline):
-    '''Tabular Inline View for Caracteristica'''
-
-    model = CaracteristicasProducto
-    min_num = 3
-    max_num = 20
-    extra = 1
-    raw_id_fields = ()
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
@@ -67,20 +61,11 @@ class ProductoAdmin(admin.ModelAdmin):
     raw_id_fields = ('insumos',)
     search_fields = ['id']
     inlines = [
-        CaracteristicaInline,
         InsumoInline
     ]
+
 
 @admin.register(InsumosProducto)
 class InsumosProductoAdmin(admin.ModelAdmin):
     list_display = ('id', 'producto', 'insumo', 'cantidad')
     list_filter = ('producto', 'insumo')
-
-@admin.register(Caracteristica)
-class CaracteristicaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre', 'detalles')
-    
-@admin.register(CaracteristicasProducto)
-class CaracteristicasProductoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'producto', 'caracteristica', 'valor')
-    list_filter = ('producto', 'caracteristica')
