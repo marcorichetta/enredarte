@@ -8,7 +8,7 @@ from .abstract_models import *
 
 ### Variables
 
-v = Variable.objects.first()
+v = Variable.objects.first() # Sólo un registro con todas las variables
 
 precio_hora = v.precio_hora
 precio_pintado = v.precio_pintado
@@ -85,29 +85,81 @@ class Producto(models.Model):
 
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
-    precio = models.PositiveIntegerField(help_text="Precio en $")
+    largo = models.DecimalField(default=0,
+                                help_text='Largo en cm', max_digits=3, decimal_places=1)
+    ancho = models.DecimalField(default=0,
+                                help_text='Ancho en cm', max_digits=3, decimal_places=1)
+    alto = models.DecimalField(default=0,
+                               help_text='Alto en cm', max_digits=3, decimal_places=1)
+    tiempo = models.PositiveIntegerField(default=30,
+                                         help_text="Minutos para realizar el producto")
+
+    # Default - MDF-3mm
+    insumo_base = models.ForeignKey(
+        Insumo, on_delete=models.PROTECT, related_name="BaseInsumo", default=1,
+        help_text="Insumo utilizado para la base")
+
+    # Default - MDF-5mm
+    insumo_lados = models.ForeignKey(
+        Insumo, on_delete=models.PROTECT, related_name="LadoInsumo", default=2,
+        help_text="Insumo utilizado para los lados")
 
     # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
     insumos = models.ManyToManyField(Insumo,
                                      through="InsumosProducto",
                                      through_fields=('producto', 'insumo'))
 
-    class Meta:
-        verbose_name = "Producto"
-        verbose_name_plural = "Productos"
-
     def __str__(self):
         return f"{self.nombre} - {self.descripcion}"
-
-    def __unicode__(self):
-        return self.nombre
 
     def get_absolute_url(self):
         return reverse("detailProducto", kwargs={"pk": self.pk})
 
     def get_image_url(self):
-        img = self.productimage_set.first()
+        """ Devuelve la url de la 1ra imagen si es que existe """
+        img = self.images.first()
         return img.imagen.url if img else img
+
+    @property
+    def get_precio_costo(self):
+        """ Calcula el precio de costo de un producto en base a las
+            medidas del mismo, a los insumos utilizados y al tiempo que lleva
+            producirlo. """
+        precioBase = (self.largo / 100) * (self.ancho / 100) * self.insumo_base.get_precio_m2
+
+        precioLatCorto = (self.ancho / 100) * (self.alto / 100) * self.insumo_lados.get_precio_m2
+
+        precioLatLargo = (self.largo / 100) * (self.alto / 100) * self.insumo_lados.get_precio_m2
+
+        precio_tiempo = (self.tiempo / 60) * precio_hora
+
+        costo = int(precioBase) + int(precioLatCorto) + \
+            int(precioLatLargo) + int(precio_tiempo)
+
+        return costo
+
+    @property
+    def get_precio_venta_crudo(self):
+        """ Calcula el precio de venta al público del producto crudo """
+
+        # Precio costo * % de ganancia
+        return round(self.get_precio_costo * ((ganancia_por_menor / 100) + 1))
+
+    @property
+    def get_precio_terminado(self):
+        """ Calcula el precio del producto terminado, sin la ganancia """
+
+        precio_apliques = 20
+        precio_tiempo_terminado = int((self.tiempo * 2) / 60 * precio_hora)
+
+        return self.get_precio_costo + precio_pintado + precio_apliques + precio_tiempo_terminado
+
+    @property
+    def get_precio_venta_terminado(self):
+        """ Calcula el precio de venta al público del producto terminado """
+
+        # Precio terminado * % de ganancia
+        return round(self.get_precio_terminado * ((ganancia_por_menor / 100) + 1))
 
     @property
     def get_insumos(self):
@@ -115,16 +167,15 @@ class Producto(models.Model):
 
         return insumos_producto
 
+
 class ProductImage(models.Model):
-    """Model definition for ProductImage."""
+    """ Este modelo existe para cargar 1 o más imágenes de un solo producto """
 
     # Si se elimina un Producto su imagen también se borra
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='images')
     imagen = models.ImageField(upload_to="productos/", blank=True)
 
     class Meta:
-        """Meta definition for ProductImage."""
-
         verbose_name = "Imagen de Producto"
         verbose_name_plural = "Imágenes de Producto"
 

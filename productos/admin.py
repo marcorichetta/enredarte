@@ -11,11 +11,6 @@ from .models import (
 # Register your models here.
 
 
-@admin.register(ProductImage)
-class ProductImage(admin.ModelAdmin):
-    list_display = ('producto', 'imagen')
-
-
 @admin.register(Unidad)
 class UnidadAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'descripcion')
@@ -48,19 +43,39 @@ class InsumoInline(admin.TabularInline):
     '''Tabular Inline View for Insumo'''
 
     model = InsumosProducto
-    min_num = 3
-    max_num = 20
+    min_num = 0
+    max_num = 5
     extra = 1
     raw_id_fields = ()
 
 
+class ProductImageInline(admin.TabularInline):
+    '''Tabular Inline View for ProductImag'''
+
+    model = ProductImage
+    min_num = 0
+    max_num = 3
+    extra = 1
+    raw_id_fields = ()
+
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre', 'descripcion', 'precio')
+    list_display = (
+        'id',
+        'nombre',
+        'descripcion',
+        'largo',
+        'ancho',
+        'alto',
+        'tiempo',
+        'insumo_base',
+        'insumo_lados',
+    )
 
-    raw_id_fields = ('insumos',)
-    search_fields = ['id']
+    list_filter = ('insumo_base', 'insumo_lados')
+    search_fields = ['id, nombre']
     inlines = [
+        ProductImageInline,
         InsumoInline
     ]
 
