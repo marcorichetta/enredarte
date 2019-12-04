@@ -5,6 +5,7 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
+    FormView
 )
 from .models import (
     Producto,
@@ -19,7 +20,8 @@ from extra_views import (
     InlineFormSetFactory,
 )
 
-from .forms import InsumosProductoFormset
+from .forms import ProductoForm, InsumosProductoFormset
+
 # Create your views here.
 
 class ProductoListView(ListView):
@@ -40,7 +42,7 @@ class ProductoListView(ListView):
         return queryset
 
 
-class InsumosProductoInline(InlineFormSetFactory):
+""" class InsumosProductoInline(InlineFormSetFactory):
     model = InsumosProducto
     fields = ['insumo', 'cantidad']
     factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
@@ -50,8 +52,24 @@ class ProductoCreateView(CreateWithInlinesView):
     inlines = [
         InsumosProductoInline
         ]
-    fields = ['nombre', 'descripcion', 'precio']
+    fields = '__all__'
+    template_name = 'productos/producto_form.html' """
+
+class ProductoCreateView(FormView):
+    """ Armar views con un form de Producto y un formset para sus insumos
+    (Falta validar y guardar todo en su lugar) """
     template_name = 'productos/producto_form.html'
+    form_class = ProductoForm
+    success_url = 'producto'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductoCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['insumos'] = InsumosProductoFormset(self.request.POST)
+        else:
+            context['insumos'] = InsumosProductoFormset()
+        return context
+
 
 class ProductoDetailView(DetailView):
     model = Producto
@@ -71,20 +89,3 @@ class ProductoUpdateView(UpdateView):
 class ProductoDeleteView(DeleteView):
     model = Producto
     success_url = '/'
-
-
-""" Armar views con un form de Producto y un formset para sus insumos
-    (Falta validar y guardar todo en su lugar)
-
-class ProductoView(FormView):
-    template_name = 'productos/producto_test.html'
-    form_class = ProductoForm
-    success_url = 'producto'
-
-    def get_context_data(self, **kwargs):
-        context = super(ProductoView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['insumos'] = InsumosProductoFormset(self.request.POST)
-        else:
-            context['insumos'] = InsumosProductoFormset()
-        return context """

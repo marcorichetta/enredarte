@@ -31,15 +31,16 @@
     </legend>
 
     <div class="card" style="width: 18rem;">
-        {% if object.get_image_url %}
-            <img class="card-img-top" src="{{object.get_image_url}}" alt="{{object.nombre}}">
+        {% if object.image_url %}
+            <img class="card-img-top" src="{{object.image_url}}" alt="{{object.nombre}}">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title">{{object.nombre}}</h5>
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">{{object.descripcion}}</li>
-            <li class="list-group-item">$ {{object.precio}}</li>
+            <li class="list-group-item">$ {{object.precio_costo}}</li>
+            <li class="list-group-item">$ {{object.precio_venta_terminado}}</li>
             {% for i in object.get_insumos %}
                 <li class="list-group-item">{{i}}</li>             
             {% endfor %}

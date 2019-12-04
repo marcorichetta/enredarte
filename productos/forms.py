@@ -1,11 +1,16 @@
-from django.forms import inlineformset_factory, ModelForm, modelformset_factory
+from django import forms
 from .models import *
 
 
-class ProductoForm(ModelForm):
+class ProductoForm(forms.ModelForm):
+
+    insumo_base = forms.ModelChoiceField(queryset=Insumo.objects.filter(nombre__contains='MDF'))
+    insumo_lados = forms.ModelChoiceField(queryset=Insumo.objects.filter(nombre__contains='MDF'))
+
     class Meta:
         model = Producto
         exclude = ('insumos',)
 
-InsumosProductoFormset = inlineformset_factory(
+
+InsumosProductoFormset = forms.inlineformset_factory(
     Producto, InsumosProducto, form=ProductoForm, can_delete=False)

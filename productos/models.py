@@ -52,18 +52,18 @@ class Insumo(models.Model):
             return self.nombre
 
     @property
-    def get_precio_m2(self):
+    def precio_m2(self):
         """ Precio Insumo x Ganancia FF / m2 de una plancha (380x280cm)
 
             Devuelve el precio redondeado de m2 del insumo"""
         return round(self.precio * ganancia_fibrofacil / Decimal(10.64))
 
     @property
-    def get_precio_recorte(self):
+    def precio_recorte(self):
         """ Precio del m2 * 2
 
             Utilizado para la venta de recortes de Fibrofacil """
-        return self.get_precio_m2 * 2
+        return self.precio_m2 * 2
 
 
 class StockInsumo(models.Model):
@@ -115,21 +115,20 @@ class Producto(models.Model):
     def get_absolute_url(self):
         return reverse("detailProducto", kwargs={"pk": self.pk})
 
-    def get_image_url(self):
+    def image_url(self):
         """ Devuelve la url de la 1ra imagen si es que existe """
         img = self.images.first()
         return img.imagen.url if img else img
 
-    @property
-    def get_precio_costo(self):
+    def precio_costo(self):
         """ Calcula el precio de costo de un producto en base a las
             medidas del mismo, a los insumos utilizados y al tiempo que lleva
             producirlo. """
-        precioBase = (self.largo / 100) * (self.ancho / 100) * self.insumo_base.get_precio_m2
+        precioBase = (self.largo / 100) * (self.ancho / 100) * self.insumo_base.precio_m2
 
-        precioLatCorto = (self.ancho / 100) * (self.alto / 100) * self.insumo_lados.get_precio_m2
+        precioLatCorto = (self.ancho / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
 
-        precioLatLargo = (self.largo / 100) * (self.alto / 100) * self.insumo_lados.get_precio_m2
+        precioLatLargo = (self.largo / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
 
         precio_tiempo = (self.tiempo / 60) * precio_hora
 
@@ -139,27 +138,26 @@ class Producto(models.Model):
         return costo
 
     @property
-    def get_precio_venta_crudo(self):
+    def precio_venta_crudo(self):
         """ Calcula el precio de venta al público del producto crudo """
 
         # Precio costo * % de ganancia
-        return round(self.get_precio_costo * ((ganancia_por_menor / 100) + 1))
+        return round(self.precio_costo * ((ganancia_por_menor / 100) + 1))
 
     @property
-    def get_precio_terminado(self):
+    def precio_terminado(self):
         """ Calcula el precio del producto terminado, sin la ganancia """
 
         precio_apliques = 20
         precio_tiempo_terminado = int((self.tiempo * 2) / 60 * precio_hora)
 
-        return self.get_precio_costo + precio_pintado + precio_apliques + precio_tiempo_terminado
+        return self.precio_costo() + precio_pintado + precio_apliques + precio_tiempo_terminado
 
-    @property
-    def get_precio_venta_terminado(self):
+    def precio_venta_terminado(self):
         """ Calcula el precio de venta al público del producto terminado """
 
         # Precio terminado * % de ganancia
-        return round(self.get_precio_terminado * ((ganancia_por_menor / 100) + 1))
+        return round(self.precio_terminado * ((ganancia_por_menor / 100) + 1))
 
     @property
     def get_insumos(self):

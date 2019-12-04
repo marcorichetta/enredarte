@@ -18,9 +18,8 @@
                 <div class="col-8">
                     {{ form|crispy }}
                 </div>
-                {% for formset in inlines %}
+                {% for formset in insumos %}
                     <div class="col-6">
-                    <h4>{{ formset.prefix }}</h4>
                         {{ formset|crispy }}
                         <hr class="mb-4">
                     </div>

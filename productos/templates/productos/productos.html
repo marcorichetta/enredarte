@@ -30,7 +30,7 @@
             <tr>
               <td>{{ prod.id }}</td>
               <td><a href="{% url 'detailProducto' prod.id %}">{{ prod.nombre }} </a></td>
-              <td>$ {{ prod.precio }}</td>
+              <td>$ {{ prod.precio_venta_terminado }}</td>
               <td>12</td>
             </tr>
             {% endfor %}
