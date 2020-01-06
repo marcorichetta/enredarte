@@ -16,19 +16,10 @@
     </nav>
 
     <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="row">
-                <legend class="border-bottom mb-3">Actualizar Producto</legend>
-                <div class="col-6">
-                    {{ form|crispy }}
-                </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Actualizar</button>
-                <a href="{% url 'detailProducto' object.id %}" class="btn btn-outline-secondary">Cancelar</a>
-            </div>
-        </form>
+        <legend class="border-bottom mb-3">Actualizar Producto</legend>
+        <div class="col-8">
+            {% crispy form %}
+        </div>
     </div>
 </div>
 {% endblock content %}
