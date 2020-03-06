@@ -4,11 +4,9 @@ from decimal import Decimal
 
 from variables.models import Variable
 
-from .abstract_models import *
+# Variables
 
-### Variables
-
-v = Variable.objects.first() # Sólo un registro con todas las variables
+v = Variable.objects.first()  # Sólo un registro con todas las variables
 
 precio_hora = v.precio_hora
 precio_pintado = v.precio_pintado
@@ -16,7 +14,8 @@ ganancia_por_mayor = v.ganancia_por_mayor
 ganancia_por_menor = v.ganancia_por_menor
 ganancia_fibrofacil = v.ganancia_fibrofacil
 
-### Modelos
+# Modelos
+
 
 class Unidad(models.Model):
     """ Tabla de referencia para unidades de medida de insumos. """
