@@ -46,24 +46,15 @@ class ClienteCreateView(CreateView):
     fields = ['nombre', 'apellido', 'telefono', 'email',
               'calle', 'numero', 'localidad']
 
-    def get_form(self, form_class=None):
-
-        form = super().get_form(form_class)
-
-        # Make the localidad field use a datalist
-        form.fields['localidad'].widget.attrs.update({'list': 'localidades'})
-
-        return form
-
     def get_context_data(self, **kwargs):
         context = super(ClienteCreateView, self).get_context_data(**kwargs)
 
-        # Devuelve una lista con los id y los nombres de las provincias
+        # Devuelve una lista con los id y los nombres de localidades y provincias
+        # Se usan en el form original y en el modal para crear nueva localidad
         context['localidades'] = Localidad.objects.get_queryset()
         context['provincias'] = Provincia.objects.get_queryset()
 
         return context
-
 
 class ClienteDetailView(DetailView):
     model = Cliente

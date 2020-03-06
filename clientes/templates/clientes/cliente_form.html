@@ -40,8 +40,9 @@
         </div>
     </div>
 </div>
+<!-- Modal End -->
 
-<!-- Area -->
+<!-- Form -->
 <div class="d-grid p-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -80,19 +81,11 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <datalist id="localidades">
-                                {% for l in localidades %}
-                                    <option label="{{ l.localidad }}" value="{{ l.cod_postal }}">{{ l.localidad }}</option>
-                                {% endfor %}
-                            </datalist>
-
-                            <label for="localidad">Localidad</label>
-                            <input class="textinput textInput form-control" list="localidades" id="localidad" name="localidad" placeholder="Ingrese la localidad" />
-
-                            <br>
-                            <!-- MODIFICAR EL REEMPLAZO DE CUANDO SE CREA UNA NUEVA LOCALIDAD -->
+                    <div class="form-group">
+                        <div class="col-md-4 px-0">
+                            {{ form.localidad|as_crispy_field }}
+                        </div>
+                        <div>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                 Agregar localidad
                             </button>
@@ -107,6 +100,7 @@
         </form>
     </div>
 </div>
+<!-- Form End -->
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -114,8 +108,10 @@
         document.querySelector('#localidad-form').addEventListener('submit', (e) => {
             e.preventDefault()
 
+            // Tomar el token del formulario original (Esto puede malir sal)
             let token = $('input[name=csrfmiddlewaretoken]').val();
 
+            // Mandar la POST request
             $.ajax({
                 type: 'POST',
                 url: '/localidad/new/',
@@ -123,7 +119,7 @@
                     csrfmiddlewaretoken: token,
                     cod_postal: $('#InputCodPostal').val(),
                     localidad: $('#InputLocalidad').val(),
-                    provincia: $('#InputProvincia').val(),
+                    provincia_id: $('#InputProvincia').val(),
                 },
                 dataType: 'json',
                 success: (nuevaLocalidad) => {

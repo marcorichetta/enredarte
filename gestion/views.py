@@ -29,9 +29,10 @@ class Dashboard(LoginRequiredMixin, TemplateView):
 
 def LocalidadCreate(request):
     if request.method == "POST":
-        cod_postal = request.POST['cod_postal']
-        localidad = request.POST['localidad']
-        provincia_id = request.POST['provincia']
+
+        cod_postal = request.POST.get('cod_postal')
+        localidad = request.POST.get('localidad')
+        provincia_id = request.POST.get('provincia_id')
 
         # Obtener instancia de Provincia
         provincia = Provincia.objects.get(pk=provincia_id)
