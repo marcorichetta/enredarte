@@ -1,76 +1,78 @@
+/* SIDEBAR STYLES */
 
-.wrapper {
-    display: flex;
-    width: 100%;
-}
-  
 #sidebar {
-  width: 226px; /* Igual que width de navbar 'Enredarte' */
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  min-height: 100vh;
-  transition: all 0.3s;
+	width: 14rem !important; /* Igual que width de navbar 'Enredarte' */
+	min-height: 100vh;
+	z-index: 100; /* Behind the navbar */
+	box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+	transition: all 0.3s;
+}
+
+.sidebar-brand {
+	height: 4.375rem;
+	text-decoration: none;
+	font-size: 1rem;
+	font-weight: 800;
+	padding: 1.5rem 1rem;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 0.05rem;
+	z-index: 1;
+}
+
+.sidebar hr.sidebar-divider {
+	margin: 0 1rem 1rem;
+	border-top: 1px solid #575757;
 }
 
 #sidebar.hide {
-    margin-left: -250px;
+	margin-left: -14rem;
 }
- 
-#sidebar .nav-item {
-  font-size: .9rem;
-}  
-  .sidebar-sticky {
-    position: relative;
-    height: calc(100vh - 48px);
-    padding-top: .5rem;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-  }
-  
-  .sidebar .nav-link {
-    font-weight: 500;
-    color: #333;
-  }
-  
-  .sidebar .nav-link .feather {
-    margin-right: 4px;
-    color: #999;
-  }
-  
-  .sidebar .nav-link.active {
-    color: #007bff;
-  }
-  
-  .sidebar .nav-link:hover .feather,
-  .sidebar .nav-link.active .feather {
-    color: inherit;
-  }
-  
-  .sidebar-heading {
-    font-size: .75rem;
-    text-transform: uppercase;
-  }
+
+.sidebar-sticky {
+	position: relative;
+	height: calc(100vh - 48px);
+	padding-top: 0.5rem;
+	overflow-x: hidden;
+	overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+	font-weight: 500;
+	color: #333;
+	padding: 1rem;
+}
+
+.sidebar .nav-link .feather {
+	margin-right: 4px;
+	color: #999;
+}
+
+.sidebar .nav-link.active {
+	color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+	color: inherit;
+}
+
+.sidebar-heading {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+}
 
 /* Mediaqueries */
 
 @media (max-width: 1024px) {
-    #sidebar {
-        width: 169px;
-    }
-    #sidebar.hide {
-        margin-left: -250px;
-    }
-    #principal {
-        width: calc(100% - 250px);
-    }
-    #principal.fullPage {
-        width: 100%;
-    }
-    #sidebarCollapse span {
-        display: none;
-    }
+	#sidebar {
+		width: 169px;
+	}
+	#sidebar.hide {
+		margin-left: -14rem;
+	}
+
+	#sidebarCollapse span {
+		display: none;
+	}
 }

@@ -1,35 +1,46 @@
-body {
-    font-size: .875rem;
-  }
+/* DASHBOARD STYLES */
 
-/* Main */ 
-.principal {
-  width: calc(100% - 250px);
-  min-height: 100vh;
-  transition: all 0.3s;
-  position: absolute;
-  top: 90px;
-  right: 0;
+body {
+	font-size: 0.875rem;
+}
+
+.wrapper {
+	display: flex;
+}
+
+.content-wrapper {
+	width: calc(100% - 14rem); /* Tamaño de la sidebar */
+	min-height: 100vh;
+	transition: all 0.3s;
 }
 
 #principal.fullPage {
-  width: 100%;
-  padding: 0 50px;
+	width: 100%;
+	padding: 0;
 }
 
 .form-container {
-  margin: 20px;
+	margin: 20px;
 }
 
 .feather {
-    width: 16px;
-    height: 16px;
+	width: 16px;
+	height: 16px;
 }
-  
+
 .card {
-    width: 14rem;
+	width: 14rem;
 }
 
 .asteriskField {
-    color: red;
+	color: red;
+}
+
+@media (max-width: 1024px) {
+	#principal {
+		width: calc(100% - 250px);
+	}
+	#principal.fullPage {
+		width: 100%;
+	}
 }

@@ -1,12 +1,10 @@
 {% extends "gestion/dashboard.html" %}
 {% load static %}
 
-{% block title %}
-Clientes
-{% endblock title %}
+{% block title %} Clientes {% endblock title %}
 
 {% block content %}
-<h1 class="h2">Clientes</h1>
+<h2>Clientes</h2>
 
 <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
@@ -14,7 +12,7 @@ Clientes
     </div>
     <form class="form-inline" action="{% url 'cliente' %}" method="GET">
         <input class="form-control form-control-light w-100 ml-auto rounded-lg" name="q" type="text"
-            placeholder="Buscar clientes" aria-label="Buscar Clientes">
+            placeholder="Buscar clientes" aria-label="Buscar Clientes" />
     </form>
 </div>
 <div class="table-responsive">
@@ -30,11 +28,12 @@ Clientes
             </tr>
         </thead>
         <tbody>
-
             {% for c in clientes %}
             <tr>
                 <td>{{ c.id }}</td>
-                <td><a href="{% url 'detailCliente' c.id %}">{{ c.nombre }} {{ c.apellido }}</a></td>
+                <td>
+                    <a href="{% url 'detailCliente' c.id %}">{{ c.nombre }} {{ c.apellido }}</a>
+                </td>
                 <td>{{ c.telefono }}</td>
                 <td>{{ c.email }}</td>
                 <td>{{ c.localidad }}</td>
@@ -68,18 +67,12 @@ Clientes
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
+        {% endif %} {% for num in page_obj.paginator.page_range %} {% if page_obj.number == num %}
         <li class="active page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
         <!-- Displays 3 previous and 3 next pages from current -->
         {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'-3' %}
         <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-        {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
+        {% endif %} {% endfor %} {% if page_obj.has_next %}
         <li class="page-item">
             <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -94,5 +87,4 @@ Clientes
     </ul>
 </nav>
 
-{% endif %}
-{% endblock content %}
+{% endif %} {% endblock content %}

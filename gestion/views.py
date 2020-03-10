@@ -9,6 +9,7 @@ from django.views.generic import (
 from proveedores.models import Proveedor
 from pedidos.models import Pedido
 from clientes.models import Cliente
+from productos.models import Producto
 
 from .models import Localidad, Provincia
 
@@ -24,6 +25,7 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         context = super(Dashboard, self).get_context_data(**kwargs)
         context['pedidos'] = Pedido.objects.get_queryset()[:5]
         context['clientes'] = Cliente.objects.get_queryset()
+        context['productos'] = Producto.objects.get_queryset()[:5]
         return context
 
 
