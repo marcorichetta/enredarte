@@ -8,7 +8,7 @@ from .custom_layout_object import Formset
 
 
 class InsumosProductoForm(forms.ModelForm):
-
+    """Estructura del formulario para agregar insumos al crear un producto. """
     class Meta:
         model = InsumosProducto
         exclude = ()
@@ -20,6 +20,8 @@ class InsumosProductoForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.label_class = 'col-auto'
+        self.helper.field_class = "col-auto"
         self.helper.layout = Layout(
             Row(
                 Field('insumo'),
@@ -30,12 +32,18 @@ class InsumosProductoForm(forms.ModelForm):
         )
 
 
+# Formset que incluye las relaciones entre Producto e Insumo
+# - Se crea 1 formset inicialmente
+# - Se pueden agregar 4 más
 InsumosProductoFormset = forms.inlineformset_factory(
     Producto, InsumosProducto, form=InsumosProductoForm,
     fields=['insumo', 'cantidad'], can_delete=True, extra=1, max_num=5)
 
-class ProductoForm(forms.ModelForm):
 
+class ProductoForm(forms.ModelForm):
+    """ Formulario principal del Producto. Se utiliza para la creación y update de los mismos """
+
+    # TODO - Ver como funciona el formulario sin estas líneas
     #insumo_base = forms.ModelChoiceField(queryset=Insumo.objects.filter(nombre__contains='MDF'))
     #insumo_lados = forms.ModelChoiceField(queryset=Insumo.objects.filter(nombre__contains='MDF'))
 
@@ -56,19 +64,20 @@ class ProductoForm(forms.ModelForm):
                 Field('descripcion'),
             ),
             Div(
-                Fieldset('Medidas del producto',
-                'largo', 'ancho', 'alto', 'tiempo'),
-                Fieldset('Fibrofacil utilizado para el producto',
-                'insumo_base', 'insumo_lados')
+                Fieldset('Medidas',
+                         'largo', 'ancho', 'alto', 'tiempo', css_class="col-6"),
+                Fieldset('Fibrofacil utilizado',
+                         'insumo_base', 'insumo_lados', css_class="col-6"),
+                css_class='d-flex'
             ),
             Div(
                 Fieldset(
-                    'Agregue insumos extra',
+                    'Otros insumos',
                     Formset('insumos'),
                 ),
                 HTML('<br>'),
                 ButtonHolder(
-                    Submit('submit', 'Guardar'),
+                    Submit('submit', 'Crear Producto', css_class="btn-success"),
                 ),
             )
         )
