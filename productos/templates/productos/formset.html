@@ -1,0 +1,44 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<!-- Alinear el botón para eliminar insumos -->
+<style type="text/css">
+    .delete-row {
+        align-self: center;
+    }
+</style>
+
+{{ formset.management_form|crispy }}
+
+{% for form in formset.forms %}
+
+{# Incluir los campos ocultos del form #}
+
+{% for hidden in form.hidden_fields %}
+{{ hidden|as_crispy_field }}
+{% endfor %}
+
+<div class="formset">
+    {% crispy form %}
+</div>
+
+{% endfor %}
+
+<br>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!-- Django Dynamic Formset -->
+<script src="{% static 'js/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    // Docs: https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst#formset-options
+
+    // Opciones para personalizar como se renderiza el formset de Insumos Extra
+    $('.formset_row-{{ formset.prefix }}').formset({
+        addText: 'Agregar',
+        addCssClass: 'btn btn-primary',
+        deleteText: 'Borrar',
+        deleteCssClass: 'btn btn-danger align-self-center',
+        prefix: '{{ formset.prefix }}',
+    });
+
+</script>

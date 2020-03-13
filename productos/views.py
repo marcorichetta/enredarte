@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
@@ -21,6 +22,7 @@ from extra_views import (
 )
 
 from .forms import ProductoForm, InsumosProductoFormset
+from django.db import transaction
 
 # Create your views here.
 
@@ -55,20 +57,86 @@ class ProductoCreateView(CreateWithInlinesView):
     fields = '__all__'
     template_name = 'productos/producto_form.html' """
 
-class ProductoCreateView(FormView):
+class ProductoCreateView(CreateView):
     """ Armar views con un form de Producto y un formset para sus insumos
     (Falta validar y guardar todo en su lugar) """
+    model = Producto
     template_name = 'productos/producto_form.html'
     form_class = ProductoForm
-    success_url = 'producto'
 
     def get_context_data(self, **kwargs):
         context = super(ProductoCreateView, self).get_context_data(**kwargs)
+        # Le agregamos los insumos al context para usarlos en el template
         if self.request.POST:
             context['insumos'] = InsumosProductoFormset(self.request.POST)
         else:
             context['insumos'] = InsumosProductoFormset()
         return context
+
+    def form_valid(self, form):
+        # Obtener info de producto e insumos posteados en el form
+        context = self.get_context_data()
+        insumos = context['insumos']
+
+        # Esto se ejecuta sólo si la transacción es atómica
+        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
+        with transaction.atomic():
+            # Guardar el Producto
+            self.object = form.save()
+            # Si son válidos los insumos se guardan
+            if insumos.is_valid():
+                insumos.instance = self.object
+                insumos.save()
+
+                # Guardar producto completo
+                return super(ProductoCreateView, self).form_valid(form)
+            else:
+                # Repopular form con errores
+                return self.render_to_response(self.get_context_data(form=form))
+
+
+    def get_success_url(self):
+        return reverse_lazy('detailProducto', kwargs={'pk': self.object.pk})
+
+
+class ProductoUpdateView(UpdateView):
+    model = Producto
+    form_class = ProductoForm
+    #template_name = 'productos/producto_form.html'
+    # Modify the template used for this view
+    template_name_suffix = '_update_form'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductoUpdateView, self).get_context_data(**kwargs)
+
+        # Enviar el objeto como instancia para ser actualizado
+        if self.request.POST:
+            context['insumos'] = InsumosProductoFormset(self.request.POST, instance=self.object)
+        else:
+            context['insumos'] = InsumosProductoFormset(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        # Obtenemos info de producto e insumos posteados en el form
+        context = self.get_context_data()
+        insumos = context['insumos']
+
+        # Esto se ejecuta sólo si la transacción es atómica
+        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
+        with transaction.atomic():
+            self.object = form.save()
+            if insumos.is_valid():
+                insumos.instance = self.object
+                insumos.save()
+                # Guardar producto completo
+                return super(ProductoUpdateView, self).form_valid(form)
+            else:
+                # Repopular form con errores
+                return self.render_to_response(self.get_context_data(form=form))
+
+
+    def get_success_url(self):
+        return reverse_lazy('detailProducto', kwargs={'pk': self.object.pk})
 
 
 class ProductoDetailView(DetailView):
@@ -78,14 +146,7 @@ class ProductoDetailView(DetailView):
         context = super(ProductoDetailView, self).get_context_data(*args, **kwargs)
         return context
 
-class ProductoUpdateView(UpdateView):
-    model = Producto
-    fields = '__all__'
-
-    # Modify the template used for this view
-    template_name_suffix = '_update_form'
-
 
 class ProductoDeleteView(DeleteView):
     model = Producto
-    success_url = '/'
+    success_url = '/productos/'
