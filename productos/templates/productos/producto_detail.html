@@ -3,19 +3,19 @@
 
 
 {% block seccion %}
-    Información sobre {{ object.nombre }}
+Información sobre {{ object.nombre }}
 {% endblock seccion %}
-    
+
 
 {% block content %}
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'producto' %}">Productos</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }}</li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'producto' %}">Productos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }}</li>
     </ol>
-  </nav>
+</nav>
 
 <div class="container">
     <legend class="border-bottom mb-4">
@@ -32,17 +32,18 @@
 
     <div class="card" style="width: 18rem;">
         {% if object.image_url %}
-            <img class="card-img-top" src="{{object.image_url}}" alt="{{object.nombre}}">
+        <img class="card-img-top" src="{{object.image_url}}" alt="{{object.nombre}}">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title">{{object.nombre}}</h5>
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">{{object.descripcion}}</li>
-            <li class="list-group-item">$ {{object.precio_costo}}</li>
-            <li class="list-group-item">$ {{object.precio_venta_terminado}}</li>
+            <li class="list-group-item">$ Costo: {{object.precio_costo}}</li>
+            <li class="list-group-item">$ Venta (Terminado):{{object.precio_venta_terminado}}</li>
+            <li class="list-group-item">Insumos extra</li>
             {% for i in object.get_insumos %}
-                <li class="list-group-item">{{i}}</li>             
+            <li class="list-group-item">{{i}}</li>
             {% endfor %}
         </ul>
     </div>

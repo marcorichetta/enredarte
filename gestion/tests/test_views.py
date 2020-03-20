@@ -1,40 +1,31 @@
-import json
-from django.test import TestCase, Client
+import pytest, json
 
 # Tests para views de Localidad y Provincia
 
 from gestion.models import Localidad, Provincia
+from utiles.factories import ProvinciaFactory, LocalidadFactory
 
 
-class LocalidadView(TestCase):
+@pytest.mark.django_db
+def test_ajax_request_nueva_localidad(client):
+    """ Crea una nueva localidad simulando la request del modal de la ruta clientes/new"""
 
-    @classmethod
-    def setUpTestData(cls):
+    # Creamos la data necesaria para realizar los tests
+    provincia1 = ProvinciaFactory()
 
-        # Creamos la data necesaria para realizar los tests
-        Provincia.objects.create(cod_provincia='TEST', provincia='CBA')
+    testData = {"cod_postal": "9999", "localidad": "Test", "provincia_id": "1"}
 
-    def test_ajax_request_nueva_localidad(self):
-        """ Crea una nueva localidad simulando la request del modal de la página de Clientes"""
+    response = client.post("/localidad/new/", testData)
 
-        testData = {
-            'cod_postal': '9999',
-            'localidad': 'Test',
-            'provincia_id': '1'
-        }
+    # Obterner la localidad creada
+    localidadCreada = Localidad.objects.get(id=1)
 
-        # No definir el content-type de la request
-        self.client.post('/localidad/new/', testData)
+    valoresEsperados = ["9999", "Test", 1]
 
-        localidadCreada = Localidad.objects.get(id=1)
+    valoresEnDB = [
+        localidadCreada.cod_postal,
+        localidadCreada.localidad,
+        localidadCreada.provincia_id,
+    ]
 
-        # Los valores esperados
-        valoresEsperados = ['9999', 'Test', 1]
-
-        valoresEnDB = [
-            localidadCreada.cod_postal,
-            localidadCreada.localidad,
-            localidadCreada.provincia_id
-        ]
-
-        self.assertListEqual(valoresEnDB, valoresEsperados)
+    assert valoresEnDB == valoresEsperados
