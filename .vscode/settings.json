@@ -1,0 +1,12 @@
+{
+	"workbench.colorCustomizations": {
+		"activityBar.background": "#f0efef",
+		"activityBar.activeBackground": "#cfcd30",
+		"activityBar.foreground": "#181717",
+		"activityBar.inactiveForeground": "#6d6d6d",
+		"activityBarBadge.background": "#f3bc25",
+		"activityBarBadge.foreground": "#000000"
+	},
+	"python.pythonPath": "env/bin/python",
+	"editor.formatOnPaste": false
+}
