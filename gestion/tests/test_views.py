@@ -13,11 +13,11 @@ def test_ajax_request_nueva_localidad(client):
     # Creamos la data necesaria para realizar los tests
     provincia1 = ProvinciaFactory()
 
-    testData = {"cod_postal": "9999", "localidad": "Test", "provincia_id": "1"}
+    testData = {"cod_postal": "9999", "localidad": "Test", "provincia_id": provincia1.id}
 
     response = client.post("/localidad/new/", testData)
 
-    # Obterner la localidad creada
+    # Obtener la localidad creada
     localidadCreada = Localidad.objects.get(id=1)
 
     valoresEsperados = ["9999", "Test", 1]
