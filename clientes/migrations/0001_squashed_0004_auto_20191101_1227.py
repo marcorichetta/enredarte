@@ -7,66 +7,66 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    replaces = [('clientes', '0001_initial'), ('clientes', '0002_auto_20190722_1526'), ('clientes', '0003_auto_20190806_1806'), ('clientes', '0004_auto_20191101_1227')]
+    # replaces = [('clientes', '0001_initial'), ('clientes', '0002_auto_20190722_1526'), ('clientes', '0003_auto_20190806_1806'), ('clientes', '0004_auto_20191101_1227')]
 
     initial = True
 
-    dependencies = [
-        ('gestion', '0006_auto_20190718_1239'),
-    ]
+    dependencies = [("gestion", "0006_auto_20190718_1239")]
 
     operations = [
         migrations.CreateModel(
-            name='Cliente',
+            name="Cliente",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nombre', models.CharField(max_length=64)),
-                ('apellido', models.CharField(max_length=64)),
-                ('email', models.EmailField(max_length=254)),
-                ('telefono', models.CharField(max_length=64)),
-                ('calle', models.CharField(max_length=64)),
-                ('numero', models.CharField(max_length=6)),
-                ('detalles', models.TextField(blank=True)),
-                ('localidad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clientes', to='gestion.Localidad')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("nombre", models.CharField(max_length=64)),
+                ("apellido", models.CharField(max_length=64)),
+                ("email", models.EmailField(max_length=254)),
+                ("telefono", models.CharField(max_length=64)),
+                ("calle", models.CharField(max_length=64)),
+                ("numero", models.CharField(max_length=6)),
+                ("detalles", models.TextField(blank=True)),
+                (
+                    "localidad",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="clientes",
+                        to="gestion.Localidad",
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'clientes_cliente',
-                'ordering': ['nombre', 'apellido'],
-            },
+            options={"db_table": "clientes_cliente", "ordering": ["nombre", "apellido"]},
         ),
-        migrations.AlterModelTable(
-            name='cliente',
-            table=None,
-        ),
+        migrations.AlterModelTable(name="cliente", table=None),
         migrations.AddField(
-            model_name='cliente',
-            name='fecha_creacion',
+            model_name="cliente",
+            name="fecha_creacion",
             field=models.DateField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='cliente',
-            name='calle',
-            field=models.CharField(blank=True, max_length=64),
+            model_name="cliente", name="calle", field=models.CharField(blank=True, max_length=64)
         ),
         migrations.AlterField(
-            model_name='cliente',
-            name='email',
-            field=models.EmailField(blank=True, max_length=254),
+            model_name="cliente", name="email", field=models.EmailField(blank=True, max_length=254)
         ),
         migrations.AlterField(
-            model_name='cliente',
-            name='numero',
-            field=models.CharField(blank=True, max_length=6),
+            model_name="cliente", name="numero", field=models.CharField(blank=True, max_length=6)
         ),
         migrations.AlterField(
-            model_name='cliente',
-            name='telefono',
-            field=models.CharField(blank=True, max_length=64),
+            model_name="cliente", name="telefono", field=models.CharField(blank=True, max_length=64)
         ),
         migrations.AlterField(
-            model_name='cliente',
-            name='localidad',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='clientes', to='gestion.Localidad'),
+            model_name="cliente",
+            name="localidad",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="clientes",
+                to="gestion.Localidad",
+            ),
         ),
     ]

@@ -9,25 +9,47 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('productos', '0003_insumo_proveedores'),
-        ('clientes', '0002_auto_20190722_1526'),
+        ("productos", "0003_insumo_proveedores"),
+        ("clientes", "0001_squashed_0004_auto_20191101_1227"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Pedido',
+            name="Pedido",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('precio_final', models.DecimalField(decimal_places=2, help_text='Precio en $', max_digits=6)),
-                ('detalles', models.TextField(blank=True)),
-                ('estado', models.CharField(choices=[('creado', 'Creado'), ('pagado', 'Pagado'), ('enviado', 'Enviado')], default='creado', max_length=64)),
-                ('actualizado', models.DateTimeField(auto_now=True)),
-                ('fecha_pedido', models.DateField(auto_now_add=True)),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='clientes.Cliente')),
-                ('productos_pedido', models.ManyToManyField(to='productos.Producto')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "precio_final",
+                    models.DecimalField(decimal_places=2, help_text="Precio en $", max_digits=6),
+                ),
+                ("detalles", models.TextField(blank=True)),
+                (
+                    "estado",
+                    models.CharField(
+                        choices=[
+                            ("creado", "Creado"),
+                            ("pagado", "Pagado"),
+                            ("enviado", "Enviado"),
+                        ],
+                        default="creado",
+                        max_length=64,
+                    ),
+                ),
+                ("actualizado", models.DateTimeField(auto_now=True)),
+                ("fecha_pedido", models.DateField(auto_now_add=True)),
+                (
+                    "cliente",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="clientes.Cliente"
+                    ),
+                ),
+                ("productos_pedido", models.ManyToManyField(to="productos.Producto")),
             ],
-            options={
-                'ordering': ['-fecha_pedido', '-actualizado'],
-            },
-        ),
+            options={"ordering": ["-fecha_pedido", "-actualizado"]},
+        )
     ]
