@@ -25,6 +25,7 @@ Productos
                 <th>Nombre</th>
                 <th>Precio</th>
                 <th>Stock</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,14 @@ Productos
                 <td><a href="{% url 'detailProducto' prod.id %}">{{ prod.nombre }} </a></td>
                 <td>$ {{ prod.precio_venta_terminado }}</td>
                 <td>12</td>
+                <td>
+                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' prod.id %}">
+                        <span data-feather="edit-3"></span>
+                    </a>
+                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deleteProducto' prod.id %}">
+                        <span data-feather="trash"></span>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

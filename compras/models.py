@@ -8,22 +8,32 @@ class Compra(models.Model):
     """Model definition for Compra."""
 
     # Un proveedor no se puede eliminar si existen compras asociadas a él
-    proveedor = models.ForeignKey(
-        'proveedores.Proveedor', on_delete=models.PROTECT)
-    insumos_compra = models.ManyToManyField(
-        'productos.Insumo', through="InsumosCompra")
+    proveedor = models.ForeignKey("proveedores.Proveedor", on_delete=models.PROTECT)
+    insumos_compra = models.ManyToManyField("productos.Insumo", through="InsumosCompra")
     detalles = models.TextField(blank=True)
     fecha_compra = models.DateField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-fecha_compra']
+        ordering = ["-fecha_compra"]
 
     def __str__(self):
         return f"Compra #{self.id}"
 
-"""     def get_absolute_url(self):
-        return reverse('detailCompra', kwargs={'pk': self.id})
- """
+    def get_absolute_url(self):
+        return reverse("compra")
+
+    @property
+    def get_insumos(self):
+        """ Devuelve los productos relacionados a este pedido """
+        insumos = self.insumoscompra_set.all()
+        return insumos
+
+    @property
+    def precio_total(self):
+        """ Precio de la suma de los insumos """
+
+        return sum(list(map(lambda insumo: insumo.precio_compra, self.insumoscompra_set.all())))
+
 
 class InsumosCompra(models.Model):
     """Model definition for InsumosCompra."""
@@ -31,12 +41,12 @@ class InsumosCompra(models.Model):
     """ Si se elimina una compra
         los insumos asociados a esa compra se eliminan """
     compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
-    insumo = models.ForeignKey('productos.Insumo', on_delete=models.CASCADE)
+    insumo = models.ForeignKey("productos.Insumo", on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     precio_compra = models.PositiveIntegerField(help_text="Precio unitario")
 
     class Meta:
-        verbose_name_plural = 'InsumosCompras'
+        verbose_name_plural = "InsumosCompras"
 
     def __str__(self):
         return f"{self.cantidad} - {self.insumo.nombre}"

@@ -8,5 +8,8 @@
 		"activityBarBadge.foreground": "#000000"
 	},
 	"python.pythonPath": "env/bin/python",
-	"editor.formatOnPaste": false
+	"editor.formatOnPaste": false,
+	"files.associations": {
+		"*.html": "django-html"
+	},
 }

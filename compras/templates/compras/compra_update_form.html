@@ -5,35 +5,21 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'pedido' %}">Pedidos</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'compra' %}">Compras</a></li>
         <li class="breadcrumb-item">
-            <a href="{% url 'detailCliente' object.id %}">
-                Compra #{{ object.nombre }}
+            <a href="{% url 'detailCompra' object.id %}">
+                Compra #{{ object.id }}
             </a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+        <li class="breadcrumb-item active" aria-current="page">Actualizar</li>
         </ol>
     </nav>
 
     <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="row">
-                <legend class="border-bottom mb-3">Actualizar Pedido</legend>
-                <div class="col-6">
-                    {{ form|crispy }}
-                </div>
-
-                {% for formset in inlines %}
-                    <div class="col-6">
-                        {{ formset|crispy }}
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Guardar</button>
-            </div>
-        </form>
+        <legend class="border-bottom mb-3">Actualizar Compra</legend>
+        <div class="col-8">
+            {% crispy form %}
+        </div>
     </div>
 </div>
 {% endblock content %}

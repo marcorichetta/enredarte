@@ -15,7 +15,7 @@ from crispy_forms.layout import (
     Submit,
     Button,
 )
-from .custom_layout_object import Formset
+from gestion.custom_layout_object import Formset
 
 
 class ProductoForm(forms.ModelForm):
@@ -47,7 +47,7 @@ class ProductoForm(forms.ModelForm):
             Div(
                 Fieldset("Otros insumos", Formset("insumos")),
                 HTML("<br>"),
-                ButtonHolder(Submit("submit", "Crear Producto", css_class="btn-success")),
+                ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
             ),
         )
 

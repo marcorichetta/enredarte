@@ -12,7 +12,7 @@ class Formset(LayoutObject):
         Formset('contact_formset')
     """
 
-    template = "productos/formset.html"
+    template = "gestion/formset.html"
 
     def __init__(self, formset_name_in_context, template=None):
 
@@ -28,5 +28,5 @@ class Formset(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         formset = context.get(self.formset_name_in_context)
 
-        context.update({'formset': formset})
+        context.update({"formset": formset})
         return render_to_string(self.template, context.flatten())
