@@ -15,9 +15,11 @@ django-extra-views==0.12.0
 django-select2==7.1.1
 factory-boy==2.12.0
 Faker==4.0.2
+flake8==3.8.1
 ipython==7.13.0
 ipython-genutils==0.2.0
 jedi==0.16.0
+mccabe==0.6.1
 more-itertools==8.2.0
 packaging==20.3
 parso==0.6.2
@@ -30,7 +32,8 @@ prompt-toolkit==3.0.4
 psycopg2==2.8.3
 ptyprocess==0.6.0
 py==1.8.1
-pycodestyle==2.5.0
+pycodestyle==2.6.0
+pyflakes==2.2.0
 Pygments==2.6.1
 pyparsing==2.4.6
 pytest==5.4.1
