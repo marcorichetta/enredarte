@@ -12,10 +12,7 @@
 	"files.associations": {
 		"*.html": "django-html"
 	},
-	"python.linting.flake8Enabled": true,
 	"python.linting.enabled": true,
-	"python.linting.flake8Args": [
-		"max-line-length=120"
-	],
-	"python.formatting.provider": "black"
+	"python.formatting.provider": "black",
+	"python.linting.prospectorEnabled": true
 }
