@@ -12,4 +12,7 @@
 	"files.associations": {
 		"*.html": "django-html"
 	},
+	"python.linting.enabled": true,
+	"python.formatting.provider": "black",
+	"python.linting.prospectorEnabled": true
 }
