@@ -32,7 +32,12 @@ class PedidoForm(forms.ModelForm):
         self.helper.label_class = "col-md-3 create-label"
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
-            Div(Field("cliente"), Field("detalles", style="height: 5rem"), Field("estado")),
+            Div(
+                Field("cliente"),
+                Field("detalles", style="height: 5rem"),
+                Field("estado"),
+                Field("precio_final"),
+            ),
             Div(
                 Fieldset("Productos", Formset("productos")),
                 HTML("<br>"),
@@ -77,6 +82,7 @@ ProductosPedidoFormset = forms.inlineformset_factory(
     form=ProductosPedidoForm,
     fields=["producto", "cantidad"],
     can_delete=True,
-    extra=1,
+    extra=0,
+    min_num=1,
     max_num=5,
 )
