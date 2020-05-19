@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.db.models import ProtectedError
 from django.contrib import messages
+from django.db import transaction
+
 from django.urls import reverse_lazy
 
 from django.views.generic import (
@@ -14,6 +16,7 @@ from django.views.generic import (
 )
 
 from .models import Pedido, ProductosPedido
+from .forms import PedidoForm, ProductosPedidoFormset
 
 # Create your views here.
 
@@ -34,16 +37,39 @@ class PedidoListView(ListView):
         return queryset
 
 
-# class ProductosPedidoInline(InlineFormSetFactory):
-#     model = ProductosPedido
-#     fields = ['producto', 'cantidad']
-#     factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
-
-
 class PedidoCreateView(CreateView):
     model = Pedido
-    fields = ["id", "cliente", "precio_final", "detalles", "estado"]
-    template_name = "pedidos/pedido_form.html"
+    form_class = PedidoForm
+
+    def get_context_data(self, **kwargs):
+        context = super(PedidoCreateView, self).get_context_data(**kwargs)
+        # Le agregamos los productos al context para usarlos en el template
+        if self.request.POST:
+            context["productos"] = ProductosPedidoFormset(self.request.POST)
+        else:
+            context["productos"] = ProductosPedidoFormset()
+        return context
+
+    def form_valid(self, form):
+        # Obtener info de pedido y productos posteados en el form
+        context = self.get_context_data()
+        productos = context["productos"]
+
+        # Esto se ejecuta sólo si la transacción es atómica
+        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
+        with transaction.atomic():
+            # Guardar la compra
+            self.object = form.save()
+            # Si son válidos los productos se guardan
+            if productos.is_valid():
+                productos.instance = self.object
+                productos.save()
+
+                # Guardar compra completa
+                return super(PedidoCreateView, self).form_valid(form)
+
+            # Repopular form con errores
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class PedidoUpdateView(UpdateView):

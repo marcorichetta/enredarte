@@ -61,9 +61,9 @@ class CompraCreateView(CreateView):
 
                 # Guardar compra completa
                 return super(CompraCreateView, self).form_valid(form)
-            else:
-                # Repopular form con errores
-                return self.render_to_response(self.get_context_data(form=form))
+
+            # Repopular form con errores
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class CompraUpdateView(UpdateView):
