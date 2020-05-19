@@ -3,8 +3,6 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from .models import Producto, Unidad, Insumo, InsumosProducto
 
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
-
 from .forms import ProductoForm, InsumosProductoFormset
 from django.db import transaction
 

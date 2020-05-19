@@ -10,23 +10,19 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-    TemplateView
+    TemplateView,
 )
 
 from .models import Pedido, ProductosPedido
-from extra_views import (
-    CreateWithInlinesView,
-    UpdateWithInlinesView,
-    InlineFormSetFactory,
-)
 
 # Create your views here.
 
+
 class PedidoListView(ListView):
     model = Pedido
-    template_name = 'pedidos/pedidos.html'
-    context_object_name = 'pedidos'
-    ordering = ['id']
+    template_name = "pedidos/pedidos.html"
+    context_object_name = "pedidos"
+    ordering = ["id"]
     paginate_by = 10
 
     def get_queryset(self):
@@ -37,30 +33,32 @@ class PedidoListView(ListView):
             return queryset.filter(title__icontains=q)
         return queryset
 
-class ProductosPedidoInline(InlineFormSetFactory):
-    model = ProductosPedido
-    fields = ['producto', 'cantidad']
-    factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
 
-class PedidoCreateView(CreateWithInlinesView):
-    model = Pedido
-    inlines = [ProductosPedidoInline]
-    fields = ['id', 'cliente', 'precio_final', 'detalles', 'estado']
-    template_name = 'pedidos/pedido_form.html'
+# class ProductosPedidoInline(InlineFormSetFactory):
+#     model = ProductosPedido
+#     fields = ['producto', 'cantidad']
+#     factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
 
-class PedidoUpdateView(UpdateWithInlinesView):
+
+class PedidoCreateView(CreateView):
     model = Pedido
-    inlines = [ProductosPedidoInline]
-    fields = ['cliente', 'precio_final', 'detalles', 'estado']
-    template_name = 'pedidos/pedido_update_form.html'
+    fields = ["id", "cliente", "precio_final", "detalles", "estado"]
+    template_name = "pedidos/pedido_form.html"
+
+
+class PedidoUpdateView(UpdateView):
+    model = Pedido
+    fields = ["cliente", "precio_final", "detalles", "estado"]
+    template_name = "pedidos/pedido_update_form.html"
 
 
 class PedidoDetailView(DetailView):
     model = Pedido
 
+
 class PedidoDeleteView(DeleteView):
     model = Pedido
-    success_url = reverse_lazy('pedido')
+    success_url = reverse_lazy("pedido")
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -69,15 +67,14 @@ class PedidoDeleteView(DeleteView):
         try:
             self.object.delete()
             # Enviar mensaje para mostrar alerta
-            messages.success(
-                request, f'{self.object} fue eliminado.')
+            messages.success(request, f"{self.object} fue eliminado.")
 
             # Redirect to success_url
         except ProtectedError:
             context = self.get_context_data(
                 object=self.object,
-                error=f'{self.object} no puede ser eliminado porque \
-                    tiene dependencias. Consulte al administrador.',
+                error=f"{self.object} no puede ser eliminado porque \
+                    tiene dependencias. Consulte al administrador.",
             )
             return self.render_to_response(context)
         return HttpResponseRedirect(success_url)
