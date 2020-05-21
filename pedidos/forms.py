@@ -1,7 +1,6 @@
 import re
 from django import forms
-from compras.models import Compra, InsumosCompra
-
+from pedidos.models import Pedido, ProductosPedido
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
@@ -18,36 +17,41 @@ from crispy_forms.layout import (
 from gestion.custom_layout_object import Formset
 
 
-class CompraForm(forms.ModelForm):
-    """ Formulario principal de Compras. """
+class PedidoForm(forms.ModelForm):
+    """Form principal de Pedido."""
 
     class Meta:
-        model = Compra
-        exclude = ("insumos_compra",)
+        model = Pedido
+        fields = ("cliente", "precio_final", "detalles", "estado")
 
     def __init__(self, *args, **kwargs):
-        super(CompraForm, self).__init__(*args, **kwargs)
+        super(PedidoForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.form_class = "form-horizontal"
         self.helper.label_class = "col-md-3 create-label"
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
-            Div(Field("proveedor"), Field("detalles")),
             Div(
-                Fieldset("Insumos", Formset("insumos")),
+                Field("cliente"),
+                Field("detalles", style="height: 5rem"),
+                Field("estado"),
+                Field("precio_final"),
+            ),
+            Div(
+                Fieldset("Productos", Formset("productos")),
                 HTML("<br>"),
-                ButtonHolder(Submit("submit", "Guardar Compra", css_class="btn-success")),
+                ButtonHolder(Submit("submit", "Guardar Pedido", css_class="btn-success")),
             ),
         )
 
 
-class InsumosCompraForm(forms.ModelForm):
+class ProductosPedidoForm(forms.ModelForm):
     """Estructura del formulario para agregar insumos a la compra. """
 
     class Meta:
-        model = InsumosCompra
-        exclude = ()
+        model = ProductosPedido
+        fields = ("pedido", "producto", "cantidad")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,9 +64,8 @@ class InsumosCompraForm(forms.ModelForm):
         self.helper.field_class = "col-auto"
         self.helper.layout = Layout(
             Row(
-                Field("insumo"),
+                Field("producto"),
                 Field("cantidad"),
-                Field("precio_compra"),
                 Field("DELETE"),
                 css_class=f"formset_row-{formtag_prefix}",
                 style="flex-wrap: nowrap;",
@@ -73,11 +76,11 @@ class InsumosCompraForm(forms.ModelForm):
 # Formset que incluye las relaciones entre Compra e Insumo
 # - Se crea 1 formset inicialmente
 # - Se pueden agregar 4 más
-InsumosCompraFormset = forms.inlineformset_factory(
-    Compra,
-    InsumosCompra,
-    form=InsumosCompraForm,
-    fields=["insumo", "cantidad", "precio_compra"],
+ProductosPedidoFormset = forms.inlineformset_factory(
+    Pedido,
+    ProductosPedido,
+    form=ProductosPedidoForm,
+    fields=["producto", "cantidad"],
     can_delete=True,
     extra=0,
     min_num=1,

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 from django.urls import reverse_lazy
 
 from django.views.generic import (
@@ -24,14 +24,20 @@ class ProveedorListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        """ Override queryset method to be able to respond
-            to search forms in proveedores.html """
+        ''' Permite buscar en un form dentro de la misma página
+        con el formato `q?texto` '''
         queryset = super(ProveedorListView, self).get_queryset()
 
-        q = self.request.GET.get("q")
-        if q:
-            return queryset.filter(razon_social__icontains=q)
+        query = self.request.GET.get("search")
+        if query:
+            return queryset.filter(Q(razon_social__icontains=query))
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        context = super(ProveedorListView, self).get_context_data(**kwargs)
+        context["search_txt"] = self.request.GET.get("search", "")
+        return context
 
 
 class ProveedorCreateView(CreateView):

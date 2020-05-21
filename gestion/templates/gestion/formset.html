@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-<!-- Alinear el botón para eliminar insumos -->
+<!-- Alinear el botón para eliminar objetos -->
 <style type="text/css">
     .delete-row {
         align-self: center;
@@ -32,7 +32,7 @@
 <script type="text/javascript">
     // Docs: https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst#formset-options
 
-    // Opciones para personalizar como se renderiza el formset de Insumos Extra
+    // Opciones para personalizar como se renderiza el formset
     $('.formset_row-{{ formset.prefix }}').formset({
         addText: 'Agregar',
         addCssClass: 'btn btn-primary',
