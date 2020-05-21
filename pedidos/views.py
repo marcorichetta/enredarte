@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 from django.contrib import messages
 from django.db import transaction
 
@@ -29,17 +29,28 @@ class PedidoListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        """ Permite buscar en un form dentro de la misma página
+        con el formato `q?texto` """
         queryset = super(PedidoListView, self).get_queryset()
 
-        q = self.request.GET.get("q")
-        if q:
-            return queryset.filter(title__icontains=q)
+        query = self.request.GET.get("search")
+        if query:
+            return queryset.filter(
+                Q(cliente__nombre__icontains=query) | Q(cliente__nombre__icontains=query)
+            )
         return queryset
+
+    def get_context_data(self, **kwargs):
+        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        context = super(PedidoListView, self).get_context_data(**kwargs)
+        context["search_txt"] = self.request.GET.get("search", "")
+        return context
 
 
 class PedidoCreateView(CreateView):
     model = Pedido
     form_class = PedidoForm
+    success_message = "Pedido %(pk)s fue creado correctamente"
 
     def get_context_data(self, **kwargs):
         context = super(PedidoCreateView, self).get_context_data(**kwargs)
@@ -58,14 +69,14 @@ class PedidoCreateView(CreateView):
         # Esto se ejecuta sólo si la transacción es atómica
         # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
         with transaction.atomic():
-            # Guardar la compra
+            # Guardar el pedido
             self.object = form.save()
             # Si son válidos los productos se guardan
             if productos.is_valid():
                 productos.instance = self.object
                 productos.save()
 
-                # Guardar compra completa
+                # Guardar pedido completa
                 return super(PedidoCreateView, self).form_valid(form)
 
             # Repopular form con errores
@@ -74,12 +85,51 @@ class PedidoCreateView(CreateView):
 
 class PedidoUpdateView(UpdateView):
     model = Pedido
-    fields = ["cliente", "precio_final", "detalles", "estado"]
-    template_name = "pedidos/pedido_update_form.html"
+    form_class = PedidoForm
+    # Modify the template used for this view
+    template_name_suffix = "_update_form"
+    success_message = "Pedido %(pk)s fue actualizado correctamente"
+
+    def get_context_data(self, **kwargs):
+        context = super(PedidoUpdateView, self).get_context_data(**kwargs)
+        # Le agregamos los productos al context para usarlos en el template
+        if self.request.POST:
+            context["productos"] = ProductosPedidoFormset(self.request.POST)
+        else:
+            context["productos"] = ProductosPedidoFormset(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        # Obtener info de pedido y productos posteados en el form
+        context = self.get_context_data()
+        productos = context["productos"]
+
+        # Esto se ejecuta sólo si la transacción es atómica
+        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
+        with transaction.atomic():
+            # Guardar el pedido
+            self.object = form.save()
+            # Si son válidos los productos se guardan
+            if productos.is_valid():
+                productos.instance = self.object
+                productos.save()
+
+                # Guardar pedido completa
+                return super(PedidoUpdateView, self).form_valid(form)
+
+            # Repopular form con errores
+            return self.render_to_response(self.get_context_data(form=form))
+
+    def get_success_url(self):
+        return reverse_lazy("detailPedido", kwargs={"pk": self.object.pk})
 
 
 class PedidoDetailView(DetailView):
     model = Pedido
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PedidoDetailView, self).get_context_data(*args, **kwargs)
+        return context
 
 
 class PedidoDeleteView(DeleteView):
@@ -93,7 +143,7 @@ class PedidoDeleteView(DeleteView):
         try:
             self.object.delete()
             # Enviar mensaje para mostrar alerta
-            messages.success(request, f"{self.object} fue eliminado.")
+            messages.success(request, f"Pedido {kwargs.get('pk')} fue eliminado.")
 
             # Redirect to success_url
         except ProtectedError:
