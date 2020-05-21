@@ -17,15 +17,20 @@ class ProductoListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        """ Permite buscar en un form dentro de la misma página
+        con el formato `q?texto` """
         queryset = super(ProductoListView, self).get_queryset()
 
-        # Permite buscar en un form dentro de la misma página
-        # con el formato q?<nombre-del-producto>
         q = self.request.GET.get("q")
         if q:
             return queryset.filter(title__icontains=q)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        context = super(ProductoListView, self).get_context_data(**kwargs)
+        context["search_txt"] = self.request.GET.get("search", "")
+        return context
 
 """ class InsumosProductoInline(InlineFormSetFactory):
     model = InsumosProducto

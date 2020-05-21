@@ -16,16 +16,17 @@ class CompraListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        """ Permite buscar en un form dentro de la misma página
+        con el formato `q?texto` """
         queryset = super(CompraListView, self).get_queryset()
 
-        # Permite buscar en un form dentro de la misma página
-        # con el formato q?<nombre-del-producto>
         query = self.request.GET.get("search")
         if query:
             return queryset.filter(Q(proveedor__razon_social__icontains=query))
         return queryset
 
     def get_context_data(self, **kwargs):
+        ''' Devuelve el texto buscado para usarlo en la paginación '''
         context = super(CompraListView, self).get_context_data(**kwargs)
         context["search_txt"] = self.request.GET.get("search", "")
         return context
@@ -96,9 +97,9 @@ class CompraUpdateView(UpdateView):
                 insumos.save()
                 # Guardar compra completo
                 return super(CompraUpdateView, self).form_valid(form)
-            else:
-                # Repopular form con errores
-                return self.render_to_response(self.get_context_data(form=form))
+
+            # Repopular form con errores
+            return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
         return reverse_lazy("detailCompra", kwargs={"pk": self.object.pk})

@@ -10,8 +10,6 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from gestion.models import Provincia, Localidad
 from .models import Cliente
 
-# Create your views here.
-
 
 class ClienteListView(ListView):
     model = Cliente
@@ -21,10 +19,10 @@ class ClienteListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = super(ClienteListView, self).get_queryset()
+        """ Permite buscar en un form dentro de la misma página
+        con el formato `q?texto` """
 
-        # Permite buscar en un form dentro de la misma página
-        # con el formato q?<nombre-del-producto>
+        queryset = super(ClienteListView, self).get_queryset()
         query = self.request.GET.get("q")
         if query:
             return queryset.filter(
@@ -33,6 +31,12 @@ class ClienteListView(ListView):
                 | Q(email__icontains=query)
             )
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        context = super(ClienteListView, self).get_context_data(**kwargs)
+        context["search_txt"] = self.request.GET.get("search", "")
+        return context
 
 
 class ClienteCreateView(CreateView):
