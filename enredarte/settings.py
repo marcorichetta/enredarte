@@ -35,6 +35,20 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    # 3rd party
+    "crispy_forms",
+    "django_extensions",
+    "debug_toolbar",
+
+    # Django
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    # My apps
     "users",
     "productos",
     "clientes",
@@ -43,18 +57,10 @@ INSTALLED_APPS = [
     "variables",
     "compras",
     "gestion",
-    "crispy_forms",
-    "django_extensions",
-    "debug_toolbar",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -131,7 +137,10 @@ USE_TZ = True
 
 # BASE_DIR = /home/rich/programming/enredarte
 
-# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+# Whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "staticfiles")
 STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")

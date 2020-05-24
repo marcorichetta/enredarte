@@ -27,6 +27,7 @@ source env/bin/activate[.fish] # Dependerá de la terminal que este utilizando
 ./manage.py crear_clientes
 ./manage.py crear_variables
 ./manage.py crear_proveedores
+./manage.py crear_insumos
 ```
 
 ## 4. Creamos superusuario
