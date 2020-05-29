@@ -3,56 +3,71 @@
 
 {% block title %} Enredarte {% endblock title %}
 
+{% block extra_head %}
+    <!-- Fullcalendar CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/core@4.4.0/main.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/bootstrap@4.4.0/main.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/daygrid@4.4.0/main.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/list@4.4.0/main.min.css"/>
+{% endblock extra_head %}
+
 {% block content %}
+
 <!-- Dashboard Template -->
 <div class="content-section">
     <h2 class="border-bottom mb-3">Inicio</h2>
-    <div class="row">
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Pedidos</h5>
-                    <p class="card-text">Listado de Pedidos</p>
-                    <a href="{% url 'pedido' %}" class="btn btn-primary">Ir a Pedidos</a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for p in pedidos %}
-                    <li class="list-group-item">Pedido #{{ p.id }} {{ p.estado }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Productos</h5>
-                    <p class="card-text">Listado de Productos</p>
-                    <a href="{% url 'producto' %}" class="btn btn-primary">Ir a Productos</a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for p in productos %}
-                    <li class="list-group-item">Producto #{{ p.id }} {{ p.nombre }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Clientes</h5>
-                    <p class="card-text">Listado de Clientes</p>
-                    <a href="{% url 'cliente' %}" class="btn btn-primary">Ir a Clientes</a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for c in clientes %}
-                    <li class="list-group-item">{{ c.nombre }} {{ c.apellido }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+    <div id='calendar' class="container"></div>
+    {% include 'gestion/pedido_modal.html' %}
 </div>
 
 <!-- Dashboard End -->
 
 {% endblock content %}
+
+
+{% block extra_js %}
+
+    <!-- Fullcalendar JS -->
+    <script src='https://unpkg.com/@fullcalendar/core@4.4.0/main.min.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/core@4.4.0/locales/es.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/bootstrap@4.4.0/main.min.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/daygrid@4.4.0/main.min.js'></script>
+    <script src="https://unpkg.com/@fullcalendar/list@4.4.0/main.min.js"></script>
+
+    <script>
+        'use strict';
+        let calendar;
+        
+        // Calendar initialization
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+  
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid', 'list' ],
+            defaultView: 'dayGridMonth',
+            header: {
+                left: 'prev,next, today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,listMonth'
+            },
+            locale: 'es',
+            weekMode: 'liquid',
+            editable: true,
+            eventTextColor: 'white',
+            eventSources: [{
+                url: '{% url "get_pedidos" %}'
+            }],
+            eventRender: function(info) {
+                // Hacer algo antes de renderizar los eventos
+                // let status = info.event.extendedProps.status;
+            },
+            eventClick: function(info){
+                $("#PedidoModal").modal('show');
+            }
+          });
+  
+          calendar.render();
+        });
+  
+      </script>
+{% endblock extra_js %}

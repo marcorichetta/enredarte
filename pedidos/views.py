@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.views.decorators.http import require_http_methods
 from django.db.models import ProtectedError, Q
 from django.contrib import messages
 from django.db import transaction
@@ -154,3 +155,22 @@ class PedidoDeleteView(DeleteView):
             )
             return self.render_to_response(context)
         return HttpResponseRedirect(success_url)
+
+@require_http_methods(["GET"])
+def get_pedidos(request):
+    '''
+        Vista llamada al inicializar el calendario.
+        
+        Devuelve los pedidos pendientes de entrega
+    '''
+
+    pedidos = Pedido.objects.all()
+
+    pedidos = [{
+        'id': p.id,
+        'title': str(p.cliente),
+        'start': p.fecha_pedido.isoformat(),
+        'status': p.estado,
+    } for p in pedidos]
+
+    return JsonResponse(pedidos, safe=False)

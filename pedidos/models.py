@@ -25,6 +25,7 @@ class Pedido(models.Model):
     actualizado = models.DateTimeField(
         auto_now=True, help_text="Última vez actualizado")
     fecha_pedido = models.DateField(auto_now_add=True)
+    fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada")
 
     def __str__(self):
         return f"Pedido #{self.id}"

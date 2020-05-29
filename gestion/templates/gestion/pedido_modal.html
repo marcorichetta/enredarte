@@ -1,0 +1,29 @@
+<!-- Modal Pedido -->
+<div class="modal fade" id="PedidoModal" tabindex="1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modificar Pedido</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h1 id="title"></h1>
+          <p>Fecha: <strong id="start"></strong></p>
+          <p>Estado: <strong id="state"></strong></p>
+          <p class="cliente-p">Cliente: 
+            <strong id="cliente-apellido"></strong>, 
+            <strong id="cliente-nombre"></strong></p>
+        </div>
+        <input hidden id="idPedido">
+        <div class="modal-footer">
+          <div class="container" >
+          <button type="button" class="btn btn-primary" id='btnConfirmar'
+            onclick="confirmarPedido()">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Fin Modal Pedido -->
