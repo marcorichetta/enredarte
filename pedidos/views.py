@@ -167,10 +167,32 @@ def get_pedidos(request):
     pedidos = Pedido.objects.all()
 
     pedidos = [{
-        'id': p.id,
+        'id': p.pk,
         'title': str(p.cliente),
         'start': p.fecha_pedido.isoformat(),
         'status': p.estado,
     } for p in pedidos]
 
+    return JsonResponse(pedidos, safe=False)
+
+@require_http_methods(["GET"])
+def filterPedidos(request, idEstado):
+    #TODO - Esta función se podría unificar con la función get_pedidos
+    '''
+        Función llamada mediante Ajax que
+        filtra los pedidos en base su estado
+
+        `id`= ID de estado del pedido
+    '''
+    # http://www.mikesmithdev.com/demo-fullcalendar-with-event-filtering/
+
+    pedidos = Pedido.objects.filter(estado=idEstado)
+
+    pedidos = [{
+        'id': p.pk,
+        'title': str(p.cliente),
+        'start': p.fecha_pedido.isoformat(),
+        'status': p.estado,
+    } for p in pedidos]
+    
     return JsonResponse(pedidos, safe=False)

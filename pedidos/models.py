@@ -6,10 +6,16 @@ from django.urls import reverse
 
 class Pedido(models.Model):
 
+    CREADO = 1
+    EN_PROCESO = 2
+    ENTREGADO = 3
+    PAGADO = 4
+
     ESTADO_PEDIDO_CHOICES = (
-        ('creado', 'Creado'),
-        ('pagado', 'Pagado'),
-        ('entregado', 'Entregado'),
+        (CREADO, 'Creado'),
+        (EN_PROCESO, 'En proceso'),
+        (ENTREGADO, 'Entregado'),
+        (PAGADO, 'Pagado'),
     )
 
     # Un cliente no se puede eliminar si tiene pedidos asociados
@@ -20,8 +26,7 @@ class Pedido(models.Model):
     precio_final = models.DecimalField(
         help_text='Precio en $', max_digits=6, decimal_places=2)
     detalles = models.TextField(blank=True)
-    estado = models.CharField(
-        max_length=64, default='creado', choices=ESTADO_PEDIDO_CHOICES)
+    estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
     actualizado = models.DateTimeField(
         auto_now=True, help_text="Última vez actualizado")
     fecha_pedido = models.DateField(auto_now_add=True)

@@ -5,7 +5,8 @@ from .views import (
     PedidoCreateView,
     PedidoUpdateView,
     PedidoDeleteView,
-    get_pedidos
+    get_pedidos,
+    filterPedidos
 )
 
 urlpatterns = [
@@ -14,5 +15,6 @@ urlpatterns = [
     path("<int:pk>/", PedidoDetailView.as_view(), name="detailPedido"),
     path("<int:pk>/delete", PedidoDeleteView.as_view(), name="deletePedido"),
     path("<int:pk>/update/", PedidoUpdateView.as_view(), name="updatePedido"),
-    path("get_pedidos/", get_pedidos, name='get_pedidos')
+    path("get_pedidos/", get_pedidos, name='get_pedidos'),
+    path("filterPedidos/<int:idEstado>", filterPedidos, name='filterPedidos'),
 ]
