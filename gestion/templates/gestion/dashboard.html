@@ -38,6 +38,10 @@
 			{% endfor %} {% endif %}
 			<!-- Alertas end -->
 
+			<!-- Errores -->
+			{% include 'gestion/msg_errors.html' %}
+			<!-- Errores end-->
+
 			<div class="p-4">
 				{% block content %} {% endblock content %}
 			</div>

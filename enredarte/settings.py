@@ -35,11 +35,6 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
-    # 3rd party
-    "crispy_forms",
-    "django_extensions",
-    "debug_toolbar",
-
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -47,6 +42,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # 3rd party
+    "crispy_forms",
+    "django_extensions",
+    "debug_toolbar",
 
     # My apps
     "users",
@@ -117,6 +117,26 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+
+# LOGGING
+# ------------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"rich": {"datefmt": "[%X]"}},
+    "handlers": {
+        "console": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "level": "DEBUG",
+        }
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"]
+        }
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
