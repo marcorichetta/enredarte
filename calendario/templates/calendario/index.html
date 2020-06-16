@@ -1,0 +1,128 @@
+{% extends "gestion/dashboard.html" %}
+{% load static %}
+
+{% block title %} Enredarte {% endblock title %}
+
+{% block extra_head %}
+<!-- Fullcalendar CSS -->
+<link rel="stylesheet" href="{% static 'calendar/packages/core/main.min.css' %}" />
+<link rel="stylesheet" href="{% static 'calendar/packages/bootstrap/main.min.css' %}" />
+<link rel="stylesheet" href="{% static 'calendar/packages/daygrid/main.min.css' %}" />
+<link rel="stylesheet" href="{% static 'calendar/packages/list/main.min.css' %}" />
+
+<!-- <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/core@4.4.0/main.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/bootstrap@4.4.0/main.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/daygrid@4.4.0/main.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/list@4.4.0/main.min.css"/> -->
+{% endblock extra_head %}
+
+{% block content %}
+
+<!-- Dashboard Template -->
+<div class="content-section">
+    <h2 class="border-bottom mb-3">Inicio</h2>
+    <div>
+        <select name="estado" id="select_estado">
+
+            <option value="0">Todos</option>
+            {% for estado in estados_pedidos %}
+                <!-- https://stackoverflow.com/questions/5219430/access-tuple-in-django-template#5219528 -->
+                
+                <!-- Example <option value="1">Creado</option> -->
+                <option value="{{ estado.0 }}">{{ estado.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id='calendar' class="container"></div>
+    {% include 'gestion/pedido_modal.html' %}
+</div>
+
+<!-- Dashboard End -->
+
+{% endblock content %}
+
+
+{% block extra_js %}
+
+<!-- Fullcalendar JS -->
+<script src="{% static 'calendar/packages/core/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/core/locales/es.js' %}"></script>
+<script src="{% static 'calendar/packages/bootstrap/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/daygrid/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/list/main.min.js' %}"></script>
+
+
+<!-- <script src='https://unpkg.com/@fullcalendar/core@4.4.0/main.min.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/core@4.4.0/locales/es.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/bootstrap@4.4.0/main.min.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/daygrid@4.4.0/main.min.js'></script>
+    <script src="https://unpkg.com/@fullcalendar/list@4.4.0/main.min.js"></script> -->
+
+<script>
+    'use strict';
+    let calendar;
+
+    // Calendar initialization
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['dayGrid', 'list'],
+            defaultView: 'dayGridMonth',
+            header: {
+                left: 'prev,next, today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,listMonth'
+            },
+            locale: 'es',
+            weekMode: 'liquid',
+            editable: true,
+            eventTextColor: 'white',
+            eventSources: [{
+                url: '{% url "get_pedidos" idEstado=0 %}'
+            }],
+            eventRender: function (info) {
+                // Hacer algo antes de renderizar los eventos
+                // let status = info.event.extendedProps.status;
+            },
+            eventClick: function (info) {
+                $("#PedidoModal").modal('show');
+            }
+        });
+
+        calendar.render();
+    });
+
+    function replaceEvents(id_estado) {
+        // Workaround para el render inicial
+        if (id_estado === null) {
+            calendar.removeAllEventSources();
+            return false
+        };
+
+        // Elimina todas las fuentes de eventos del calendario
+        calendar.removeAllEventSources();
+
+        // Creamos la nueva fuente con la url del servicio que necesitamos solicitar
+        let newEventSource = {
+            id: 'source',
+            url: '{% url "get_pedidos" idEstado=0 %}'.replace(0, id_estado),
+        }
+
+        // Agregamos nueva fuente de eventos
+        calendar.addEventSource(newEventSource);
+    }
+
+    // Cuando cambie el valor del select de Estado
+    $("#select_estado").change(function () {
+        /* 
+            El select contiene 2 propiedades:
+            - id del estado
+            - Texto de la estado
+        */
+        let id_estado = $('#select_estado').val();
+
+        replaceEvents(id_estado);
+    });
+</script>
+{% endblock extra_js %}

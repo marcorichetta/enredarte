@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.views.decorators.http import require_http_methods
@@ -21,8 +21,6 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         context["pedidos"] = Pedido.objects.get_queryset()[:5]
         context["clientes"] = Cliente.objects.get_queryset()
         context["productos"] = Producto.objects.get_queryset()[:5]
-
-        context["estados_pedidos"] = Pedido.ESTADO_PEDIDO_CHOICES
 
         return context
 
