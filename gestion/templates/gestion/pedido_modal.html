@@ -1,4 +1,30 @@
 <!-- Modal Pedido -->
+
+<script>
+
+  const estados = ['CREADO', 'EN PROCESO', 'ENTREGADO', 'PAGADO']
+  /**
+   * Utilidad para formatear las fechas de los eventos
+   */
+  function formatDatetime(dateTime) {
+    const year = dateTime.getFullYear();
+    // Agrega un 0 adicional para mostrar '01' y no '1'
+    const month = `0${dateTime.getMonth()+1}`.slice(-2);
+    const day = `0${dateTime.getDate()}`.slice(-2);
+
+    return `${day}/${month}/${year}`;
+  }
+  
+  function cargarDataForm(event) {
+    $("#start").html(formatDatetime(event.start));
+    $("#cliente").html(event.title);
+    $("#estado").html(estados[event.extendedProps.status]);
+
+    let url = '{% url "detailPedido" pk=0 %}'.replace(0, event.id)
+    $("#url").attr('href', url)
+  }
+</script>
+
 <div class="modal fade" id="PedidoModal" tabindex="1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -11,10 +37,9 @@
         <div class="modal-body">
           <h1 id="title"></h1>
           <p>Fecha: <strong id="start"></strong></p>
-          <p>Estado: <strong id="state"></strong></p>
-          <p class="cliente-p">Cliente: 
-            <strong id="cliente-apellido"></strong>, 
-            <strong id="cliente-nombre"></strong></p>
+          <p>Cliente: <strong id="cliente"></strong></p>
+          <p>Estado: <strong id="estado"></strong></p>
+          <a id="url" class="btn btn-sm btn-outline-secondary" href="">Más detalles</a>
         </div>
         <input hidden id="idPedido">
         <div class="modal-footer">

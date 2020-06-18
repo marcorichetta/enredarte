@@ -6,10 +6,10 @@ from django.urls import reverse
 
 class Pedido(models.Model):
 
-    CREADO = 1
-    EN_PROCESO = 2
-    ENTREGADO = 3
-    PAGADO = 4
+    CREADO = 0
+    EN_PROCESO = 1
+    ENTREGADO = 2
+    PAGADO = 3
 
     ESTADO_PEDIDO_CHOICES = (
         (CREADO, 'Creado'),

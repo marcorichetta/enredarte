@@ -21,19 +21,21 @@
 <!-- Dashboard Template -->
 <div class="content-section">
     <h2 class="border-bottom mb-3">Inicio</h2>
-    <div>
-        <select name="estado" id="select_estado">
+    <div class="container">
 
-            <option value="0">Todos</option>
+    <div class="form-group col-4">
+        <label for="select_estado">Filtrar pedidos</label>
+        <select class="form-control" name="estado" id="select_estado">
+            <option value="9">Todos</option>
+            <!-- https://www.djangotemplatetagsandfilters.com/tags/for/ -->
             {% for estado in estados_pedidos %}
-                <!-- https://stackoverflow.com/questions/5219430/access-tuple-in-django-template#5219528 -->
-                
-                <!-- Example <option value="1">Creado</option> -->
-                <option value="{{ estado.0 }}">{{ estado.1 }}</option>
+                <option value="{{ forloop.counter0 }}">{{ estado }}</option>
             {% endfor %}
         </select>
     </div>
-    <div id='calendar' class="container"></div>
+    <div id='calendar'></div>
+</div>
+
     {% include 'gestion/pedido_modal.html' %}
 </div>
 
@@ -77,15 +79,19 @@
             locale: 'es',
             weekMode: 'liquid',
             editable: true,
+            eventLimit: 4,
             eventTextColor: 'white',
             eventSources: [{
                 url: '{% url "get_pedidos" idEstado=0 %}'
             }],
             eventRender: function (info) {
-                // Hacer algo antes de renderizar los eventos
-                // let status = info.event.extendedProps.status;
+                $(info.el).tooltip({ 
+                    title: info.event.title,
+                    // TODO - Incluir otro tipo de info más útil 
+                });     
             },
             eventClick: function (info) {
+                cargarDataForm(info.event);
                 $("#PedidoModal").modal('show');
             }
         });

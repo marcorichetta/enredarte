@@ -8,17 +8,21 @@ from pedidos.models import Pedido
 class Calendario(LoginRequiredMixin, TemplateView):
     """ View que contiene un calendario interactivo con pedidos """
 
-    template_name = "calendario/index.html"
+    template_name = "calendario/calendario.html"
 
     def get_context_data(self, **kwargs):
         context = super(Calendario, self).get_context_data(**kwargs)
-        context["pedidos"] = Pedido.objects.get_queryset()[:5]
-        context["estados_pedidos"] = Pedido.ESTADO_PEDIDO_CHOICES
+        context["estados_pedidos"] = {
+            'Creado' : Pedido.CREADO,
+            'En Proceso' : Pedido.EN_PROCESO,
+            'Entregado' : Pedido.ENTREGADO,
+            'Pagado' : Pedido.PAGADO,
+        }
 
         return context
 
 @require_http_methods(["GET"])
-def get_pedidos(request:HttpRequest, idEstado: int) -> JsonResponse:
+def get_pedidos(request:HttpRequest, idEstado: int == 9) -> JsonResponse:
     """ Función llamada mediante AJAX que devuelve pedidos
 
         :param idEstado: ID del estado sobre el que se quiere filtrar
@@ -27,7 +31,7 @@ def get_pedidos(request:HttpRequest, idEstado: int) -> JsonResponse:
     """
 
     #TODO Esto se debe poder hacer de una forma más funcional
-    if idEstado == 0:
+    if idEstado == 9:
         pedidos = Pedido.objects.all()[:50]
     else:
         pedidos = Pedido.objects.filter(estado=idEstado)
