@@ -3,54 +3,15 @@
 
 {% block title %} Enredarte {% endblock title %}
 
+{% block extra_head %}
+{% endblock extra_head %}
+
 {% block content %}
+
 <!-- Dashboard Template -->
 <div class="content-section">
-    <h2 class="border-bottom mb-3">Inicio</h2>
-    <div class="row">
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Pedidos</h5>
-                    <p class="card-text">Listado de Pedidos</p>
-                    <a href="{% url 'pedido' %}" class="btn btn-primary">Ir a Pedidos</a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for p in pedidos %}
-                    <li class="list-group-item">Pedido #{{ p.id }} {{ p.estado }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Productos</h5>
-                    <p class="card-text">Listado de Productos</p>
-                    <a href="{% url 'producto' %}" class="btn btn-primary">Ir a Productos</a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for p in productos %}
-                    <li class="list-group-item">Producto #{{ p.id }} {{ p.nombre }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Clientes</h5>
-                    <p class="card-text">Listado de Clientes</p>
-                    <a href="{% url 'cliente' %}" class="btn btn-primary">Ir a Clientes</a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for c in clientes %}
-                    <li class="list-group-item">{{ c.nombre }} {{ c.apellido }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+    <h2 class="border-bottom mb-3">Dashboard</h2>
+    
 </div>
 
 <!-- Dashboard End -->

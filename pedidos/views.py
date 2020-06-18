@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.db.models import ProtectedError, Q
 from django.contrib import messages
@@ -12,10 +11,9 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-    TemplateView,
 )
 
-from .models import Pedido, ProductosPedido
+from .models import Pedido
 from .forms import PedidoForm, ProductosPedidoFormset
 
 # Create your views here.

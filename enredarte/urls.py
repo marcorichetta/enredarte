@@ -27,8 +27,12 @@ if settings.DEBUG:
 
 urlpatterns += [
     path("admin/", admin.site.urls),
+    
     # Root
     path("", include("gestion.urls")),
+
+    # Apps
+    path("calendario/", include("calendario.urls")),
     path("clientes/", include("clientes.urls")),
     path("compras/", include("compras.urls")),
     path("productos/", include("productos.urls")),

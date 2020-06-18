@@ -19,6 +19,9 @@
 	<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
 	<link rel="stylesheet" href="{% static 'css/sidebar.css' %}" />
 	<link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+	
+	{% block extra_head %}{% endblock extra_head %}
+		
 </head>
 
 <body>
@@ -56,9 +59,7 @@
 
 	<script src="{% static 'js/dashboard.js' %}" async></script>
 
-	{% block endbody %}
-	<!-- Block for select2 -->
-	{% endblock endbody %}
+	{% block extra_js %}{% endblock extra_js %}
 </body>
 
 </html>

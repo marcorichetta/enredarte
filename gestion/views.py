@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
+from django.views.decorators.http import require_http_methods
 from pedidos.models import Pedido
 from clientes.models import Cliente
 from productos.models import Producto
@@ -20,28 +21,24 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         context["pedidos"] = Pedido.objects.get_queryset()[:5]
         context["clientes"] = Cliente.objects.get_queryset()
         context["productos"] = Producto.objects.get_queryset()[:5]
+
         return context
 
 
+@require_http_methods(["POST"])
 def LocalidadCreate(request):
-    if request.method == "POST":
+    cod_postal = request.POST.get("cod_postal")
+    localidad = request.POST.get("localidad")
+    provincia_id = request.POST.get("provincia_id")
 
-        cod_postal = request.POST.get("cod_postal")
-        localidad = request.POST.get("localidad")
-        provincia_id = request.POST.get("provincia_id")
+    # Obtener instancia de Provincia
+    provincia = Provincia.objects.get(pk=provincia_id)
 
-        # Obtener instancia de Provincia
-        provincia = Provincia.objects.get(pk=provincia_id)
+    # Crear en DB
+    Localidad.objects.create(cod_postal=cod_postal, localidad=localidad, provincia=provincia)
 
-        # Crear en DB
-        Localidad.objects.create(cod_postal=cod_postal, localidad=localidad, provincia=provincia)
+    # Enviar dict con datos de la nueva Localidad
+    nuevaLocalidad = {"cod_postal": cod_postal, "localidad": localidad, "provincia": provincia_id}
 
-        # Enviar dict con datos de la nueva Localidad
-        nuevaLocalidad = {
-            "cod_postal": cod_postal,
-            "localidad": localidad,
-            "provincia": provincia_id,
-        }
-
-        # Devolver info a JS
-        return JsonResponse(nuevaLocalidad)
+    # Devolver info a JS
+    return JsonResponse(nuevaLocalidad)
