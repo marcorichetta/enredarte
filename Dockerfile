@@ -1,48 +1,42 @@
-# Pull official base image
-FROM python:3.8.0-alpine
+# Pull base image for 1st stage build
+FROM python:3.8 as build-python
 
-# set work dir
-WORKDIR /usr/app/enredarte
+# Upgrade pip and create wheels to be installed later
+RUN pip install --upgrade pip
+COPY ./requirements.txt /
+# Install Pillow lonely (38MB)
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels Pillow
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
+
+# 2nd stage build
+FROM python:3.8
 
 # set env variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
-RUN apk update \
-    # GCC for alpine linux https://wiki.alpinelinux.org/wiki/GCC
-    && apk add build-base \
-    # Postgres
-    postgresql-dev python3-dev musl-dev \
-    # Pillow dependencies
-    jpeg-dev \
-    zlib-dev \
-    freetype-dev \
-    lcms2-dev \
-    openjpeg-dev \
-    tiff-dev \
-    tk-dev \
-    tcl-dev \
-    harfbuzz-dev \
-    fribidi-dev
+RUN apt-get update \
+    && apt-get install -y binutils netcat \
+    && rm -rf /var/lib/apt
 
-# install dependencies
-RUN pip install --upgrade pip
-COPY ./*requirements.txt .
-RUN pip install -r requirements.txt
-RUN pip install -r prod-requirements.txt
+# copy and install the previously created wheels
+COPY --from=build-python /wheels /wheels
+COPY --from=build-python requirements.txt .
+RUN pip install --no-cache /wheels/*
 
-# copy entrypoint
-COPY ./entrypoint.sh .
+# set work dir
+WORKDIR /usr/app/enredarte
 
 # copy project
 COPY . .
 
+# copy entrypoint
+COPY ./entrypoint.sh .
+
 # add and run as non-root user
-RUN adduser -D testuser
-USER testuser
+RUN adduser --disabled-login myuser
+USER myuser
 
 # run entrypoint
-# ENTRYPOINT [ "/usr/app/enredarte/entrypoint.sh" ]
-
-CMD gunicorn enredarte.wsgi:application --bind 0.0.0.0:$PORT
+ENTRYPOINT [ "/usr/app/enredarte/entrypoint.sh" ]
