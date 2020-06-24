@@ -1,0 +1,28 @@
+version: "3.7" # Update to 3.8
+
+services:
+    web:
+        build: .
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/usr/app/enredarte
+        ports:
+            # Map port 8000 from CONTAINER to access at `localhost:8000`
+            - "8000:8000"
+            - "4000:4000" # ptvsd port for debugging
+        env_file:
+            - ./.env.dev
+        depends_on:
+            - db
+    db:
+        image: postgres:12.0-alpine # Update to 13
+        volumes: 
+            - postgres_data:/var/lib/postgresql/data
+        environment: 
+            - POSTGRES_USER=enredarte
+            - POSTGRES_PASSWORD=enredarte
+            - POSTGRES_DB=enredarte_dev
+
+# Makes data persistent
+volumes: 
+    postgres_data:
