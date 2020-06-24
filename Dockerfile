@@ -43,4 +43,6 @@ RUN adduser -D testuser
 USER testuser
 
 # run entrypoint
-ENTRYPOINT [ "/usr/app/enredarte/entrypoint.sh" ]
+# ENTRYPOINT [ "/usr/app/enredarte/entrypoint.sh" ]
+
+CMD gunicorn enredarte.wsgi:application --bind 0.0.0.0:$PORT
