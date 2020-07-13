@@ -6,13 +6,13 @@ from variables.models import Variable
 
 # Variables
 
-v = Variable.objects.first()  # Sólo un registro con todas las variables
+# v = Variable.objects.get(pk=1)  # Sólo un registro con todas las variables
 
-precio_hora = v.precio_hora
-precio_pintado = v.precio_pintado
-ganancia_por_mayor = v.ganancia_por_mayor
-ganancia_por_menor = v.ganancia_por_menor
-ganancia_fibrofacil = v.ganancia_fibrofacil
+# precio_hora = v.precio_hora
+# precio_pintado = v.precio_pintado
+# ganancia_por_mayor = v.ganancia_por_mayor
+# ganancia_por_menor = v.ganancia_por_menor
+# ganancia_fibrofacil = v.ganancia_fibrofacil
 
 # Modelos
 
@@ -55,7 +55,7 @@ class Insumo(models.Model):
         """ Precio Insumo x Ganancia FF / m2 de una plancha (380x280cm)
 
             Devuelve el precio redondeado de m2 del insumo"""
-        return round(self.precio * ganancia_fibrofacil / Decimal(10.64))
+        return round(self.precio * Variable.objects.get(pk=1).ganancia_fibrofacil / Decimal(10.64))
 
     @property
     def precio_recorte(self):
@@ -129,7 +129,7 @@ class Producto(models.Model):
 
         precioLatLargo = (self.largo / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
 
-        precio_tiempo = (self.tiempo / 60) * precio_hora
+        precio_tiempo = (self.tiempo / 60) * Variable.objects.get(pk=1).precio_hora
 
         costo = int(precioBase) + int(precioLatCorto) + \
             int(precioLatLargo) + int(precio_tiempo)
@@ -141,22 +141,23 @@ class Producto(models.Model):
         """ Calcula el precio de venta al público del producto crudo """
 
         # Precio costo * % de ganancia
-        return round(self.precio_costo * ((ganancia_por_menor / 100) + 1))
+        return round(self.precio_costo * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1))
 
     @property
     def precio_terminado(self):
         """ Calcula el precio del producto terminado, sin la ganancia """
 
         precio_apliques = 20
-        precio_tiempo_terminado = int((self.tiempo * 2) / 60 * precio_hora)
+        precio_tiempo_terminado = int((self.tiempo * 2) / 60 * Variable.objects.get(pk=1).precio_hora)
 
-        return self.precio_costo() + precio_pintado + precio_apliques + precio_tiempo_terminado
+        return self.precio_costo() + \
+            Variable.objects.get(pk=1).precio_pintado + precio_apliques + precio_tiempo_terminado
 
     def precio_venta_terminado(self):
         """ Calcula el precio de venta al público del producto terminado """
 
         # Precio terminado * % de ganancia
-        return round(self.precio_terminado * ((ganancia_por_menor / 100) + 1))
+        return round(self.precio_terminado * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1))
 
     @property
     def get_insumos(self):
