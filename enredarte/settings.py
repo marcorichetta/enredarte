@@ -11,9 +11,18 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from dotenv import load_dotenv
+import dj_database_url
+import environ
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # /home/rich/programming/enredarte
@@ -24,14 +33,14 @@ BASE_DIR = os.path.dirname((os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = env('DEBUG')
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -51,11 +60,11 @@ INSTALLED_APPS = [
 
     # My apps
     "users",
+    "variables",
     "productos",
     "clientes",
     "proveedores",
     "pedidos",
-    "variables",
     "compras",
     "calendario",
     "gestion",
@@ -98,22 +107,7 @@ WSGI_APPLICATION = "enredarte.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432")
-    }
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql_psycopg2",
-    #     "NAME": "enredartedb",
-    #     "USER": os.environ.get("DBUSER"),
-    #     "PASSWORD": os.environ.get("DBPASSWORD"),
-    #     "HOST": "localhost",
-    #     "PORT": "",
-    # }
+    "default": env.db()
 }
 
 
@@ -189,3 +183,13 @@ INTERNAL_IPS = ["127.0.0.1"]
 # SELECT2
 SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
 SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
+
+# dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+# Import from local_settings
+try:
+    from .local_settings import *
+except:
+    pass
