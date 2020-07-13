@@ -1,0 +1,1 @@
+web: gunicorn enredarte.wsgi --log-file -
