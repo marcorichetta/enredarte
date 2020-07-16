@@ -36,6 +36,20 @@ body {
 	color: red;
 }
 
+/* Placeholder Text para productos sin imagen */
+.image-placeholder {
+    background-color: #eee;
+	display: flex;
+}
+
+.image-placeholder > h5 {
+    align-self: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* Media Queries */
+
 @media (max-width: 1024px) {
 	#principal {
 		width: calc(100% - 250px);

@@ -28,7 +28,6 @@ environ.Env.read_env()
 # /home/rich/programming/enredarte
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    'whitenoise.runserver_nostatic', # #Disable Django static file server during DEVELOPMENT
     "django.contrib.staticfiles",
 
     # 3rd party
@@ -122,25 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# LOGGING
-# ------------------------------------------------------------------------------
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {"rich": {"datefmt": "[%X]"}},
-    "handlers": {
-        "console": {
-            "class": "rich.logging.RichHandler",
-            "formatter": "rich",
-            "level": "DEBUG",
-        }
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"]
-        }
-    },
-}
+# Logging
+# https://docs.djangoproject.com/en/2.2/topics/logging
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -155,38 +138,54 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-# Whitenoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-
-STATIC_URL = "/staticfiles/"
+# STATIC
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = '/static/'
+# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
+
+# MEDIA
+# ------------------------------------------------------------------------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
+# DJANGO-CRISPY-FORMS CONFIGS
+# ------------------------------------------------------------------------------
+# https://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # Override login redirect url
 LOGIN_REDIRECT_URL = "index"
 LOGIN_URL = "login"
 
-# Debug Toolbar
+# DJANGO-DEBUG-TOOLBAR CONFIGS
+# ------------------------------------------------------------------------------
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+# https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
 INTERNAL_IPS = ["127.0.0.1"]
 
 # SELECT2
+# ------------------------------------------------------------------------------
 SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
 SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
 
-# dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+# DJ DATABASE URL
+# ------------------------------------------------------------------------------
+if not DEBUG:
+    print("Production")
+    # dj_database_url
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
 
 # Import from local_settings
+# ------------------------------------------------------------------------------
 try:
     from .local_settings import *
 except:
