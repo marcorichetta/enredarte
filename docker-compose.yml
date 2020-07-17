@@ -11,7 +11,7 @@ services:
             - "8000:8000"
             - "4000:4000" # ptvsd port for debugging
         env_file:
-            - ./.env.dev
+            - ./enredarte/.env
         depends_on:
             - db
     db:

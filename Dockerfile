@@ -4,8 +4,6 @@ FROM python:3.8 as build-python
 # Upgrade pip and create wheels to be installed later
 RUN pip install --upgrade pip
 COPY ./requirements.txt /
-# Install Pillow lonely (38MB)
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels Pillow
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
 
 # 2nd stage build
