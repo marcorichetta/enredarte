@@ -4,16 +4,6 @@ from decimal import Decimal
 
 from variables.models import Variable
 
-# Variables
-
-# v = Variable.objects.get(pk=1)  # Sólo un registro con todas las variables
-
-# precio_hora = v.precio_hora
-# precio_pintado = v.precio_pintado
-# ganancia_por_mayor = v.ganancia_por_mayor
-# ganancia_por_menor = v.ganancia_por_menor
-# ganancia_fibrofacil = v.ganancia_fibrofacil
-
 # Modelos
 
 
