@@ -26,8 +26,8 @@ if settings.DEBUG:
     urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]
 
 urlpatterns += [
-    path("admin/", admin.site.urls),
-    
+    path("admin/", admin.site.urls, name='admin'),
+
     # Root
     path("", include("gestion.urls")),
 

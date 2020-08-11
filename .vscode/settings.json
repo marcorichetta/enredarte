@@ -12,5 +12,5 @@
 	"editor.formatOnSave": false,
 	"python.linting.enabled": true,
 	"python.formatting.provider": "black",
-	"python.linting.prospectorEnabled": true,
+	"python.linting.flake8Enabled": true,
 }

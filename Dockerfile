@@ -3,8 +3,9 @@ FROM python:3.8 as build-python
 
 # Upgrade pip and create wheels to be installed later
 RUN pip install --upgrade pip
+COPY ./dev-requirements.txt /
 COPY ./requirements.txt /
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels --retries 10 -r requirements.txt
 
 # 2nd stage build
 FROM python:3.8
