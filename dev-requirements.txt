@@ -3,6 +3,7 @@ cfgv==3.2.0
 distlib==0.3.1
 filelock==3.0.12
 flake8==3.8.3
+flake8-comprehensions
 identify==1.4.25
 iniconfig==1.0.1
 mypy==0.782
