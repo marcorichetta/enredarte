@@ -1,4 +1,4 @@
-{% extends "gestion/dashboard.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
@@ -12,7 +12,7 @@ Compras
     <div class="btn-group mr-2">
         <a type="button" class="btn btn-outline-success" href="{% url 'createCompra' %}">Crear</a>
     </div>
-    {% include 'gestion/search_form.html' %}
+    {% include 'search_form.html' %}
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-md">
@@ -50,6 +50,6 @@ Compras
     </table>
 </div>
 
-{% include 'gestion/pagination.html' with search_text=search_txt %}
+{% include 'pagination.html' with search_text=search_txt %}
 
 {% endblock content %}

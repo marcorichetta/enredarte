@@ -14,7 +14,7 @@ from .models import Localidad, Provincia
 class Dashboard(LoginRequiredMixin, TemplateView):
     """ Panel principal que contiene información útil para el usuario """
 
-    template_name = "gestion/index.html"
+    template_name = "index.html"
 
     def get_context_data(self, **kwargs):
         context = super(Dashboard, self).get_context_data(**kwargs)
@@ -35,10 +35,16 @@ def LocalidadCreate(request):
     provincia = Provincia.objects.get(pk=provincia_id)
 
     # Crear en DB
-    Localidad.objects.create(cod_postal=cod_postal, localidad=localidad, provincia=provincia)
+    Localidad.objects.create(
+        cod_postal=cod_postal, localidad=localidad, provincia=provincia
+    )
 
     # Enviar dict con datos de la nueva Localidad
-    nuevaLocalidad = {"cod_postal": cod_postal, "localidad": localidad, "provincia": provincia_id}
+    nuevaLocalidad = {
+        "cod_postal": cod_postal,
+        "localidad": localidad,
+        "provincia": provincia_id,
+    }
 
     # Devolver info a JS
     return JsonResponse(nuevaLocalidad)
