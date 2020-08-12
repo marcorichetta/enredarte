@@ -1,4 +1,4 @@
-{% extends "gestion/dashboard.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 
@@ -18,32 +18,46 @@ Información sobre {{ object.nombre }}
 </nav>
 
 <div class="container">
-    <legend class="border-bottom mb-4">
-        {{ object.id }} - {{ object.nombre }}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' object.id %}">
-            <span data-feather="edit-3"></span>
-        </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteProducto' object.id %}">
-            <span data-feather="trash"></span>
-        </a>
-    </legend>
 
-    <div class="card" style="width: 18rem;">
+    <div class="row">
         {% if object.image_url %}
-        <img class="card-img-top" src="{{object.image_url}}" alt="{{object.nombre}}">
+            <img class="w-50 rounded-left" src="{{object.image_url}}" alt="{{object.nombre}}">
+            {% else %}
+            <div class="w-50 rounded-left image-placeholder" alt="Placeholder">
+                <h5>Cargue una imagen para este producto</h5>
+            </div>
         {% endif %}
-        <div class="card-body">
-            <h5 class="card-title">{{object.nombre}}</h5>
+        <div class="card w-50">
+            <div class="card-body">
+                <div>
+                    <h4 class="card-title">{{object.nombre}}
+                        <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' object.id %}">
+                            <span data-feather="edit-3"></span>
+                        </a>
+                        <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deleteProducto' object.id %}">
+                            <span data-feather="trash"></span>
+                        </a>
+                    </h4>
+                </div>
+                <h6 class="card-subtitle mb-2 text-muted">Info extra</h6>
+                <p class="card-text">{{object.descripcion}}</p>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        $ Costo:
+                        <span class="price text-success">{{object.precio_costo}}</span>
+                    </li>
+                    <li class="list-group-item">$ Venta (Terminado) :
+                        <span class="price text-success">{{object.precio_venta_terminado}}</span>
+                    </li>
+                    <li class="list-group-item">Insumos extra</li>
+                    {% for i in object.get_insumos %}
+                    <li class="list-group-item">{{i}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{object.descripcion}}</li>
-            <li class="list-group-item">$ Costo: {{object.precio_costo}}</li>
-            <li class="list-group-item">$ Venta (Terminado):{{object.precio_venta_terminado}}</li>
-            <li class="list-group-item">Insumos extra</li>
-            {% for i in object.get_insumos %}
-            <li class="list-group-item">{{i}}</li>
-            {% endfor %}
-        </ul>
     </div>
+
 </div>
 {% endblock content  %}

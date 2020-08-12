@@ -12,7 +12,7 @@ class Formset(LayoutObject):
         Formset('contact_formset')
     """
 
-    template = "gestion/formset.html"
+    template = "formset.html"
 
     def __init__(self, formset_name_in_context, template=None):
 

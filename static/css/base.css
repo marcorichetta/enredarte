@@ -1,0 +1,82 @@
+/* BASE STYLES */
+
+/* inter-regular - latin */
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	src: local(''),
+		 url('../fonts/inter-v2-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		 url('../fonts/inter-v2-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  }
+  
+  /* inter-700 - latin */
+  @font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 700;
+	src: local(''),
+		 url('../fonts/inter-v2-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		 url('../fonts/inter-v2-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  }
+  
+
+body {
+	font-size: 0.900rem;
+	font-family: 'Inter';
+}
+
+.wrapper {
+	display: flex;
+}
+
+.content-wrapper {
+	width: calc(100% - 14rem); /* Tamaño de la sidebar */
+	min-height: 100vh;
+	transition: all 0.3s;
+}
+
+#principal.fullPage {
+	width: 100%;
+	padding: 0;
+}
+
+.form-container {
+	margin: 20px;
+}
+
+.feather {
+	width: 16px;
+	height: 16px;
+}
+
+.card {
+	width: 14rem;
+}
+
+.asteriskField {
+	color: red;
+}
+
+/* Placeholder Text para productos sin imagen */
+.image-placeholder {
+    background-color: #eee;
+	display: flex;
+}
+
+.image-placeholder > h5 {
+    align-self: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* Media Queries */
+
+@media (max-width: 1024px) {
+	#principal {
+		width: calc(100% - 250px);
+	}
+	#principal.fullPage {
+		width: 100%;
+	}
+}

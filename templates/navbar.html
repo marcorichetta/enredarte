@@ -1,11 +1,10 @@
 <!-- Navbar -->
-<nav
-	id="navbar"
-	class="navbar navbar-expand-lg navbar-dark flex-md-nowrap p-0 shadow custom-gradient"
->
+<nav id="navbar" class="navbar navbar-expand-lg navbar-dark flex-md-nowrap p-0 shadow custom-gradient">
 	<!-- Toggle button -->
 	<!-- https://codepen.io/ainalem/pen/LJYRxz -->
-	<a id="sidebarCollapse" class="navbar-toggle" href="#">
+	<a id="sidebarCollapse" class="navbar-toggle "
+		onclick="this.classList.toggle('active')" href="#">
+
 		<svg
 			class="ham hamRotate ham4"
 			viewBox="0 0 100 100"
@@ -27,19 +26,13 @@
 	<!-- End toggle -->
 	<ul class="navbar-nav px-3 ml-auto">
 		<li class="nav-item dropdown">
-			<a
-				class="nav-link dropdown-toggle"
-				href="#"
-				id="navbarDropdown"
-				role="button"
-				data-toggle="dropdown"
-				aria-haspopup="true"
-				aria-expanded="false"
-			>
+			<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false">
 				<span data-feather="user"></span>
 				{{ user.username }}
 			</a>
 			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+				<a class="dropdown-item" href="{% url 'admin:login' %}">Administrador</a>
 				<a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
 			</div>
 		</li>

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import dj_database_url
 import environ
+
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -32,10 +33,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env("DEBUG")
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
@@ -50,14 +51,12 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    'whitenoise.runserver_nostatic', # #Disable Django static file server during DEVELOPMENT
+    "whitenoise.runserver_nostatic",  # #Disable Django static file server during DEVELOPMENT
     "django.contrib.staticfiles",
-
     # 3rd party
     "crispy_forms",
     "django_extensions",
     "debug_toolbar",
-
     # My apps
     "users",
     "variables",
@@ -87,7 +86,7 @@ ROOT_URLCONF = "enredarte.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -106,9 +105,7 @@ WSGI_APPLICATION = "enredarte.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db()
-}
+DATABASES = {"default": env.db()}
 
 
 # Password validation
@@ -143,7 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 # http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
@@ -182,11 +179,11 @@ if not DEBUG:
     print("Production")
     # dj_database_url
     db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
+    DATABASES["default"].update(db_from_env)
 
 # Import from local_settings
 # ------------------------------------------------------------------------------
 try:
     from .local_settings import *
-except:
+except FileNotFoundError:
     pass

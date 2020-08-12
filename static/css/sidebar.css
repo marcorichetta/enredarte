@@ -22,7 +22,7 @@
 
 .sidebar hr.sidebar-divider {
 	margin: 0 1rem 1rem;
-	border-top: 1px solid #575757;
+	border-top: 1px solid #bebebe;
 }
 
 #sidebar.hide {
@@ -72,6 +72,16 @@ a[data-toggle="collapse"] {
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
+}
+
+ul.subMenu {
+	list-style: none;
+}
+
+.subMenu > li > a {
+	padding: 8px;
+	display: block;
+	text-align: left;
 }
 
 /* Mediaqueries */
