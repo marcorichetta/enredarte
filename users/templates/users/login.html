@@ -1,26 +1,30 @@
 {% extends "users/layout.html" %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 {% block title %}
-    Iniciar sesión
+Iniciar sesión
 {% endblock title %}
-    
-{% block inner %}
-        <form method="POST">
-            {% csrf_token %}
 
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Iniciar Sesión</legend>
-                <p>Si todavía no tenés una cuenta, por favor <a href="{% url 'register' %}">regístrate</a>.</p>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-success" type="submit">Iniciar sesión</button>
-            </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
-            </small>
-        </div>
+{% block inner %}
+<form method="POST" id="form-login">
+    {% csrf_token %}
+
+    <img class="mb-4" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border-radius: 25px;"
+        src="{% static 'images/Enredarte.jpg' %}" alt="" width="200" height="200">
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Iniciar Sesión</legend>
+        {{ form|crispy }}
+    </fieldset>
+    <div class="form-group">
+        <button class="btn btn-outline-success" type="submit">Iniciar sesión</button>
+    </div>
+    <small class="text-muted">
+        ¿Olvidaste tu contraseña?
+        <br>
+        <a href="#" target="_blank" rel="noreferrer noopener">
+            Contactate con el administrador
+        </a>
+    </small>
+</form>
+
 {% endblock %}
