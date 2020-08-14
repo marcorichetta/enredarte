@@ -39,7 +39,7 @@ class PedidoListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        """ Devuelve el texto buscado para usarlo en la paginación """
         context = super(PedidoListView, self).get_context_data(**kwargs)
         context["search_txt"] = self.request.GET.get("search", "")
         return context
