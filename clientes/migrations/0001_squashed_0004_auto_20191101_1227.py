@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [("gestion", "0006_auto_20190718_1239")]
+    dependencies = [("gestion", "0001_squashed_0006_auto_20190718_1239")]
 
     operations = [
         migrations.CreateModel(
@@ -20,7 +20,10 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.AutoField(
-                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
                     ),
                 ),
                 ("nombre", models.CharField(max_length=64)),
@@ -49,16 +52,24 @@ class Migration(migrations.Migration):
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name="cliente", name="calle", field=models.CharField(blank=True, max_length=64)
+            model_name="cliente",
+            name="calle",
+            field=models.CharField(blank=True, max_length=64),
         ),
         migrations.AlterField(
-            model_name="cliente", name="email", field=models.EmailField(blank=True, max_length=254)
+            model_name="cliente",
+            name="email",
+            field=models.EmailField(blank=True, max_length=254),
         ),
         migrations.AlterField(
-            model_name="cliente", name="numero", field=models.CharField(blank=True, max_length=6)
+            model_name="cliente",
+            name="numero",
+            field=models.CharField(blank=True, max_length=6),
         ),
         migrations.AlterField(
-            model_name="cliente", name="telefono", field=models.CharField(blank=True, max_length=64)
+            model_name="cliente",
+            name="telefono",
+            field=models.CharField(blank=True, max_length=64),
         ),
         migrations.AlterField(
             model_name="cliente",

@@ -7,14 +7,14 @@ import proveedores.helpers
 
 class Migration(migrations.Migration):
 
-    replaces = [
-        ("gestion", "0001_initial"),
-        ("gestion", "0002_auto_20190704_1709"),
-        ("gestion", "0003_auto_20190705_1600"),
-        ("gestion", "0004_auto_20190705_1913"),
-        ("gestion", "0005_auto_20190705_1940"),
-        ("gestion", "0006_auto_20190718_1239"),
-    ]
+    # replaces = [
+    #     ("gestion", "0001_initial"),
+    #     ("gestion", "0002_auto_20190704_1709"),
+    #     ("gestion", "0003_auto_20190705_1600"),
+    #     ("gestion", "0004_auto_20190705_1913"),
+    #     ("gestion", "0005_auto_20190705_1940"),
+    #     ("gestion", "0006_auto_20190718_1239"),
+    # ]
 
     initial = True
 

@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("clientes", "0001_squashed_0004_auto_20191101_1227"),
-        ("gestion", "0006_auto_20190718_1239"),
+        ("gestion", "0001_squashed_0006_auto_20190718_1239"),
     ]
 
     operations = [
@@ -16,7 +16,9 @@ class Migration(migrations.Migration):
             model_name="pedido",
             name="cliente",
             field=models.OneToOneField(
-                default=1, on_delete=django.db.models.deletion.CASCADE, to="clientes.Cliente"
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="clientes.Cliente",
             ),
             preserve_default=False,
         )
