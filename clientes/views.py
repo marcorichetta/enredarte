@@ -1,9 +1,8 @@
 from django.shortcuts import HttpResponseRedirect
 from django.db.models import Q
 from django.db.models import ProtectedError
-from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -31,17 +30,18 @@ class ClienteListView(ListView):
                 | Q(email__icontains=query)
             )
         return queryset
-    
+
     def get_context_data(self, **kwargs):
-        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        """ Devuelve el texto buscado para usarlo en la paginación """
         context = super(ClienteListView, self).get_context_data(**kwargs)
         context["search_txt"] = self.request.GET.get("search", "")
         return context
 
 
-class ClienteCreateView(CreateView):
+class ClienteCreateView(SuccessMessageMixin, CreateView):
     model = Cliente
     fields = ["nombre", "apellido", "telefono", "email", "calle", "numero", "localidad"]
+    success_message = "Creado con éxito."
 
     def get_context_data(self, **kwargs):
         context = super(ClienteCreateView, self).get_context_data(**kwargs)
@@ -58,9 +58,19 @@ class ClienteDetailView(DetailView):
     model = Cliente
 
 
-class ClienteUpdateView(UpdateView):
+class ClienteUpdateView(SuccessMessageMixin, UpdateView):
     model = Cliente
-    fields = "__all__"
+    fields = [
+        "nombre",
+        "apellido",
+        "telefono",
+        "email",
+        "calle",
+        "numero",
+        "localidad",
+        "detalles",
+    ]
+    success_message = "Actualizado con éxito."
 
     # Modify the template used for this view
     template_name_suffix = "_update_form"
@@ -69,22 +79,3 @@ class ClienteUpdateView(UpdateView):
 class ClienteDeleteView(DeleteView):
     model = Cliente
     success_url = reverse_lazy("cliente")
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-
-        try:
-            self.object.delete()
-            # Enviar mensaje para mostrar alerta
-            messages.success(request, f"El cliente {self.object} fue eliminado.")
-
-            # Redirect to success_url
-        except ProtectedError:
-            context = self.get_context_data(
-                object=self.object,
-                error=f"{self.object} no puede ser eliminado porque \
-                    tiene dependencias. Consulte al administrador.",
-            )
-            return self.render_to_response(context)
-        return HttpResponseRedirect(success_url)
