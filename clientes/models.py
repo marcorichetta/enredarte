@@ -12,7 +12,10 @@ class Cliente(BaseModel):
     numero = models.CharField(max_length=6, blank=True)
     """ Para eliminar una localidad, primero hay que
         eliminar todos los clientes de la misma """
-    localidad = models.ForeignKey("core.Localidad", on_delete=models.PROTECT)
+    localidad = models.ForeignKey(
+        "core.Localidad", on_delete=models.PROTECT, related_name="clientes"
+    )
+
     detalles = models.TextField(blank=True)
 
     class Meta:
