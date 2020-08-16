@@ -1,10 +1,11 @@
 from django.db import models
+from django.db.models.query import QuerySet
 from django.urls import reverse
+from core.base_model import BaseModel
+from productos.models import Producto
 
-# Create your models here.
 
-
-class Pedido(models.Model):
+class Pedido(BaseModel):
 
     CREADO = 0
     EN_PROCESO = 1
@@ -30,46 +31,45 @@ class Pedido(models.Model):
     )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
-    actualizado = models.DateTimeField(auto_now=True, help_text="Última vez actualizado")
-    fecha_pedido = models.DateField(auto_now_add=True)
     fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Pedido #{self.id}"
 
     class Meta:
-        ordering = ["-fecha_pedido", "-actualizado"]
+        ordering = ["-fecha_entrega", "-modified"]
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         """ Utilizada después de actualizar o eliminar un pedido"""
         return reverse("detailPedido", kwargs={"pk": self.id})
 
     @property
-    def get_productos(self):
+    def get_productos(self) -> "Queryset[Producto]":
         """ Devuelve los productos relacionados a este pedido """
         return Pedido.objects.get(id=self.id).productos_pedido.all()
 
     @property
-    def tiempo_total(self):
+    def tiempo_total(self) -> int:
+        """ Devuelve la sumatoria de tiempo para producir todos los productos del pedido """
         return sum(producto.tiempo for producto in self.get_productos)
 
-    def get_status(self):
-        if self.estado == "pagado":
-            return "Pedido pagado"
-        elif self.estado == "entregado":
-            return "Pedido entregado"
-        return "En proceso"
+    def cambiar_estado(self, nuevo_estado: int) -> None:
+        """ Cambia el estado del pedido  """
+        self.estado = nuevo_estado
+        self.save()
 
 
-class ProductosPedido(models.Model):
+class ProductosPedido(BaseModel):
 
     # Si se elimina un Pedido, se eliminan los datos asociados a éste
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name="pedidos")
 
     # Si se elimina un Producto, sólo se quitara el registro
     # de ese producto del pedido.
-    producto = models.ForeignKey("productos.Producto", on_delete=models.CASCADE)
+    producto = models.ForeignKey(
+        "productos.Producto", on_delete=models.CASCADE, related_name="productos"
+    )
     cantidad = models.PositiveIntegerField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.cantidad} - {self.producto.nombre}"
