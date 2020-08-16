@@ -2,7 +2,7 @@
 
 from django.core.management.base import BaseCommand
 import sys
-from gestion.models import Localidad
+from core.models import Localidad
 from proveedores.models import Proveedor
 
 

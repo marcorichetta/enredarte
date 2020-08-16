@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "debug_toolbar",
     # My apps
+    "core",
     "users",
     "variables",
     "productos",
@@ -66,7 +67,6 @@ INSTALLED_APPS = [
     "pedidos",
     "compras",
     "calendario",
-    "gestion",
 ]
 
 MIDDLEWARE = [
@@ -166,7 +166,14 @@ LOGIN_URL = "login"
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
 # https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
-INTERNAL_IPS = ["127.0.0.1"]
+INTERNAL_IPS = [
+    "172.22.0.1",
+    "localhost",
+    "127.0.0.1",
+]
+
+DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
+
 
 # SELECT2
 # ------------------------------------------------------------------------------

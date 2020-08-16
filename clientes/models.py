@@ -16,7 +16,7 @@ class Cliente(SoftDeletableModel, TimeStampedModel):
     """ Para eliminar una localidad, primero hay que
         eliminar todos los clientes de la misma """
     localidad = models.ForeignKey(
-        "gestion.Localidad", on_delete=models.PROTECT, related_name="clientes"
+        "core.Localidad", on_delete=models.PROTECT, related_name="clientes"
     )
     detalles = models.TextField(blank=True)
     fecha_creacion = models.DateField(auto_now_add=True)
@@ -24,11 +24,11 @@ class Cliente(SoftDeletableModel, TimeStampedModel):
     class Meta:
         ordering = ["nombre", "apellido"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.nombre} {self.apellido}"
 
-    def get_email(self):
+    def get_email(self) -> str:
         return self.email
 
-    def get_absolute_url(self):
-        return reverse("cliente")
+    def get_absolute_url(self) -> str:
+        return reverse("detailCliente", kwargs={"pk": self.id})

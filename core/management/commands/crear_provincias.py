@@ -2,14 +2,16 @@
 
 from django.core.management.base import BaseCommand
 import sys
-from gestion.models import Provincia, Localidad
+from core.models import Provincia, Localidad
 
 
 class Command(BaseCommand):
     help = """Crea las provincias y localidades iniciales"""
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS("--- Creando provincias y localidades de prueba ---"))
+        self.stdout.write(
+            self.style.SUCCESS("--- Creando provincias y localidades de prueba ---")
+        )
         Provincia.objects.create(cod_provincia="AR-B", provincia="Buenos Aires")
         Provincia.objects.create(cod_provincia="AR-C", provincia="Capital Federal")
         Provincia.objects.create(cod_provincia="AR-K", provincia="Catamarca")
@@ -34,10 +36,16 @@ class Command(BaseCommand):
         Provincia.objects.create(cod_provincia="AR-V", provincia="Tierra del Fuego")
         Provincia.objects.create(cod_provincia="AR-T", provincia="Tucumán")
 
-        Localidad.objects.create(cod_postal=5000, localidad="Córdoba Capital", provincia=cba)
+        Localidad.objects.create(
+            cod_postal=5000, localidad="Córdoba Capital", provincia=cba
+        )
         Localidad.objects.create(cod_postal=5921, localidad="Las Perdices", provincia=cba)
-        Localidad.objects.create(cod_postal=5923, localidad="General Deheza", provincia=cba)
-        Localidad.objects.create(cod_postal=5809, localidad="General Cabrera", provincia=cba)
+        Localidad.objects.create(
+            cod_postal=5923, localidad="General Deheza", provincia=cba
+        )
+        Localidad.objects.create(
+            cod_postal=5809, localidad="General Cabrera", provincia=cba
+        )
         Localidad.objects.create(cod_postal=5800, localidad="Río Cuarto", provincia=cba)
         Localidad.objects.create(cod_postal=5900, localidad="Villa María", provincia=cba)
 

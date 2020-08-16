@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [("gestion", "0001_squashed_0006_auto_20190718_1239")]
+    dependencies = [("core", "0001_squashed_0006_auto_20190718_1239")]
 
     operations = [
         migrations.CreateModel(
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="clientes",
-                        to="gestion.Localidad",
+                        to="core.Localidad",
                     ),
                 ),
             ],
@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name="clientes",
-                to="gestion.Localidad",
+                to="core.Localidad",
             ),
         ),
     ]

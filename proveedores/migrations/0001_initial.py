@@ -10,25 +10,46 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('gestion', '0009_delete_proveedor'),
+        ("core", "0009_delete_proveedor"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Proveedor',
+            name="Proveedor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cuit', models.CharField(help_text='Ingrese el CUIT con el siguiente formato: 20-12345678-9', max_length=13, unique=True, validators=[proveedores.helpers.validar_cuit])),
-                ('razon_social', models.CharField(max_length=64)),
-                ('telefono', models.CharField(max_length=64)),
-                ('email', models.EmailField(max_length=254)),
-                ('calle', models.CharField(max_length=64)),
-                ('numero', models.CharField(max_length=4)),
-                ('detalles', models.TextField(blank=True)),
-                ('localidad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='proveedores', to='gestion.Localidad')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "cuit",
+                    models.CharField(
+                        help_text="Ingrese el CUIT con el siguiente formato: 20-12345678-9",
+                        max_length=13,
+                        unique=True,
+                        validators=[proveedores.helpers.validar_cuit],
+                    ),
+                ),
+                ("razon_social", models.CharField(max_length=64)),
+                ("telefono", models.CharField(max_length=64)),
+                ("email", models.EmailField(max_length=254)),
+                ("calle", models.CharField(max_length=64)),
+                ("numero", models.CharField(max_length=4)),
+                ("detalles", models.TextField(blank=True)),
+                (
+                    "localidad",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="proveedores",
+                        to="core.Localidad",
+                    ),
+                ),
             ],
-            options={
-                'verbose_name_plural': 'Proveedores',
-            },
+            options={"verbose_name_plural": "Proveedores",},
         ),
     ]

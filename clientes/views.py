@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from gestion.models import Provincia, Localidad
+from core.models import Provincia, Localidad
 from .models import Cliente
 
 
