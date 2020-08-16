@@ -1,46 +1,48 @@
 from django.db import models
 from django.urls import reverse
+from core.base_model import BaseModel
+from datetime import date
 
 # Create your models here.
 
 
-class Compra(models.Model):
+class Compra(BaseModel):
     """Model definition for Compra."""
 
     # Un proveedor no se puede eliminar si existen compras asociadas a él
-    proveedor = models.ForeignKey("proveedores.Proveedor", on_delete=models.PROTECT)
+    proveedor = models.ForeignKey(
+        "proveedores.Proveedor", on_delete=models.PROTECT, related_name="compras"
+    )
     insumos_compra = models.ManyToManyField("productos.Insumo", through="InsumosCompra")
     detalles = models.TextField(blank=True)
-    fecha_compra = models.DateField(auto_now_add=True)
+    fecha_compra = models.DateField(
+        default=date.today
+    )  # Igual que auto_now_add pero permite cambiar la fecha
 
     class Meta:
         ordering = ["-fecha_compra"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Compra #{self.id}"
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse("compra")
 
     @property
-    def get_insumos(self):
-        """ Devuelve los productos relacionados a este pedido """
-        insumos = self.insumoscompra_set.all()
-        return insumos
-
-    @property
-    def precio_total(self):
+    def precio_total(self) -> int:
         """ Precio de la suma de los insumos """
 
-        return sum(list(map(lambda insumo: insumo.precio_compra, self.insumoscompra_set.all())))
+        return sum(insumo.precio_compra for insumo in self.insumos_comprados.all())
 
 
-class InsumosCompra(models.Model):
+class InsumosCompra(BaseModel):
     """Model definition for InsumosCompra."""
 
     """ Si se elimina una compra
         los insumos asociados a esa compra se eliminan """
-    compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
+    compra = models.ForeignKey(
+        Compra, on_delete=models.CASCADE, related_name="insumos_comprados"
+    )
     insumo = models.ForeignKey("productos.Insumo", on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     precio_compra = models.PositiveIntegerField(help_text="Precio unitario")

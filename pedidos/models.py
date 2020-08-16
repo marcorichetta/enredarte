@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.query import QuerySet
 from django.urls import reverse
+from datetime import date
+
 from core.base_model import BaseModel
 from productos.models import Producto
 
@@ -31,7 +33,8 @@ class Pedido(BaseModel):
     )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
-    fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada")
+    fecha_pedido = models.DateField(default=date.today, verbose_name="Fecha de pedido")
+    fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada", blank=True)
 
     def __str__(self) -> str:
         return f"Pedido #{self.id}"
@@ -44,14 +47,9 @@ class Pedido(BaseModel):
         return reverse("detailPedido", kwargs={"pk": self.id})
 
     @property
-    def get_productos(self) -> "Queryset[Producto]":
-        """ Devuelve los productos relacionados a este pedido """
-        return Pedido.objects.get(id=self.id).productos_pedido.all()
-
-    @property
     def tiempo_total(self) -> int:
         """ Devuelve la sumatoria de tiempo para producir todos los productos del pedido """
-        return sum(producto.tiempo for producto in self.get_productos)
+        return sum(producto.tiempo for producto in self.productos_pedido.all())
 
     def cambiar_estado(self, nuevo_estado: int) -> None:
         """ Cambia el estado del pedido  """
@@ -62,13 +60,13 @@ class Pedido(BaseModel):
 class ProductosPedido(BaseModel):
 
     # Si se elimina un Pedido, se eliminan los datos asociados a éste
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name="pedidos")
+    pedido = models.ForeignKey(
+        Pedido, on_delete=models.CASCADE, related_name="productos_pedidos"
+    )
 
     # Si se elimina un Producto, sólo se quitara el registro
     # de ese producto del pedido.
-    producto = models.ForeignKey(
-        "productos.Producto", on_delete=models.CASCADE, related_name="productos"
-    )
+    producto = models.ForeignKey("productos.Producto", on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
 
     def __str__(self) -> str:

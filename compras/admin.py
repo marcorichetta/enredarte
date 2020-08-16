@@ -18,10 +18,10 @@ class InsumoInline(admin.TabularInline):
 class CompraAdmin(admin.ModelAdmin):
     """Admin View for Compra"""
 
+    autocomplete_fields = ["proveedor"]
     list_display = ("id", "proveedor", "fecha_compra")
     list_filter = ("proveedor", "fecha_compra")
     inlines = [InsumoInline]
-    autocomplete_fields = ["insumos_compra"]
 
 
 @admin.register(InsumosCompra)
