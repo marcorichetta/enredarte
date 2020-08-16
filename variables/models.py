@@ -1,26 +1,27 @@
 from django.db import models
+from core.base_model import BaseModel
 
 
-class Variable(models.Model):
+class Variable(BaseModel):
     precio_hora = models.PositiveSmallIntegerField(
-        help_text="Precio de la hora de trabajo",
-        blank=True)
+        help_text="Precio de la hora de trabajo", blank=True
+    )
 
     precio_pintado = models.PositiveSmallIntegerField(
-        help_text="Precio de la pintura/apliques incluídos en el producto",
-        blank=True)
+        help_text="Precio de la pintura/apliques incluídos en el producto", blank=True
+    )
 
     ganancia_por_mayor = models.PositiveSmallIntegerField(
-        help_text="Porcentaje de ganancia por mayor",
-        blank=True)
+        help_text="Porcentaje de ganancia por mayor", blank=True
+    )
 
     ganancia_por_menor = models.PositiveSmallIntegerField(
-        help_text="Porcentaje de ganancia por menor",
-        blank=True)
+        help_text="Porcentaje de ganancia por menor", blank=True
+    )
 
     ganancia_fibrofacil = models.PositiveSmallIntegerField(
-        help_text="Porcentaje de ganancia aplicada al fibrofacil",
-        blank=True)
+        help_text="Porcentaje de ganancia aplicada al fibrofacil", blank=True
+    )
 
     def __str__(self):
         return f"\
@@ -32,7 +33,7 @@ class Variable(models.Model):
     @property
     def get_ganancias(self):
         """ Devuelve una lista con las ganancias """
-        return [self.por_mayor, self.por_menor]
+        return [self.ganancia_por_mayor, self.ganancia_por_menor]
 
     @property
     def get_ganancia_ff(self):
