@@ -8,7 +8,10 @@ on:
 
 jobs:
   build:
-
+    env:
+      SECRET_KEY: br=%@w=na0$4@gyxw42#)yl%o#gc0=esto7x*ta$5xxi*ea&a)
+      ALLOWED_HOSTS: 127.0.0.1
+    
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
