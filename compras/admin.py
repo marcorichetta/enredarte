@@ -10,6 +10,7 @@ class InsumoInline(admin.TabularInline):
     min_num = 1
     max_num = 20
     extra = 1
+    exclude = ("is_removed",)
 
 
 @admin.register(Compra)

@@ -1,13 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from decimal import Decimal
+from core.base_model import BaseModel
 
 from variables.models import Variable
 
 # Modelos
 
 
-class Unidad(models.Model):
+class Unidad(BaseModel):
     """ Tabla de referencia para unidades de medida de insumos. """
 
     nombre = models.CharField(max_length=128, unique=True)
@@ -20,7 +21,7 @@ class Unidad(models.Model):
         return f"{self.nombre}"
 
 
-class Insumo(models.Model):
+class Insumo(BaseModel):
     nombre = models.CharField(max_length=64, unique=True)
     descripcion = models.TextField(blank=True)
     medida = models.CharField(max_length=64)
@@ -45,7 +46,9 @@ class Insumo(models.Model):
         """ Precio Insumo x Ganancia FF / m2 de una plancha (380x280cm)
 
             Devuelve el precio redondeado de m2 del insumo"""
-        return round(self.precio * Variable.objects.get(pk=1).ganancia_fibrofacil / Decimal(10.64))
+        return round(
+            self.precio * Variable.objects.get(pk=1).ganancia_fibrofacil / Decimal(10.64)
+        )
 
     @property
     def precio_recorte(self):
@@ -69,34 +72,46 @@ class StockInsumo(models.Model):
         return f"{self.cantidad} - {self.insumo}"
 
 
-class Producto(models.Model):
+class Producto(BaseModel):
     """ Este modelo se refiere al Producto Genérico: Bandeja, Bastidor, Reloj """
 
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
-    largo = models.DecimalField(default=0,
-                                help_text='Largo en cm', max_digits=3, decimal_places=1)
-    ancho = models.DecimalField(default=0,
-                                help_text='Ancho en cm', max_digits=3, decimal_places=1)
-    alto = models.DecimalField(default=0,
-                               help_text='Alto en cm', max_digits=3, decimal_places=1)
-    tiempo = models.PositiveIntegerField(default=30,
-                                         help_text="Minutos para realizar el producto")
+    largo = models.DecimalField(
+        default=0, help_text="Largo en cm", max_digits=3, decimal_places=1
+    )
+    ancho = models.DecimalField(
+        default=0, help_text="Ancho en cm", max_digits=3, decimal_places=1
+    )
+    alto = models.DecimalField(
+        default=0, help_text="Alto en cm", max_digits=3, decimal_places=1
+    )
+    tiempo = models.PositiveIntegerField(
+        default=30, help_text="Minutos para realizar el producto"
+    )
 
     # Default - MDF-3mm
     insumo_base = models.ForeignKey(
-        Insumo, on_delete=models.PROTECT, related_name="BaseInsumo", default=1,
-        help_text="Insumo utilizado para la base")
+        Insumo,
+        on_delete=models.PROTECT,
+        related_name="BaseInsumo",
+        default=1,
+        help_text="Insumo utilizado para la base",
+    )
 
     # Default - MDF-5mm
     insumo_lados = models.ForeignKey(
-        Insumo, on_delete=models.PROTECT, related_name="LadoInsumo", default=2,
-        help_text="Insumo utilizado para los lados")
+        Insumo,
+        on_delete=models.PROTECT,
+        related_name="LadoInsumo",
+        default=2,
+        help_text="Insumo utilizado para los lados",
+    )
 
     # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
-    insumos = models.ManyToManyField(Insumo,
-                                     through="InsumosProducto",
-                                     through_fields=('producto', 'insumo'))
+    insumos = models.ManyToManyField(
+        Insumo, through="InsumosProducto", through_fields=("producto", "insumo")
+    )
 
     def __str__(self):
         return f"{self.nombre} - {self.descripcion}"
@@ -115,14 +130,22 @@ class Producto(models.Model):
             producirlo. """
         precioBase = (self.largo / 100) * (self.ancho / 100) * self.insumo_base.precio_m2
 
-        precioLatCorto = (self.ancho / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
+        precioLatCorto = (
+            (self.ancho / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
+        )
 
-        precioLatLargo = (self.largo / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
+        precioLatLargo = (
+            (self.largo / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
+        )
 
         precio_tiempo = (self.tiempo / 60) * Variable.objects.get(pk=1).precio_hora
 
-        costo = int(precioBase) + int(precioLatCorto) + \
-            int(precioLatLargo) + int(precio_tiempo)
+        costo = (
+            int(precioBase)
+            + int(precioLatCorto)
+            + int(precioLatLargo)
+            + int(precio_tiempo)
+        )
 
         return costo
 
@@ -131,23 +154,35 @@ class Producto(models.Model):
         """ Calcula el precio de venta al público del producto crudo """
 
         # Precio costo * % de ganancia
-        return round(self.precio_costo * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1))
+        return round(
+            self.precio_costo
+            * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1)
+        )
 
     @property
     def precio_terminado(self):
         """ Calcula el precio del producto terminado, sin la ganancia """
 
         precio_apliques = 20
-        precio_tiempo_terminado = int((self.tiempo * 2) / 60 * Variable.objects.get(pk=1).precio_hora)
+        precio_tiempo_terminado = int(
+            (self.tiempo * 2) / 60 * Variable.objects.get(pk=1).precio_hora
+        )
 
-        return self.precio_costo() + \
-            Variable.objects.get(pk=1).precio_pintado + precio_apliques + precio_tiempo_terminado
+        return (
+            self.precio_costo()
+            + Variable.objects.get(pk=1).precio_pintado
+            + precio_apliques
+            + precio_tiempo_terminado
+        )
 
     def precio_venta_terminado(self):
         """ Calcula el precio de venta al público del producto terminado """
 
         # Precio terminado * % de ganancia
-        return round(self.precio_terminado * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1))
+        return round(
+            self.precio_terminado
+            * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1)
+        )
 
     @property
     def get_insumos(self):
@@ -156,11 +191,13 @@ class Producto(models.Model):
         return insumos_producto
 
 
-class ProductImage(models.Model):
+class ProductImage(BaseModel):
     """ Este modelo existe para cargar 1 o más imágenes de un solo producto """
 
     # Si se elimina un Producto su imagen también se borra
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='images')
+    producto = models.ForeignKey(
+        Producto, on_delete=models.CASCADE, related_name="images"
+    )
     imagen = models.ImageField(upload_to="productos/", blank=True)
 
     class Meta:
@@ -172,7 +209,7 @@ class ProductImage(models.Model):
         return self.producto.nombre
 
 
-class InsumosProducto(models.Model):
+class InsumosProducto(BaseModel):
 
     # Misma lógica que ProductosPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
