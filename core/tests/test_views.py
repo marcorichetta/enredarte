@@ -2,12 +2,14 @@ import pytest
 
 # Tests para views de Localidad y Provincia
 
-from gestion.models import Localidad
+from core.models import Localidad
+from django.shortcuts import get_object_or_404
 from utiles.factories import ProvinciaFactory, LocalidadFactory
+
+pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture
-@pytest.mark.django_db
 def test_data(client):
 
     # Creamos la data necesaria para realizar los tests
@@ -26,11 +28,10 @@ def test_ajax_request(django_db_setup, test_data):
     assert test_data.status_code == 200
 
 
-@pytest.mark.django_db
-def test_nueva_localidad(django_db_setup):
+def test_nueva_localidad(django_db_setup, test_data):
 
     # Obtener la localidad creada
-    localidadCreada = Localidad.objects.get(id=1)
+    localidadCreada = get_object_or_404(Localidad, id=1)
 
     valoresEsperados = ["9999", "Test", 1]
 
@@ -39,5 +40,7 @@ def test_nueva_localidad(django_db_setup):
         localidadCreada.localidad,
         localidadCreada.provincia_id,
     ]
+
+    print(valoresEnDB)
 
     assert valoresEnDB == valoresEsperados

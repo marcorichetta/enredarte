@@ -14,15 +14,15 @@ def active(context, url_name):
 
     # Try to reverse the url
     try:
-        url = '^' + reverse(url_name)
+        url = "^" + reverse(url_name)
     except NoReverseMatch:
         # '/' doesn't reverse so only the 'index' page enters here
-        url = '^' + url_name + '$'
+        url = "^" + url_name + "$"
 
     # Search in the context to get the routes path
     # '/pedidos/ for example
-    path = context['request'].path
+    path = context["request"].path
 
     if re.search(url, path):
-        return 'active'
-    return ''
+        return "active"
+    return ""
