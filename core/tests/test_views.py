@@ -1,34 +1,40 @@
 import pytest
+from django.urls import reverse
 
 # Tests para views de Localidad y Provincia
 
 from core.models import Localidad
 from django.shortcuts import get_object_or_404
-from utiles.factories import ProvinciaFactory, LocalidadFactory
+from .factories import ProvinciaFactory, LocalidadFactory
 
 pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture
-def test_data(client):
+def nueva_localidad(client):
+    # Fixture para crear el cliente necesario para los tests
 
-    # Creamos la data necesaria para realizar los tests
-    # provincia1 = ProvinciaFactory()
+    provincia = ProvinciaFactory()
 
-    testData = {"cod_postal": "9999", "localidad": "Test", "provincia_id": 1}
+    # localidad = LocalidadFactoryFactory()
+    url = reverse("crearLocalidad")
 
-    response = client.post("/localidad/new/", testData)
+    testData = {"cod_postal": "9999", "localidad": "Test", "provincia_id": provincia.pk}
+
+    response = client.post(url, data=testData)
 
     return response
 
 
-def test_ajax_request(django_db_setup, test_data):
+@pytest.mark.django_db()
+def test_ajax_request(nueva_localidad):
     """ Crea una nueva localidad simulando la request del modal de la ruta clientes/new"""
 
-    assert test_data.status_code == 200
+    assert nueva_localidad.status_code == 200
 
 
-def test_nueva_localidad(django_db_setup, test_data):
+@pytest.mark.django_db()
+def test_nueva_localidad(nueva_localidad):
 
     # Obtener la localidad creada
     localidadCreada = get_object_or_404(Localidad, id=1)
@@ -40,7 +46,5 @@ def test_nueva_localidad(django_db_setup, test_data):
         localidadCreada.localidad,
         localidadCreada.provincia_id,
     ]
-
-    print(valoresEnDB)
 
     assert valoresEnDB == valoresEsperados

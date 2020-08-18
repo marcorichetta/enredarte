@@ -4,7 +4,7 @@ import pytest
 
 from productos.models import Insumo, Producto, Unidad
 from productos.forms import InsumosProductoFormset, ProductoForm
-from utiles.factories import *
+from .factories import InsumoFactory, UnidadFactory
 
 
 @pytest.fixture
@@ -23,8 +23,8 @@ def form_producto():
             "ancho": "15",
             "alto": "4",
             "tiempo": "50",
-            "insumo_base": insumo1,
-            "insumo_lados": insumo2,
+            "insumo_base": insumo1.pk,
+            "insumo_lados": insumo2.pk,
         }
     )
 
@@ -34,5 +34,7 @@ def form_producto():
 @pytest.mark.django_db
 def test_insumos_correctos(django_db_setup, form_producto):
     """ Insumo base y lados deben mostrar solamente opciones de Fibrofacil """
-    assert form_producto.fields["insumo_base"] == "MDF-3"
-    assert form_producto.fields["insumo_lados"] == "MDF-5"
+
+    assert form_producto.is_valid()
+    assert form_producto.cleaned_data["insumo_base"].nombre == "MDF-3"
+    assert form_producto.cleaned_data["insumo_lados"].nombre == "MDF-5"
