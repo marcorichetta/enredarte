@@ -1,6 +1,13 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    FormView,
+)
 from .models import Producto, Unidad, Insumo, InsumosProducto
 
 from .forms import ProductoForm, InsumosProductoFormset
@@ -19,7 +26,7 @@ class ProductoListView(ListView):
     def get_queryset(self):
         """ Permite buscar en un form dentro de la misma página
         con el formato `q?texto` """
-        queryset = super(ProductoListView, self).get_queryset()
+        queryset = super().get_queryset()
 
         q = self.request.GET.get("q")
         if q:
@@ -27,10 +34,11 @@ class ProductoListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        ''' Devuelve el texto buscado para usarlo en la paginación '''
-        context = super(ProductoListView, self).get_context_data(**kwargs)
+        """ Devuelve el texto buscado para usarlo en la paginación """
+        context = super().get_context_data(**kwargs)
         context["search_txt"] = self.request.GET.get("search", "")
         return context
+
 
 """ class InsumosProductoInline(InlineFormSetFactory):
     model = InsumosProducto
@@ -99,7 +107,9 @@ class ProductoUpdateView(UpdateView):
 
         # Enviar el objeto como instancia para ser actualizado
         if self.request.POST:
-            context["insumos"] = InsumosProductoFormset(self.request.POST, instance=self.object)
+            context["insumos"] = InsumosProductoFormset(
+                self.request.POST, instance=self.object
+            )
         else:
             context["insumos"] = InsumosProductoFormset(instance=self.object)
         return context

@@ -7,13 +7,15 @@
         {
             "name": "Python: Django",
             "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/manage.py",
-            "args": [
-                "runserver",
-                "--noreload",
+            "request": "attach",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/usr/app/enredarte"
+                }
             ],
-            "django": true
+            "port": 4000,
+            "host": "localhost",
         }
     ]
 }

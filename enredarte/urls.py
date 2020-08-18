@@ -10,7 +10,7 @@ urlpatterns = []
 urlpatterns += [
     path("admin/", admin.site.urls, name="admin"),
     # Root
-    path("", include("gestion.urls")),
+    path("", include("core.urls")),
     # Apps
     path("calendario/", include("calendario.urls")),
     path("clientes/", include("clientes.urls")),

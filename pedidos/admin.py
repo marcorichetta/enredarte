@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 
 from .models import Pedido, ProductosPedido
@@ -10,6 +11,7 @@ class ProductoInline(admin.TabularInline):
     min_num = 1
     max_num = 20
     extra = 1
+    exclude = ("is_removed",)
 
 
 @admin.register(Pedido)
@@ -20,10 +22,26 @@ class PedidoAdmin(admin.ModelAdmin):
         "precio_final",
         "detalles",
         "estado",
-        "actualizado",
-        "fecha_pedido",
+        "fecha_entrega",
+        "created",
+        "modified",
+        "is_removed",
     )
-    list_filter = ("cliente", "actualizado", "fecha_pedido")
+    list_filter = ("cliente", "fecha_entrega")
     autocomplete_fields = ["productos_pedido"]
 
     inlines = [ProductoInline]
+
+
+@admin.register(ProductosPedido)
+class ProductosPedidoAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "created",
+        "modified",
+        "is_removed",
+        "pedido",
+        "producto",
+        "cantidad",
+    )
+    list_filter = ("created", "modified", "is_removed", "pedido", "producto")

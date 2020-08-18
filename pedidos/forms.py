@@ -14,7 +14,7 @@ from crispy_forms.layout import (
     Submit,
     Button,
 )
-from gestion.custom_layout_object import Formset
+from core.custom_layout_object import Formset
 
 
 class PedidoForm(forms.ModelForm):

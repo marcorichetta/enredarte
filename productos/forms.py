@@ -15,7 +15,7 @@ from crispy_forms.layout import (
     Submit,
     Button,
 )
-from gestion.custom_layout_object import Formset
+from core.custom_layout_object import Formset
 
 
 class ProductoForm(forms.ModelForm):
@@ -23,8 +23,12 @@ class ProductoForm(forms.ModelForm):
 
     # Filtra los insumos disponibles para base y lados
     # Solo incluye los que contengan MDF
-    insumo_base = forms.ModelChoiceField(queryset=Insumo.objects.filter(nombre__contains="MDF"))
-    insumo_lados = forms.ModelChoiceField(queryset=Insumo.objects.filter(nombre__contains="MDF"))
+    insumo_base = forms.ModelChoiceField(
+        queryset=Insumo.objects.filter(nombre__contains="MDF")
+    )
+    insumo_lados = forms.ModelChoiceField(
+        queryset=Insumo.objects.filter(nombre__contains="MDF")
+    )
 
     class Meta:
         model = Producto
@@ -40,14 +44,23 @@ class ProductoForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(Field("nombre"), Field("descripcion")),
             Div(
-                Fieldset("Medidas", "largo", "ancho", "alto", "tiempo", css_class="col-6"),
-                Fieldset("Fibrofacil utilizado", "insumo_base", "insumo_lados", css_class="col-6"),
+                Fieldset(
+                    "Medidas", "largo", "ancho", "alto", "tiempo", css_class="col-6"
+                ),
+                Fieldset(
+                    "Fibrofacil utilizado",
+                    "insumo_base",
+                    "insumo_lados",
+                    css_class="col-6",
+                ),
                 css_class="d-flex",
             ),
             Div(
                 Fieldset("Otros insumos", Formset("insumos")),
                 HTML("<br>"),
-                ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
+                ButtonHolder(
+                    Submit("submit", "Guardar Producto", css_class="btn-success")
+                ),
             ),
         )
 

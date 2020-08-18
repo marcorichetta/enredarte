@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("clientes", "0001_squashed_0004_auto_20191101_1227"),
-        ("gestion", "0001_squashed_0006_auto_20190718_1239"),
+        ("core", "0001_squashed_0006_auto_20190718_1239"),
     ]
 
     operations = [

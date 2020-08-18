@@ -8,12 +8,12 @@ import proveedores.helpers
 class Migration(migrations.Migration):
 
     # replaces = [
-    #     ("gestion", "0001_initial"),
-    #     ("gestion", "0002_auto_20190704_1709"),
-    #     ("gestion", "0003_auto_20190705_1600"),
-    #     ("gestion", "0004_auto_20190705_1913"),
-    #     ("gestion", "0005_auto_20190705_1940"),
-    #     ("gestion", "0006_auto_20190718_1239"),
+    #     ("core", "0001_initial"),
+    #     ("core", "0002_auto_20190704_1709"),
+    #     ("core", "0003_auto_20190705_1600"),
+    #     ("core", "0004_auto_20190705_1913"),
+    #     ("core", "0005_auto_20190705_1940"),
+    #     ("core", "0006_auto_20190718_1239"),
     # ]
 
     initial = True
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 (
                     "insumo",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="gestion.Insumo"
+                        on_delete=django.db.models.deletion.CASCADE, to="core.Insumo"
                     ),
                 ),
             ],
@@ -153,7 +153,7 @@ class Migration(migrations.Migration):
                 (
                     "insumo",
                     models.OneToOneField(
-                        on_delete=django.db.models.deletion.CASCADE, to="gestion.Insumo"
+                        on_delete=django.db.models.deletion.CASCADE, to="core.Insumo"
                     ),
                 ),
             ],
@@ -190,7 +190,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="proveedores",
-                        to="gestion.Localidad",
+                        to="core.Localidad",
                     ),
                 ),
             ],
@@ -219,7 +219,7 @@ class Migration(migrations.Migration):
                 (
                     "insumos",
                     models.ManyToManyField(
-                        through="gestion.InsumosProducto", to="gestion.Insumo"
+                        through="core.InsumosProducto", to="core.Insumo"
                     ),
                 ),
             ],
@@ -230,20 +230,20 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="provincias",
-                to="gestion.Provincia",
+                to="core.Provincia",
             ),
         ),
         migrations.AddField(
             model_name="insumosproducto",
             name="producto",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="gestion.Producto"
+                on_delete=django.db.models.deletion.CASCADE, to="core.Producto"
             ),
         ),
         migrations.AddField(
             model_name="insumo",
             name="proveedores",
-            field=models.ManyToManyField(to="gestion.Proveedor"),
+            field=models.ManyToManyField(to="core.Proveedor"),
         ),
         migrations.AddField(
             model_name="insumo",
@@ -252,7 +252,7 @@ class Migration(migrations.Migration):
                 default=3,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="unidades",
-                to="gestion.Unidad",
+                to="core.Unidad",
             ),
         ),
         migrations.RenameField(
@@ -300,10 +300,10 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="pedidos",
-                        to="gestion.EstadoPedido",
+                        to="core.EstadoPedido",
                     ),
                 ),
-                ("productos_pedido", models.ManyToManyField(to="gestion.Producto")),
+                ("productos_pedido", models.ManyToManyField(to="core.Producto")),
             ],
         ),
     ]
