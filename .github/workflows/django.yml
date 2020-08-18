@@ -9,8 +9,15 @@ on:
 jobs:
   build:
     env:
+      DEBUG: on
       SECRET_KEY: br=%@w=na0$4@gyxw42#)yl%o#gc0=esto7x*ta$5xxi*ea&a)
       ALLOWED_HOSTS: 127.0.0.1
+      DATABASE_URL: enredarte_dev
+      DB_USER: enredarte
+      DB_PASSWORD: enredarte
+      DB_HOST: db
+      DB_PORT: 5432
+      DATABASE: postgres
     
     runs-on: ubuntu-latest
     strategy:
