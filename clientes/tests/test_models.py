@@ -1,34 +1,31 @@
-import pytest
-
 # Unit tests para el modelo Cliente
-
+import pytest
+from clientes.tests.factories import ClienteFactory
 from clientes.models import Cliente
-
-from utiles.factories import ProvinciaFactory, LocalidadFactory
 
 
 @pytest.fixture
-def crear_cliente():
+def cliente():
+    # Fixture para crear el cliente necesario para los tests
 
-    # Creamos la data necesaria para realizar los tests
-    locTest = LocalidadFactory()
+    cliente = ClienteFactory()
 
-    clienteTest = Cliente.objects.create(
-        nombre="Marco",
-        apellido="Richetta",
-        email="marcorichetta@gmail.com",
-        telefono="3534123456",
-        calle="Santa Fe",
-        numero="565",
-        localidad=locTest,
-    )
-
-    return clienteTest
+    return cliente
 
 
 @pytest.mark.django_db()
-def test_reverse(django_db_setup, crear_cliente):
+class TestClientes:
+    def test_creado_borrado_cliente(self, cliente):
 
-    # cliente = Cliente.objects.get(id=1)
+        assert Cliente.all_objects.count() == 1
 
-    assert crear_cliente.get_absolute_url() == "/clientes/"
+        cliente.delete()
+
+        # El manager `objects` devuelve sólo las instancias activas
+        assert Cliente.objects.count() == 0
+        # El manager `all_objects` devuelve todas las instancias creadas
+        assert Cliente.all_objects.count() == 1
+
+    def test_reverse(self, cliente):
+
+        assert cliente.get_absolute_url() == "/clientes/1/"
