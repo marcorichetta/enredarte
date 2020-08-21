@@ -1,0 +1,2 @@
+# Files to exclude on COPY
+env

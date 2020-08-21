@@ -11,23 +11,23 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import dj_database_url
 import environ
-
-# from dotenv import load_dotenv
-
-# load_dotenv()
-
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-# reading .env file
-environ.Env.read_env()
+from typing import List
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# /home/rich/programming/enredarte
+# .../enredarte/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+env = environ.Env(
+    # Set casting, default value for production
+    DEBUG=(bool, False)
+)
+
+# reading .env file
+env_file = os.path.join(BASE_DIR, ".env")
+if os.path.exists(env_file):
+    environ.Env.read_env(env_file)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -40,11 +40,9 @@ DEBUG = env("DEBUG")
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS: List[str] = env.str("ALLOWED_HOSTS").split(" ")
 
-# Application definition
-
-INSTALLED_APPS = [
+INSTALLED_APPS: List[str] = [
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -56,7 +54,6 @@ INSTALLED_APPS = [
     # 3rd party
     "crispy_forms",
     "django_extensions",
-    "debug_toolbar",
     # My apps
     "core",
     "users",
@@ -69,9 +66,8 @@ INSTALLED_APPS = [
     "calendario",
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE: List[str] = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -80,6 +76,20 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# DJANGO-DEBUG-TOOLBAR CONFIGS
+# ------------------------------------------------------------------------------
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+# https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
+
+# Enable the debug toolbar only in DEBUG mode.
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]
+
+    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
+
 
 ROOT_URLCONF = "enredarte.urls"
 
@@ -105,8 +115,7 @@ WSGI_APPLICATION = "enredarte.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {"default": env.db()}
-
+DATABASES = {"default": env.db_url("DATABASE_URL")}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -162,28 +171,15 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 LOGIN_REDIRECT_URL = "index"
 LOGIN_URL = "login"
 
-# DJANGO-DEBUG-TOOLBAR CONFIGS
-# ------------------------------------------------------------------------------
-# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
-# https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
-INTERNAL_IPS = [
-    "172.22.0.1",
-    "localhost",
-    "127.0.0.1",
-]
-
-DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
-
 
 # SELECT2
 # ------------------------------------------------------------------------------
 SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
 SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
 
-# DJ DATABASE URL
-# ------------------------------------------------------------------------------
-if not DEBUG:
-    print("Production")
-    # dj_database_url
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES["default"].update(db_from_env)
+
+if DEBUG:
+    try:
+        from .local_settings import *
+    except ModuleNotFoundError:
+        pass

@@ -1,0 +1,11 @@
+Django
+django-crispy-forms==1.7.2
+django-environ==0.4.5
+django-extensions==3.0.3
+django-model-utils==4.0.0
+factory-boy==2.12.0
+gunicorn==20.0.4
+ipython==7.13.0
+psycopg2-binary==2.8.5
+Pillow==7.2.0
+whitenoise==5.1.0
