@@ -5,15 +5,9 @@
 
 {% block extra_head %}
 <!-- Fullcalendar CSS -->
-<link rel="stylesheet" href="{% static 'calendar/packages/core/main.min.css' %}" />
-<link rel="stylesheet" href="{% static 'calendar/packages/bootstrap/main.min.css' %}" />
-<link rel="stylesheet" href="{% static 'calendar/packages/daygrid/main.min.css' %}" />
-<link rel="stylesheet" href="{% static 'calendar/packages/list/main.min.css' %}" />
+<!-- <link rel="stylesheet" href="{% static 'calendar/packages/bootstrap/main.min.css' %}" /> -->
 
-<!-- <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/core@4.4.0/main.min.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/bootstrap@4.4.0/main.min.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/daygrid@4.4.0/main.min.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/@fullcalendar/list@4.4.0/main.min.css"/> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css">
 {% endblock extra_head %}
 
 {% block content %}
@@ -47,18 +41,14 @@
 {% block extra_js %}
 
 <!-- Fullcalendar JS -->
-<script src="{% static 'calendar/packages/core/main.min.js' %}"></script>
+<!-- <script src="{% static 'calendar/packages/core/main.min.js' %}"></script>
 <script src="{% static 'calendar/packages/core/locales/es.js' %}"></script>
 <script src="{% static 'calendar/packages/bootstrap/main.min.js' %}"></script>
 <script src="{% static 'calendar/packages/daygrid/main.min.js' %}"></script>
-<script src="{% static 'calendar/packages/list/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/list/main.min.js' %}"></script> -->
 
-
-<!-- <script src='https://unpkg.com/@fullcalendar/core@4.4.0/main.min.js'></script>
-    <script src='https://unpkg.com/@fullcalendar/core@4.4.0/locales/es.js'></script>
-    <script src='https://unpkg.com/@fullcalendar/bootstrap@4.4.0/main.min.js'></script>
-    <script src='https://unpkg.com/@fullcalendar/daygrid@4.4.0/main.min.js'></script>
-    <script src="https://unpkg.com/@fullcalendar/list@4.4.0/main.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.3.0,npm/fullcalendar@5.3.0/locales/es.min.js"></script>
 
 <script>
     'use strict';
@@ -69,22 +59,20 @@
         const calendarEl = document.getElementById('calendar');
 
         calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['dayGrid', 'list'],
-            defaultView: 'dayGridMonth',
-            header: {
-                left: 'prev,next, today',
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,dayGridWeek,listMonth'
             },
             locale: 'es',
-            weekMode: 'liquid',
             editable: true,
-            eventLimit: 4,
+            dayMaxEventRows: 4,
             eventTextColor: 'white',
             eventSources: [{
                 url: '{% url "get_pedidos" idEstado=0 %}'
             }],
-            eventRender: function (info) {
+            eventDidMount: function (info) {
                 $(info.el).tooltip({ 
                     title: info.event.title,
                     // TODO - Incluir otro tipo de info más útil 
