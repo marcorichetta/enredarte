@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.8]
     
     steps:
       - uses: actions/checkout@v2
@@ -23,10 +23,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
       - name: Cache Python packages
-        uses: actions/cache@v2.1.0
+      - uses: actions/cache@v2.1.1
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -35,11 +37,11 @@ jobs:
         run: pytest
         env:
           DEBUG: on
-          SECRET_KEY: br=%@w=na0$4@gyxw42#)yl%o#gc0=esto7x*ta$5xxi*ea&a)
-          ALLOWED_HOSTS: 127.0.0.1
-          DATABASE_URL: enredarte_dev
-          DB_USER: enredarte
-          DB_PASSWORD: enredarte
-          DB_HOST: db
-          DB_PORT: 5432
-          DATABASE: postgres
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DATABASE: ${{ secrets.DATABASE }}
