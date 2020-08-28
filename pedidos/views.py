@@ -62,23 +62,26 @@ class PedidoCreateView(CreateView):
     def form_valid(self, form):
         # Obtener info de pedido y productos posteados en el form
         context = self.get_context_data()
-        productos = context["productos"]
+        formset_productos = context["productos"]
 
-        # Esto se ejecuta sólo si la transacción es atómica
-        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
-        with transaction.atomic():
-            # Guardar el pedido
-            self.object = form.save()
-            # Si son válidos los productos se guardan
-            if productos.is_valid():
-                productos.instance = self.object
-                productos.save()
+        # Pre guardado del pedido
+        nuevo_pedido = form.save(commit=False)
 
-                # Guardar pedido completa
-                return super(PedidoCreateView, self).form_valid(form)
+        # Calcular y sobreescribir el precio total del pedido
+        nuevo_pedido.precio_total = form.instance.get_precio_total
 
-            # Repopular form con errores
-            return self.render_to_response(self.get_context_data(form=form))
+        # Si son válidos los productos se guardan
+        if formset_productos.is_valid():
+            # Guardar pedido
+            nuevo_pedido.save()
+
+            formset_productos.instance = nuevo_pedido
+            formset_productos.save()
+
+            return super().form_valid(form)
+
+        # Repopular form con errores
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class PedidoUpdateView(UpdateView):
@@ -92,7 +95,9 @@ class PedidoUpdateView(UpdateView):
         context = super(PedidoUpdateView, self).get_context_data(**kwargs)
         # Le agregamos los productos al context para usarlos en el template
         if self.request.POST:
-            context["productos"] = ProductosPedidoFormset(self.request.POST)
+            context["productos"] = ProductosPedidoFormset(
+                self.request.POST, instance=self.object
+            )
         else:
             context["productos"] = ProductosPedidoFormset(instance=self.object)
         return context
@@ -100,23 +105,26 @@ class PedidoUpdateView(UpdateView):
     def form_valid(self, form):
         # Obtener info de pedido y productos posteados en el form
         context = self.get_context_data()
-        productos = context["productos"]
+        formset_productos = context["productos"]
 
-        # Esto se ejecuta sólo si la transacción es atómica
-        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
-        with transaction.atomic():
-            # Guardar el pedido
-            self.object = form.save()
-            # Si son válidos los productos se guardan
-            if productos.is_valid():
-                productos.instance = self.object
-                productos.save()
+        # Pre guardar el pedido
+        pedido_actualizado = form.save(commit=False)
 
-                # Guardar pedido completa
-                return super(PedidoUpdateView, self).form_valid(form)
+        # Calcular y sobreescribir el precio total del pedido
+        pedido_actualizado.precio_total = form.instance.get_precio_total
 
-            # Repopular form con errores
-            return self.render_to_response(self.get_context_data(form=form))
+        # Si son válidos los productos se guardan
+        if formset_productos.is_valid():
+            # Guardar pedido
+            pedido_actualizado.save()
+
+            formset_productos.instance = pedido_actualizado
+            formset_productos.save()
+
+            return super().form_valid(form)
+
+        # Repopular form con errores
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
         return reverse_lazy("detailPedido", kwargs={"pk": self.object.pk})

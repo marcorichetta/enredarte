@@ -65,7 +65,7 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    def get_queryset(self):
+    def get_queryset(self, request):
         return Producto.all_objects.all()
 
     list_display = (
@@ -90,7 +90,7 @@ class ProductoAdmin(admin.ModelAdmin):
 
 @admin.register(InsumosProducto)
 class InsumosProductoAdmin(admin.ModelAdmin):
-    def get_queryset(self):
+    def get_queryset(self, request):
         return InsumosProducto.all_objects.all()
 
     list_display = (

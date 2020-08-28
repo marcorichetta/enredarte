@@ -1,6 +1,7 @@
 import re
 from django import forms
 from pedidos.models import Pedido, ProductosPedido
+from calendario.widgets import DatePicker
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
@@ -22,7 +23,8 @@ class PedidoForm(forms.ModelForm):
 
     class Meta:
         model = Pedido
-        fields = ("cliente", "precio_final", "detalles", "estado")
+        fields = ("cliente", "detalles", "estado", "fecha_entrega")
+        widgets = {"fecha_entrega": DatePicker()}
 
     def __init__(self, *args, **kwargs):
         super(PedidoForm, self).__init__(*args, **kwargs)
@@ -32,17 +34,21 @@ class PedidoForm(forms.ModelForm):
         self.helper.label_class = "col-md-3 create-label"
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
-            Div(
-                Field("cliente"),
-                Field("detalles", style="height: 5rem"),
-                Field("estado"),
-                Field("precio_final"),
+            Row(
+                Div(
+                    Field("cliente"),
+                    Field("detalles", style="height: 5rem"),
+                    Field("estado"),
+                    Field("fecha_entrega"),
+                    css_class="col-6",
+                ),
+                Div(
+                    Fieldset("Agregar Productos", Formset("productos")),
+                    css_class="col-6 flex-wrap: nowrap",
+                ),
             ),
-            Div(
-                Fieldset("Productos", Formset("productos")),
-                HTML("<br>"),
-                ButtonHolder(Submit("submit", "Guardar Pedido", css_class="btn-success")),
-            ),
+            HTML("<br>"),
+            ButtonHolder(Submit("submit", "Guardar Pedido", css_class="btn-success")),
         )
 
 

@@ -28,7 +28,7 @@ class Pedido(BaseModel):
     productos_pedido = models.ManyToManyField(
         "productos.Producto", through="ProductosPedido"
     )
-    precio_final = models.DecimalField(
+    precio_total = models.DecimalField(
         help_text="Precio en $", max_digits=6, decimal_places=2
     )
     detalles = models.TextField(blank=True)
@@ -51,6 +51,18 @@ class Pedido(BaseModel):
         """ Devuelve la sumatoria de tiempo para producir todos los productos del pedido """
         return sum(producto.tiempo for producto in self.productos_pedido.all())
 
+    @property
+    def get_precio_total(self) -> int:
+        """ Devuelve el precio total del pedido """
+        return sum(producto.precio_pedido for producto in self.productos_pedidos.all())
+
+    def save_precio_total(self) -> None:
+        """ Devuelve el precio total del pedido """
+        self.precio_total = sum(
+            producto.precio_pedido for producto in self.productos_pedidos.all()
+        )
+        self.save()
+
     def cambiar_estado(self, nuevo_estado: int) -> None:
         """ Cambia el estado del pedido  """
         self.estado = nuevo_estado
@@ -71,3 +83,8 @@ class ProductosPedido(BaseModel):
 
     def __str__(self) -> str:
         return f"{self.cantidad} - {self.producto.nombre}"
+
+    @property
+    def precio_pedido(self):
+        """ Calcula el precio total de cada producto del pedido """
+        return self.cantidad * self.producto.precio_venta_terminado

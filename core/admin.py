@@ -31,16 +31,3 @@ class ProvinciaAdmin(admin.ModelAdmin):
 class LocalidadAdmin(admin.ModelAdmin):
     list_display = ("cod_postal", "localidad", "provincia")
     list_filter = ("provincia",)
-
-
-""" @admin.register(Pedido)
-class PedidoAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'fecha_pedido',
-        'cliente',
-        'estado_pedido',
-        'precio_final',
-    )
-    list_filter = ('fecha_pedido', 'cliente', 'estado_pedido')
-    raw_id_fields = ('productos_pedido',) """

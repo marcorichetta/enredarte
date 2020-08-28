@@ -16,10 +16,13 @@ class ProductoInline(admin.TabularInline):
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        return Pedido.all_objects.all()
+
     list_display = (
         "id",
         "cliente",
-        "precio_final",
+        "precio_total",
         "detalles",
         "estado",
         "fecha_entrega",
@@ -35,6 +38,9 @@ class PedidoAdmin(admin.ModelAdmin):
 
 @admin.register(ProductosPedido)
 class ProductosPedidoAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        return ProductosPedido.all_objects.all()
+
     list_display = (
         "id",
         "created",

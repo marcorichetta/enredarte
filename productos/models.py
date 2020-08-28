@@ -175,6 +175,7 @@ class Producto(BaseModel):
             + precio_tiempo_terminado
         )
 
+    @property
     def precio_venta_terminado(self):
         """ Calcula el precio de venta al público del producto terminado """
 

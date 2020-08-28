@@ -37,7 +37,8 @@ Información sobre {{ object.nombre }}
         {% endfor %}
 
         <h5>Estado</h5>
-        <li>{{object.estado}}</li>
+        <li>{{ object.get_estado_display }}</li>
+        <li>{{ object.get_precio_total }}</li>
         {% if object.detalles %}
         <li>{{object.detalles}}</li>
         {% endif %}
