@@ -29,7 +29,7 @@ class Pedido(BaseModel):
         "productos.Producto", through="ProductosPedido"
     )
     precio_total = models.DecimalField(
-        help_text="Precio en $", max_digits=6, decimal_places=2
+        help_text="Precio en $", max_digits=6, decimal_places=2, default=0
     )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
@@ -44,7 +44,7 @@ class Pedido(BaseModel):
 
     def get_absolute_url(self) -> str:
         """ Utilizada después de actualizar o eliminar un pedido"""
-        return reverse("detailPedido", kwargs={"pk": self.id})
+        return reverse("pedidos:detail", kwargs={"pk": self.id})
 
     @property
     def tiempo_total(self) -> int:
