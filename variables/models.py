@@ -3,6 +3,14 @@ from core.base_model import BaseModel
 
 
 class Variable(BaseModel):
+    """
+        Variables globales utilizadas por el sistema para el calculo de precios
+
+        Se crean al inicializar el proyecto mediante el comando
+        `crear_variables.py` ubicado en managements/commands
+
+    """
+
     precio_hora = models.PositiveSmallIntegerField(
         help_text="Precio de la hora de trabajo", blank=True
     )

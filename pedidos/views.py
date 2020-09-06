@@ -127,7 +127,7 @@ class PedidoUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("detailPedido", kwargs={"pk": self.object.pk})
+        return reverse_lazy("pedidos:detail", kwargs={"pk": self.object.pk})
 
 
 class PedidoDetailView(DetailView):
@@ -140,7 +140,7 @@ class PedidoDetailView(DetailView):
 
 class PedidoDeleteView(DeleteView):
     model = Pedido
-    success_url = reverse_lazy("pedido")
+    success_url = reverse_lazy("pedidos:list")
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

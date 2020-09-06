@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import environ
 from typing import List
+import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # .../enredarte/
@@ -168,8 +170,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # Override login redirect url
-LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "core:home"
 LOGIN_URL = "login"
+LOGOUT_REDIRECT_URL = "login"
 
 
 # SELECT2
@@ -177,6 +180,16 @@ LOGIN_URL = "login"
 SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
 SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
 
+# SENTRY
+# ------------------------------------------------------------------------------
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+)
 
 if DEBUG:
     try:

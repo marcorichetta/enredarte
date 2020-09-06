@@ -17,7 +17,7 @@ def nueva_localidad(client):
     provincia = ProvinciaFactory()
 
     # localidad = LocalidadFactoryFactory()
-    url = reverse("crearLocalidad")
+    url = reverse("core:crearLocalidad")
 
     testData = {"cod_postal": "9999", "localidad": "Test", "provincia_id": provincia.pk}
 

@@ -79,7 +79,7 @@ class ProductosPedidoForm(forms.ModelForm):
         )
 
 
-# Formset que incluye las relaciones entre Compra e Insumo
+# Formset que incluye las relaciones entre Pedido y Productos
 # - Se crea 1 formset inicialmente
 # - Se pueden agregar 4 más
 ProductosPedidoFormset = forms.inlineformset_factory(
