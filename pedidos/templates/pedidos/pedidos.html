@@ -8,7 +8,7 @@
 
 <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-        <a type="button" class="btn btn-outline-success" href="{% url 'createPedido' %}">Crear</a>
+        <a type="button" class="btn btn-outline-success" href="{% url 'pedidos:create' %}">Crear</a>
     </div>
     {% include 'search_form.html' %}
 </div>
@@ -32,13 +32,13 @@
                 <td>{{ ped.get_estado_display }}</td>
                 <td>{{ ped.actualizado }}</td>
                 <td>
-                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'detailPedido' ped.id %}">
+                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'pedidos:detail' ped.id %}">
                         <span data-feather="zoom-in"></span>
                     </a>
-                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updatePedido' ped.id %}">
+                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'pedidos:update' ped.id %}">
                         <span data-feather="edit-3"></span>
                     </a>
-                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deletePedido' ped.id %}">
+                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'pedidos:delete' ped.id %}">
                         <span data-feather="trash"></span>
                     </a>
                 </td>

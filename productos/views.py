@@ -93,7 +93,7 @@ class ProductoCreateView(CreateView):
                 return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("detailProducto", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoUpdateView(UpdateView):
@@ -133,7 +133,7 @@ class ProductoUpdateView(UpdateView):
                 return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("detailProducto", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoDetailView(DetailView):
@@ -146,4 +146,4 @@ class ProductoDetailView(DetailView):
 
 class ProductoDeleteView(DeleteView):
     model = Producto
-    success_url = "/productos/"
+    success_url = reverse_lazy("productos:list")

@@ -10,7 +10,7 @@ Proveedores
 
 <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-        <a type="button" class="btn btn-outline-success" href="{% url 'createProveedor' %}">Crear</a>
+        <a type="button" class="btn btn-outline-success" href="{% url 'proveedores:create' %}">Crear</a>
     </div>
     {% include 'search_form.html' %}
 </div>
@@ -36,13 +36,13 @@ Proveedores
                 <td>{{ p.telefono }}</td>
                 <td>{{ p.email }}</td>
                 <td>
-                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'detailProveedor' p.id %}">
+                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'proveedores:detail' p.id %}">
                         <span data-feather="zoom-in"></span>
                     </a>
-                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updateProveedor' p.id %}">
+                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'proveedores:update' p.id %}">
                         <span data-feather="edit-3"></span>
                     </a>
-                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deleteProveedor' p.id %}">
+                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'proveedores:delete' p.id %}">
                         <span data-feather="trash"></span>
                     </a>
                 </td>

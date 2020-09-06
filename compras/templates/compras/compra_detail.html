@@ -11,8 +11,8 @@ Información sobre {{ object.nombre }}
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'compra' %}">Compras</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'compras:list' %}">Compras</a></li>
         <li class="breadcrumb-item active" aria-current="page">Compra #{{ object.id }}</li>
     </ol>
 </nav>
@@ -20,10 +20,10 @@ Información sobre {{ object.nombre }}
 <div class="container">
     <legend class="border-bottom mb-4">
         {{ object.id }} - {{ object.proveedor }}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateCompra' object.id %}">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'compras:update' object.id %}">
             <span data-feather="edit-3"></span>
         </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteCompra' object.id %}">
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'compras:delete' object.id %}">
             <span data-feather="trash"></span>
         </a>
     </legend>

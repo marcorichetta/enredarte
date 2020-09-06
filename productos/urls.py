@@ -7,10 +7,11 @@ from .views import (
     ProductoDeleteView,
 )
 
+app_name = "productos"
 urlpatterns = [
-    path("", ProductoListView.as_view(), name="producto"),
-    path("new/", ProductoCreateView.as_view(), name="createProducto"),
-    path("<int:pk>/", ProductoDetailView.as_view(), name="detailProducto"),
-    path("<int:pk>/delete", ProductoDeleteView.as_view(), name="deleteProducto"),
-    path("<int:pk>/update/", ProductoUpdateView.as_view(), name="updateProducto"),
+    path("", ProductoListView.as_view(), name="list"),
+    path("new/", ProductoCreateView.as_view(), name="create"),
+    path("<int:pk>/", ProductoDetailView.as_view(), name="detail"),
+    path("<int:pk>/delete", ProductoDeleteView.as_view(), name="delete"),
+    path("<int:pk>/update/", ProductoUpdateView.as_view(), name="update"),
 ]

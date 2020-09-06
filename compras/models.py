@@ -26,7 +26,7 @@ class Compra(BaseModel):
         return f"Compra #{self.id}"
 
     def get_absolute_url(self) -> str:
-        return reverse("compra")
+        return reverse("compras:detail", kwargs={"pk": self.id})
 
     @property
     def precio_total(self) -> int:

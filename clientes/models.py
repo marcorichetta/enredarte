@@ -28,4 +28,4 @@ class Cliente(BaseModel):
         return self.email
 
     def get_absolute_url(self) -> str:
-        return reverse("detailCliente", kwargs={"pk": self.id})
+        return reverse("clientes:detail", kwargs={"pk": self.id})

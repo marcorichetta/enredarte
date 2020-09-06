@@ -32,4 +32,4 @@ class Proveedor(BaseModel):
         return f"{self.razon_social}"
 
     def get_absolute_url(self) -> str:
-        return reverse("proveedor")
+        return reverse("proveedores:detail", kwargs={"pk": self.pk})

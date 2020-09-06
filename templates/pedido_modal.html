@@ -20,7 +20,7 @@
     $("#cliente").html(event.title);
     $("#estado").html(estados[event.extendedProps.status]);
 
-    let url = '{% url "detailPedido" pk=0 %}'.replace(0, event.id)
+    let url = '{% url "pedidos:detail" pk=0 %}'.replace(0, event.id)
     $("#url").attr('href', url)
   }
 </script>

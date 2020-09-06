@@ -3,21 +3,15 @@
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'cliente' %}">Clientes</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }} {{ object.apellido }}</li>
-    </ol>
-  </nav>
+{% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" %}
 
 <div class="container">
     <legend class="border-bottom mb-4">
         {{ object.nombre }} {{ object.apellido }}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateCliente' object.id %}">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'clientes:update' object.id %}">
             <span data-feather="edit-3"></span>
         </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteCliente' object.id %}">
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'clientes:delete' object.id %}">
             <span data-feather="trash"></span>
         </a>
     </legend>

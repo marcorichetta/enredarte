@@ -10,7 +10,7 @@ Productos
 
 <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-        <a type="button" class="btn btn-outline-success" href="{% url 'createProducto' %}">Crear</a>
+        <a type="button" class="btn btn-outline-success" href="{% url 'productos:create' %}">Crear</a>
     </div>
     {% include 'search_form.html' %}
 </div>
@@ -34,13 +34,13 @@ Productos
                 <td>$ {{ prod.precio_venta_terminado }}</td>
                 <td>12</td>
                 <td>
-                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'detailProducto' prod.id %}">
+                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'productos:detail' prod.id %}">
                         <span data-feather="zoom-in"></span>
                     </a>
-                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' prod.id %}">
+                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'productos:update' prod.id %}">
                         <span data-feather="edit-3"></span>
                     </a>
-                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deleteProducto' prod.id %}">
+                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'productos:delete' prod.id %}">
                         <span data-feather="trash"></span>
                     </a>
                 </td>

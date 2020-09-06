@@ -9,21 +9,16 @@ Información sobre {{ object.nombre }}
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'pedido' %}">Pedidos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Pedido #{{ object.id }}</li>
-    </ol>
-</nav>
+{% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" %}
 
 <div class="container">
+    <h1>{{ object.get_absolute_url }}</h1>
     <legend class="border-bottom mb-4">
         {{ object.id }} - {{ object.cliente }}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updatePedido' object.id %}">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'pedidos:update' object.id %}">
             <span data-feather="edit-3"></span>
         </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'deletePedido' object.id %}">
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'pedidos:delete' object.id %}">
             <span data-feather="trash"></span>
         </a>
     </legend>

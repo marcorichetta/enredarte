@@ -4,8 +4,9 @@ from .views import (
     get_pedidos,
 )
 
+app_name = "calendario"
 urlpatterns = [
     # AJAX #
-    path("", Calendario.as_view(), name='calendario.index'),
-    path("get_pedidos/<int:idEstado>", get_pedidos, name='get_pedidos'),
+    path("", Calendario.as_view(), name="index"),
+    path("get_pedidos/<int:idEstado>", get_pedidos, name="get_pedidos"),
 ]

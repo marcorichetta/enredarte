@@ -11,8 +11,8 @@ Información sobre {{ object.razon_social}}
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'proveedor' %}">Proveedores</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'proveedores:list' %}">Proveedores</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social}}</li>
     </ol>
 </nav>
@@ -20,10 +20,10 @@ Información sobre {{ object.razon_social}}
 <div class="container">
     <legend class="border-bottom mb-4">
         {{ object.razon_social}}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'updateProveedor' object.id %}">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'proveedores:update' object.id %}">
             <span data-feather="edit-3"></span>
         </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'deleteProveedor' object.id %}">
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'proveedores:delete' object.id %}">
             <span data-feather="trash"></span>
         </a>
     </legend>

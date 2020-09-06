@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import(
+from .views import (
     ProveedorListView,
     ProveedorDetailView,
     ProveedorCreateView,
@@ -7,14 +7,11 @@ from .views import(
     ProveedorDeleteView,
 )
 
+app_name = "proveedores"
 urlpatterns = [
-    path('', ProveedorListView.as_view(), name='proveedor'),
-    path('new/',
-         ProveedorCreateView.as_view(), name='createProveedor'),
-    path('<int:pk>/',
-         ProveedorDetailView.as_view(), name='detailProveedor'),
-    path('<int:pk>/delete',
-         ProveedorDeleteView.as_view(), name='deleteProveedor'),
-    path('<int:pk>/update/',
-         ProveedorUpdateView.as_view(), name='updateProveedor'),
+    path("", ProveedorListView.as_view(), name="list"),
+    path("new/", ProveedorCreateView.as_view(), name="create"),
+    path("<int:pk>/", ProveedorDetailView.as_view(), name="detail"),
+    path("<int:pk>/delete", ProveedorDeleteView.as_view(), name="delete"),
+    path("<int:pk>/update/", ProveedorUpdateView.as_view(), name="update"),
 ]

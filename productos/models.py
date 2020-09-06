@@ -117,7 +117,7 @@ class Producto(BaseModel):
         return f"{self.nombre} - {self.descripcion}"
 
     def get_absolute_url(self):
-        return reverse("detailProducto", kwargs={"pk": self.pk})
+        return reverse("productos:detail", kwargs={"pk": self.pk})
 
     def image_url(self):
         """ Devuelve la url de la 1ra imagen si es que existe """
@@ -155,7 +155,7 @@ class Producto(BaseModel):
 
         # Precio costo * % de ganancia
         return round(
-            self.precio_costo
+            self.precio_costo()
             * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1)
         )
 

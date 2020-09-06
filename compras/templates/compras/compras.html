@@ -10,7 +10,7 @@ Compras
 
 <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-        <a type="button" class="btn btn-outline-success" href="{% url 'createCompra' %}">Crear</a>
+        <a type="button" class="btn btn-outline-success" href="{% url 'compras:create' %}">Crear</a>
     </div>
     {% include 'search_form.html' %}
 </div>
@@ -34,13 +34,13 @@ Compras
                 <td>$ {{ com.precio_total }}</td>
                 <td>{{ com.fecha_compra }}</td>
                 <td>
-                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'detailCompra' com.id %}">
+                    <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'compras:detail' com.id %}">
                         <span data-feather="zoom-in"></span>
                     </a>
-                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updateCompra' com.id %}">
+                    <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'compras:update' com.id %}">
                         <span data-feather="edit-3"></span>
                     </a>
-                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deleteCompra' com.id %}">
+                    <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'compras:delete' com.id %}">
                         <span data-feather="trash"></span>
                     </a>
                 </td>

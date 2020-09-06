@@ -10,7 +10,7 @@
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-          <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'createVariante' %}">Crear</a>
+          <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'variantes:create' %}">Crear</a>
           <button type="button" class="btn btn-sm btn-outline-secondary">Exportar</button>
         </div>
       </div>
@@ -30,7 +30,7 @@
             <tr>
               <td>{{ var.id }}</td>
               <td>{{ var.producto }}</td>
-              <td><a href="{% url 'detailProducto' var.producto_id %}">{{ var.nombre }} </a></td>
+              <td><a href="{% url 'productos:detail' var.producto_id %}">{{ var.nombre }} </a></td>
               <td>$ {{ var.precio }}</td>
             </tr>
             {% endfor %}

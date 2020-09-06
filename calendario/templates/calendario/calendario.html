@@ -70,7 +70,7 @@
             dayMaxEventRows: 4,
             eventTextColor: 'white',
             eventSources: [{
-                url: '{% url "get_pedidos" idEstado=0 %}'
+                url: '{% url "calendario:get_pedidos" idEstado=0 %}'
             }],
             eventDidMount: function (info) {
                 $(info.el).tooltip({ 
@@ -100,7 +100,7 @@
         // Creamos la nueva fuente con la url del servicio que necesitamos solicitar
         let newEventSource = {
             id: 'source',
-            url: '{% url "get_pedidos" idEstado=0 %}'.replace(0, id_estado),
+            url: '{% url "calendario:get_pedidos" idEstado=0 %}'.replace(0, id_estado),
         }
 
         // Agregamos nueva fuente de eventos

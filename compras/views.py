@@ -26,7 +26,7 @@ class CompraListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        ''' Devuelve el texto buscado para usarlo en la paginación '''
+        """ Devuelve el texto buscado para usarlo en la paginación """
         context = super(CompraListView, self).get_context_data(**kwargs)
         context["search_txt"] = self.request.GET.get("search", "")
         return context
@@ -78,7 +78,9 @@ class CompraUpdateView(UpdateView):
 
         # Enviar el objeto como instancia para ser actualizado
         if self.request.POST:
-            context["insumos"] = InsumosCompraFormset(self.request.POST, instance=self.object)
+            context["insumos"] = InsumosCompraFormset(
+                self.request.POST, instance=self.object
+            )
         else:
             context["insumos"] = InsumosCompraFormset(instance=self.object)
         return context
@@ -102,7 +104,7 @@ class CompraUpdateView(UpdateView):
             return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("detailCompra", kwargs={"pk": self.object.pk})
+        return reverse_lazy("compras:detail", kwargs={"pk": self.object.pk})
 
 
 class CompraDetailView(DetailView):

@@ -78,4 +78,4 @@ class ClienteUpdateView(SuccessMessageMixin, UpdateView):
 
 class ClienteDeleteView(DeleteView):
     model = Cliente
-    success_url = reverse_lazy("cliente")
+    success_url = reverse_lazy("clientes:list")

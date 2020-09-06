@@ -11,8 +11,8 @@ Información sobre {{ object.nombre }}
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'producto' %}">Productos</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'productos:list' %}">Productos</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }}</li>
     </ol>
 </nav>
@@ -31,10 +31,10 @@ Información sobre {{ object.nombre }}
             <div class="card-body">
                 <div>
                     <h4 class="card-title">{{object.nombre}}
-                        <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'updateProducto' object.id %}">
+                        <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'productos:update' object.id %}">
                             <span data-feather="edit-3"></span>
                         </a>
-                        <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'deleteProducto' object.id %}">
+                        <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'productos:delete' object.id %}">
                             <span data-feather="trash"></span>
                         </a>
                     </h4>
