@@ -42,16 +42,18 @@ class Insumo(BaseModel):
             return self.nombre
 
     @property
-    def precio_m2(self):
-        """ Precio Insumo x Ganancia FF / m2 de una plancha (380x280cm)
+    def precio_m2(self) -> float:
+        """
+            Precio Insumo x Ganancia FF / m2 de una plancha de 380x280cm == (10.64 m2)
 
-            Devuelve el precio redondeado de m2 del insumo"""
-        return round(
+            Devuelve el precio redondeado de m2 del insumo
+        """
+        return (
             self.precio * Variable.objects.get(pk=1).ganancia_fibrofacil / Decimal(10.64)
         )
 
     @property
-    def precio_recorte(self):
+    def precio_recorte(self) -> float:
         """ Precio del m2 * 2
 
             Utilizado para la venta de recortes de Fibrofacil """
@@ -124,7 +126,7 @@ class Producto(BaseModel):
         img = self.images.first()
         return img.imagen.url if img else img
 
-    def precio_costo(self):
+    def precio_costo(self) -> float:
         """ Calcula el precio de costo de un producto en base a las
             medidas del mismo, a los insumos utilizados y al tiempo que lleva
             producirlo. """
@@ -140,56 +142,45 @@ class Producto(BaseModel):
 
         precio_tiempo = (self.tiempo / 60) * Variable.objects.get(pk=1).precio_hora
 
-        costo = (
-            int(precioBase)
-            + int(precioLatCorto)
-            + int(precioLatLargo)
-            + int(precio_tiempo)
-        )
+        costo = precioBase + precioLatCorto + precioLatLargo + precio_tiempo
 
         return costo
 
     @property
-    def precio_venta_crudo(self):
+    def precio_venta_crudo(self) -> float:
         """ Calcula el precio de venta al público del producto crudo """
 
         # Precio costo * % de ganancia
-        return round(
-            self.precio_costo()
-            * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1)
+        return self.precio_costo() * (
+            (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
         )
 
     @property
-    def precio_terminado(self):
+    def precio_terminado(self) -> float:
         """ Calcula el precio del producto terminado, sin la ganancia """
 
-        precio_apliques = 20
-        precio_tiempo_terminado = int(
+        precio_tiempo_terminado = (
             (self.tiempo * 2) / 60 * Variable.objects.get(pk=1).precio_hora
         )
 
         return (
             self.precio_costo()
             + Variable.objects.get(pk=1).precio_pintado
-            + precio_apliques
             + precio_tiempo_terminado
         )
 
     @property
-    def precio_venta_terminado(self):
+    def precio_venta_terminado(self) -> float:
         """ Calcula el precio de venta al público del producto terminado """
 
         # Precio terminado * % de ganancia
-        return round(
-            self.precio_terminado
-            * ((Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1)
+        return self.precio_terminado * (
+            (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
         )
 
     @property
     def get_insumos(self):
-        insumos_producto = self.insumosproducto_set.all()
-
-        return insumos_producto
+        return self.insumosproducto_set.all()
 
 
 class ProductImage(BaseModel):

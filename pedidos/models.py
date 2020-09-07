@@ -52,12 +52,12 @@ class Pedido(BaseModel):
         return sum(producto.tiempo for producto in self.productos_pedido.all())
 
     @property
-    def get_precio_total(self) -> int:
+    def get_precio_total(self) -> float:
         """ Devuelve el precio total del pedido """
         return sum(producto.precio_pedido for producto in self.productos_pedidos.all())
 
     def save_precio_total(self) -> None:
-        """ Devuelve el precio total del pedido """
+        """ Guarda el precio total del pedido """
         self.precio_total = sum(
             producto.precio_pedido for producto in self.productos_pedidos.all()
         )
@@ -85,6 +85,6 @@ class ProductosPedido(BaseModel):
         return f"{self.cantidad} - {self.producto.nombre}"
 
     @property
-    def precio_pedido(self):
+    def precio_pedido(self) -> float:
         """ Calcula el precio total de cada producto del pedido """
         return self.cantidad * self.producto.precio_venta_terminado
