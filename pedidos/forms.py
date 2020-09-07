@@ -37,9 +37,9 @@ class PedidoForm(forms.ModelForm):
             Row(
                 Div(
                     Field("cliente"),
-                    Field("detalles", style="height: 5rem"),
                     Field("estado"),
                     Field("fecha_entrega"),
+                    Field("detalles", style="height: 5rem"),
                     css_class="col-6",
                 ),
                 Div(

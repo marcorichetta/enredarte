@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from decimal import Decimal
+from django.core.validators import MinValueValidator
 from core.base_model import BaseModel
 
 from variables.models import Variable
@@ -31,7 +32,10 @@ class Insumo(BaseModel):
         Unidad, on_delete=models.SET_DEFAULT, default=3, related_name="unidades"
     )
     precio = models.DecimalField(
-        help_text="Precio de compra al proveedor en $", max_digits=6, decimal_places=2
+        help_text="Precio de compra al proveedor en $",
+        max_digits=6,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     proveedores = models.ManyToManyField("proveedores.Proveedor")
 
@@ -66,7 +70,10 @@ class StockInsumo(models.Model):
     # Si se elimina un insumo su stock también es borrado
     insumo = models.OneToOneField(Insumo, on_delete=models.CASCADE)
     cantidad = models.DecimalField(
-        max_digits=5, decimal_places=2, verbose_name="Cantidad en Stock"
+        max_digits=5,
+        decimal_places=2,
+        verbose_name="Cantidad en Stock",
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     detalles = models.TextField(blank=True)
 
@@ -80,13 +87,25 @@ class Producto(BaseModel):
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
     largo = models.DecimalField(
-        default=0, help_text="Largo en cm", max_digits=3, decimal_places=1
+        default=0,
+        help_text="Largo en cm",
+        max_digits=3,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     ancho = models.DecimalField(
-        default=0, help_text="Ancho en cm", max_digits=3, decimal_places=1
+        default=0,
+        help_text="Ancho en cm",
+        max_digits=3,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     alto = models.DecimalField(
-        default=0, help_text="Alto en cm", max_digits=3, decimal_places=1
+        default=0,
+        help_text="Alto en cm",
+        max_digits=3,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     tiempo = models.PositiveIntegerField(
         default=30, help_text="Minutos para realizar el producto"
@@ -140,11 +159,12 @@ class Producto(BaseModel):
             (self.largo / 100) * (self.alto / 100) * self.insumo_lados.precio_m2
         )
 
-        precio_tiempo = (self.tiempo / 60) * Variable.objects.get(pk=1).precio_hora
+        horas: float = self.tiempo / 60
 
-        costo = precioBase + precioLatCorto + precioLatLargo + precio_tiempo
+        # Castear a decimal para poder multiplicar con otro decimal
+        precio_tiempo = Decimal(horas) * Variable.objects.get(pk=1).precio_hora
 
-        return costo
+        return precioBase + precioLatCorto + precioLatLargo + precio_tiempo
 
     @property
     def precio_venta_crudo(self) -> float:
@@ -159,8 +179,10 @@ class Producto(BaseModel):
     def precio_terminado(self) -> float:
         """ Calcula el precio del producto terminado, sin la ganancia """
 
+        tiempo_terminado = (self.tiempo * 2) / 60
+
         precio_tiempo_terminado = (
-            (self.tiempo * 2) / 60 * Variable.objects.get(pk=1).precio_hora
+            Decimal(tiempo_terminado) * Variable.objects.get(pk=1).precio_hora
         )
 
         return (

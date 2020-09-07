@@ -59,7 +59,7 @@ def test_calculo_precio_producto(form_producto):
 
     prod1: Producto = form_producto.save()
 
-    assert prod1.precio_costo() == 40
-    assert prod1.precio_venta_crudo == 62
-    assert prod1.precio_terminado == 176
-    assert prod1.precio_venta_terminado == 273
+    assert round(prod1.precio_costo()) == 42
+    assert round(prod1.precio_venta_crudo) == 64
+    assert round(prod1.precio_terminado) == 158
+    assert round(prod1.precio_venta_terminado) == 245

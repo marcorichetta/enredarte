@@ -31,7 +31,7 @@ Productos
             <tr>
                 <td>{{ prod.id }}</td>
                 <td>{{ prod.nombre }}</td>
-                <td>$ {{ prod.precio_venta_terminado }}</td>
+                <td>$ {{ prod.precio_venta_terminado|floatformat }}</td>
                 <td>12</td>
                 <td>
                     <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'productos:detail' prod.id %}">

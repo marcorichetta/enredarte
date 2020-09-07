@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.query import QuerySet
 from django.urls import reverse
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 from datetime import date
 
 from core.base_model import BaseModel
@@ -29,7 +31,11 @@ class Pedido(BaseModel):
         "productos.Producto", through="ProductosPedido"
     )
     precio_total = models.DecimalField(
-        help_text="Precio en $", max_digits=6, decimal_places=2, default=0
+        help_text="Precio en $",
+        max_digits=6,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)

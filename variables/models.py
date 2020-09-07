@@ -1,5 +1,7 @@
 from django.db import models
 from core.base_model import BaseModel
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 
 
 class Variable(BaseModel):
@@ -16,6 +18,7 @@ class Variable(BaseModel):
         max_digits=5,
         decimal_places=2,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
 
     precio_pintado = models.DecimalField(
@@ -23,6 +26,7 @@ class Variable(BaseModel):
         max_digits=5,
         decimal_places=2,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
 
     ganancia_por_mayor = models.DecimalField(
@@ -30,6 +34,7 @@ class Variable(BaseModel):
         max_digits=5,
         decimal_places=2,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
 
     ganancia_por_menor = models.DecimalField(
@@ -37,6 +42,7 @@ class Variable(BaseModel):
         max_digits=5,
         decimal_places=2,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
 
     ganancia_fibrofacil = models.DecimalField(
@@ -44,6 +50,7 @@ class Variable(BaseModel):
         max_digits=5,
         decimal_places=2,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
 
     def __str__(self):
