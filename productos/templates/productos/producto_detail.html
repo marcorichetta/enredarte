@@ -45,10 +45,10 @@ Información sobre {{ object.nombre }}
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         $ Costo:
-                        <span class="price text-success">{{object.precio_costo}}</span>
+                        <span class="price text-success">{{object.precio_costo|floatformat}}</span>
                     </li>
                     <li class="list-group-item">$ Venta (Terminado) :
-                        <span class="price text-success">{{object.precio_venta_terminado}}</span>
+                        <span class="price text-success">{{object.precio_venta_terminado|floatformat}}</span>
                     </li>
                     <li class="list-group-item">Insumos extra</li>
                     {% for i in object.get_insumos %}

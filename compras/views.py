@@ -35,9 +35,10 @@ class CompraListView(ListView):
 class CompraCreateView(CreateView):
     model = Compra
     form_class = CompraForm
+    success_message = "Compra %(pk)s creada con éxito"
 
     def get_context_data(self, **kwargs):
-        context = super(CompraCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         # Le agregamos los insumos al context para usarlos en el template
         if self.request.POST:
             context["insumos"] = InsumosCompraFormset(self.request.POST)
@@ -48,33 +49,31 @@ class CompraCreateView(CreateView):
     def form_valid(self, form):
         # Obtener info de compra e insumos posteados en el form
         context = self.get_context_data()
-        insumos = context["insumos"]
+        formset_insumos = context["insumos"]
 
-        # Esto se ejecuta sólo si la transacción es atómica
-        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
-        with transaction.atomic():
-            # Guardar la compra
-            self.object = form.save()
-            # Si son válidos los insumos se guardan
-            if insumos.is_valid():
-                insumos.instance = self.object
-                insumos.save()
+        # Guardar la compra
+        self.object = form.save()
+        # Si son válidos los insumos se guardan
+        if formset_insumos.is_valid():
+            formset_insumos.instance = self.object
+            formset_insumos.save()
 
-                # Guardar compra completa
-                return super(CompraCreateView, self).form_valid(form)
+            # Guardar compra completa
+            return super().form_valid(form)
 
-            # Repopular form con errores
-            return self.render_to_response(self.get_context_data(form=form))
+        # Repopular form con errores
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class CompraUpdateView(UpdateView):
     model = Compra
     form_class = CompraForm
+    success_message = "Compra %(pk)s actualizada con éxito"
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
     def get_context_data(self, **kwargs):
-        context = super(CompraUpdateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Enviar el objeto como instancia para ser actualizado
         if self.request.POST:
@@ -90,18 +89,16 @@ class CompraUpdateView(UpdateView):
         context = self.get_context_data()
         insumos = context["insumos"]
 
-        # Esto se ejecuta sólo si la transacción es atómica
-        # https://docs.djangoproject.com/en/2.1/topics/db/transactions/#controlling-transactions-explicitly
-        with transaction.atomic():
-            self.object = form.save()
-            if insumos.is_valid():
-                insumos.instance = self.object
-                insumos.save()
-                # Guardar compra completo
-                return super(CompraUpdateView, self).form_valid(form)
+        self.object = form.save()
 
-            # Repopular form con errores
-            return self.render_to_response(self.get_context_data(form=form))
+        if insumos.is_valid():
+            insumos.instance = self.object
+            insumos.save()
+            # Guardar compra completo
+            return super(CompraUpdateView, self).form_valid(form)
+
+        # Repopular form con errores
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
         return reverse_lazy("compras:detail", kwargs={"pk": self.object.pk})
@@ -117,4 +114,4 @@ class CompraDetailView(DetailView):
 
 class CompraDeleteView(DeleteView):
     model = Compra
-    success_url = reverse_lazy("compra")
+    success_url = reverse_lazy("compras")

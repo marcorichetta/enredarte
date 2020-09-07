@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.query import QuerySet
 from django.urls import reverse
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 from datetime import date
 
 from core.base_model import BaseModel
@@ -29,7 +31,11 @@ class Pedido(BaseModel):
         "productos.Producto", through="ProductosPedido"
     )
     precio_total = models.DecimalField(
-        help_text="Precio en $", max_digits=6, decimal_places=2, default=0
+        help_text="Precio en $",
+        max_digits=6,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(Decimal("0.0"))],
     )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
@@ -52,12 +58,12 @@ class Pedido(BaseModel):
         return sum(producto.tiempo for producto in self.productos_pedido.all())
 
     @property
-    def get_precio_total(self) -> int:
+    def get_precio_total(self) -> float:
         """ Devuelve el precio total del pedido """
         return sum(producto.precio_pedido for producto in self.productos_pedidos.all())
 
     def save_precio_total(self) -> None:
-        """ Devuelve el precio total del pedido """
+        """ Guarda el precio total del pedido """
         self.precio_total = sum(
             producto.precio_pedido for producto in self.productos_pedidos.all()
         )
@@ -85,6 +91,6 @@ class ProductosPedido(BaseModel):
         return f"{self.cantidad} - {self.producto.nombre}"
 
     @property
-    def precio_pedido(self):
+    def precio_pedido(self) -> float:
         """ Calcula el precio total de cada producto del pedido """
         return self.cantidad * self.producto.precio_venta_terminado

@@ -1,7 +1,10 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 from core.base_model import BaseModel
 from datetime import date
+
 
 # Create your models here.
 
@@ -16,7 +19,7 @@ class Compra(BaseModel):
     insumos_compra = models.ManyToManyField("productos.Insumo", through="InsumosCompra")
     detalles = models.TextField(blank=True)
     fecha_compra = models.DateField(
-        default=date.today
+        verbose_name="Fecha de compra", default=date.today
     )  # Igual que auto_now_add pero permite cambiar la fecha
 
     class Meta:
@@ -29,7 +32,7 @@ class Compra(BaseModel):
         return reverse("compras:detail", kwargs={"pk": self.id})
 
     @property
-    def precio_total(self) -> int:
+    def precio_total(self):
         """ Precio de la suma de los insumos """
 
         return sum(insumo.precio_compra for insumo in self.insumos_comprados.all())
@@ -45,7 +48,12 @@ class InsumosCompra(BaseModel):
     )
     insumo = models.ForeignKey("productos.Insumo", on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
-    precio_compra = models.PositiveIntegerField(help_text="Precio unitario")
+    precio_compra = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        help_text="Precio unitario",
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
 
     class Meta:
         verbose_name_plural = "InsumosCompras"

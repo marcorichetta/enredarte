@@ -29,11 +29,16 @@ Información sobre {{ object.nombre }}
     </legend>
     <ul class="list-group mb-4">
         <li>Fecha: {{object.fecha_compra}}</li>
+        <li>Precio de compra: $ {{object.precio_total|floatformat}}</li>
 
         <h5>Insumos</h5>
         <!-- p es una referencia a cada producto -->
-        {% for p in object.get_insumos %}
-        <li>{{ p.cantidad }} - {{p.insumo.nombre}} - {{p.insumo.descripcion}}</li>
+        {% for i in object.insumos_comprados.all %}
+        <li>
+            <b>Cantidad:</b> {{ i.cantidad }}
+            <br>
+            <b>Insumo:</b> {{i.insumo.nombre}} - {{i.insumo.descripcion}}
+        </li>
         {% endfor %}
     </ul>
 </div>

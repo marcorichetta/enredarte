@@ -31,7 +31,7 @@ Compras
             <tr>
                 <td>{{ com.id }}</td>
                 <td>{{ com.proveedor }}</td>
-                <td>$ {{ com.precio_total }}</td>
+                <td>$ {{ com.precio_total|floatformat }}</td>
                 <td>{{ com.fecha_compra }}</td>
                 <td>
                     <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url 'compras:detail' com.id %}">

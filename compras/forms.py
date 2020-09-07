@@ -1,7 +1,7 @@
 import re
 from django import forms
 from compras.models import Compra, InsumosCompra
-
+from calendario.widgets import DatePicker
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
@@ -23,7 +23,8 @@ class CompraForm(forms.ModelForm):
 
     class Meta:
         model = Compra
-        exclude = ("insumos_compra",)
+        fields = ("proveedor", "fecha_compra", "detalles")
+        widgets = {"fecha_compra": DatePicker()}
 
     def __init__(self, *args, **kwargs):
         super(CompraForm, self).__init__(*args, **kwargs)
@@ -33,12 +34,20 @@ class CompraForm(forms.ModelForm):
         self.helper.label_class = "col-md-3 create-label"
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
-            Div(Field("proveedor"), Field("detalles")),
-            Div(
-                Fieldset("Insumos", Formset("insumos")),
-                HTML("<br>"),
-                ButtonHolder(Submit("submit", "Guardar Compra", css_class="btn-success")),
+            Row(
+                Div(
+                    Field("proveedor"),
+                    Field("fecha_compra"),
+                    Field("detalles", style="height: 5rem"),
+                    css_class="col-6",
+                ),
+                Div(
+                    Fieldset("Agregar Insumos", Formset("insumos")),
+                    css_class="col-6 flex-wrap: nowrap",
+                ),
             ),
+            HTML("<br>"),
+            ButtonHolder(Submit("submit", "Guardar Compra", css_class="btn-success")),
         )
 
 
