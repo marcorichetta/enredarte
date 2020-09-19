@@ -4,38 +4,65 @@ from django.db.models import ProtectedError
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    TemplateView,
+)
 
 from core.models import Provincia, Localidad
 from .models import Cliente
 
+from django_tables2 import TemplateColumn, SingleTableView, Table, SingleTableMixin
+from django_tables2.export.views import ExportMixin
+from django_filters import FilterSet, CharFilter
+from django_filters.views import FilterView
 
-class ClienteListView(ListView):
+
+class ClienteTable(Table):
+    class Meta:
+        model = Cliente
+        fields = (
+            "id",
+            "nombre",
+            "apellido",
+            "email",
+            "telefono",
+            "localidad",
+            "opciones",
+        )
+        attrs = {"class": "table table-md"}
+
+    opciones = TemplateColumn(
+        template_name="botones_tabla.html",
+        extra_context={
+            "detail": "clientes:detail",
+            "update": "clientes:update",
+            "delete": "clientes:delete",
+        },
+    )
+
+
+class ClienteFilter(FilterSet):
+    class Meta:
+        model = Cliente
+        fields = {"nombre": ["icontains"], "apellido": ["icontains"]}
+
+
+class ClienteListView(ExportMixin, SingleTableMixin, FilterView):
+    table_class = ClienteTable
     model = Cliente
     template_name = "clientes/clientes.html"
-    context_object_name = "clientes"
-    ordering = ["id"]
-    paginate_by = 10
+    export_formats = ("csv", "xlsx")
 
-    def get_queryset(self):
-        """ Permite buscar en un form dentro de la misma página
-        con el formato `q?texto` """
+    filterset_class = ClienteFilter
 
-        queryset = super(ClienteListView, self).get_queryset()
-        query = self.request.GET.get("q")
-        if query:
-            return queryset.filter(
-                Q(nombre__icontains=query)
-                | Q(apellido__icontains=query)
-                | Q(email__icontains=query)
-            )
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        """ Devuelve el texto buscado para usarlo en la paginación """
-        context = super(ClienteListView, self).get_context_data(**kwargs)
-        context["search_txt"] = self.request.GET.get("search", "")
-        return context
+    # def get_queryset(self):
+    #     """ Permite buscar en un form dentro de la misma página
+    #     con el formato `q?texto` """
 
 
 class ClienteCreateView(SuccessMessageMixin, CreateView):

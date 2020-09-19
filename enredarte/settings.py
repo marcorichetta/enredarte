@@ -56,6 +56,7 @@ INSTALLED_APPS: List[str] = [
     # 3rd party
     "crispy_forms",
     "django_extensions",
+    "django_tables2",
     # My apps
     "core",
     "users",
@@ -179,6 +180,10 @@ LOGOUT_REDIRECT_URL = "login"
 # ------------------------------------------------------------------------------
 SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
 SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
+
+# DJANGO TABLES 2
+# ------------------------------------------------------------------------------
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 # SENTRY
 # ------------------------------------------------------------------------------
