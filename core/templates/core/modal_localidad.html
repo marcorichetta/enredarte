@@ -1,0 +1,40 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear una nueva localidad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="localidad-form">
+                    <div class="form-group">
+                        <label for="InputCodPostal">Código Postal</label>
+                        <input type="number" class="form-control" style="width: 120px" id="InputCodPostal">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputLocalidad">Localidad</label>
+                        <input type="text" class="form-control" id="InputLocalidad" placeholder="Ingrese una localidad">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputProvincia">Provincia</label>
+                        <select autocapitalize="characters" class="form-control" id="InputProvincia">
+                            
+                            {% for p in provincias %}
+                                <option value="{{ p.pk }}">{{ p.provincia }}</option>
+                            {% endfor %}
+                                
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->

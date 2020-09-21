@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+
+{% include "core/modal_localidad.html" %}
+
+<!-- Form -->
 <div class="d-grid p-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -13,17 +17,97 @@
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
-            <div class="row">
+            <div class="col-8">
                 <legend class="border-bottom mb-3">Crear Proveedor</legend>
-                <div class="col-6">
-                    {{ form|crispy }}
+                <div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.cuit|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.razon_social|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.telefono|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.calle|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.numero|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 px-0">
+                            {{ form.localidad|as_crispy_field }}
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Agregar localidad
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Guardar</button>
-                <a href="{% url 'proveedores:list' %}" class="btn btn-outline-secondary">Cancelar</a>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Guardar</button>
+                    <a href="{% url 'proveedores:list' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
+<!-- Form End -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        document.querySelector('#localidad-form').addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            // Tomar el token del formulario original (Esto puede malir sal)
+            let token = $('input[name=csrfmiddlewaretoken]').val();
+
+            // Mandar la POST request
+            $.ajax({
+                type: 'POST',
+                url: '/localidad/new/',
+                data: {
+                    csrfmiddlewaretoken: token,
+                    cod_postal: $('#InputCodPostal').val(),
+                    localidad: $('#InputLocalidad').val(),
+                    provincia_id: $('#InputProvincia').val(),
+                },
+                dataType: 'json',
+                success: (nuevaLocalidad) => {
+                    window.alert('Se creó la nueva localidad con éxito');
+
+                    // Esconder modal
+                    $('#exampleModal').modal('hide');
+
+                    // Seleccionar select del formulario de cliente
+                    localidadSelect = document.getElementById('id_localidad');
+
+                    // Crear una nueva opción para ese select
+                    localidadSelect.options.add(
+                        new Option(
+                            nuevaLocalidad.localidad,
+                            nuevaLocalidad.cod_postal
+                        )
+                    )
+
+                    // Actualizar el select con la opción creada
+                    localidadSelect.value = nuevaLocalidad.cod_postal
+
+                }
+            })
+        })
+
+    })
+</script>
 {% endblock content %}

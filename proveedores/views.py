@@ -1,7 +1,4 @@
-from django.contrib import messages
-from django.shortcuts import render, HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import ProtectedError, Q
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
 from django.views.generic import (
@@ -12,47 +9,111 @@ from django.views.generic import (
     DeleteView,
     TemplateView,
 )
+
+from core.models import Localidad, Provincia
 from .models import Proveedor
 
-# Create your views here.
+import django_tables2 as tables
+from django_tables2.export.views import ExportMixin
+from django_filters import FilterSet, CharFilter, NumberFilter
+from django_filters.views import FilterView
 
 
-class ProveedorListView(ListView):
+class ProveedorTable(tables.Table):
+    class Meta:
+        model = Proveedor
+        fields = (
+            "id",
+            "razon_social",
+            "cuit",
+            "telefono",
+            "email",
+            "localidad",
+            "opciones",
+        )
+        attrs = {"class": "table table-sm table-hover"}
+
+    opciones = tables.TemplateColumn(
+        template_name="botones_tabla.html",
+        extra_context={
+            "detail": "proveedores:detail",
+            "update": "proveedores:update",
+            "delete": "proveedores:delete",
+        },
+    )
+
+
+class ProveedorFilter(FilterSet):
+    razon_social = CharFilter(
+        field_name="razon_social", lookup_expr="icontains", label="Buscar por nombre"
+    )
+    cuit = CharFilter(field_name="cuit", lookup_expr="icontains", label="Buscar por CUIT")
+
+    class Meta:
+        model = Proveedor
+        fields = ["razon_social", "cuit", "localidad"]
+
+
+class ProveedorListView(ExportMixin, tables.SingleTableView):
+    table_class = ProveedorTable
     model = Proveedor
+    filter_class = ProveedorFilter
     template_name = "proveedores/proveedores.html"
-    context_object_name = "proveedores"
-    ordering = ["id"]
-    paginate_by = 10
+    export_formats = ("csv", "xlsx")
+    table_pagination = {"per_page": 20}
+    exclude_columns = ("opciones",)
 
-    def get_queryset(self):
-        """ Permite buscar en un form dentro de la misma página
-        con el formato `q?texto` """
-        queryset = super(ProveedorListView, self).get_queryset()
-
-        query = self.request.GET.get("search")
-        if query:
-            return queryset.filter(Q(razon_social__icontains=query))
-        return queryset
+    def get_table_data(self):
+        """
+            Sobreescribe el método utilizado para obtener los registros de la tabla
+            De esta manera se devuelve sólo 1 tabla, que puede o no estar filtrada.
+            https://stackoverflow.com/a/15129259/6389248
+        """
+        self.filter = self.filter_class(
+            self.request.GET, queryset=super().get_table_data()
+        )
+        return self.filter.qs
 
     def get_context_data(self, **kwargs):
         """ Devuelve el texto buscado para usarlo en la paginación """
-        context = super(ProveedorListView, self).get_context_data(**kwargs)
-        context["search_txt"] = self.request.GET.get("search", "")
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
         return context
 
 
-class ProveedorCreateView(CreateView):
+class ProveedorCreateView(SuccessMessageMixin, CreateView):
     model = Proveedor
     fields = ["cuit", "razon_social", "telefono", "email", "calle", "numero", "localidad"]
+    success_message = "Creado con éxito."
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Devuelve una lista con los id y los nombres de localidades y provincias
+        # Se usan en el form original y en el modal para crear nueva localidad
+        context["localidades"] = Localidad.objects.get_queryset()
+        context["provincias"] = Provincia.objects.get_queryset()
+
+        return context
 
 
 class ProveedorDetailView(DetailView):
     model = Proveedor
 
 
-class ProveedorUpdateView(UpdateView):
+class ProveedorUpdateView(SuccessMessageMixin, UpdateView):
     model = Proveedor
-    fields = "__all__"
+    fields = [
+        "cuit",
+        "razon_social",
+        "telefono",
+        "email",
+        "calle",
+        "numero",
+        "localidad",
+        "detalles",
+    ]
+    success_message = "Actualizado con éxito."
 
     # Modify the template used for this view
     template_name_suffix = "_update_form"
@@ -61,22 +122,3 @@ class ProveedorUpdateView(UpdateView):
 class ProveedorDeleteView(DeleteView):
     model = Proveedor
     success_url = reverse_lazy("proveedores:list")
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-
-        try:
-            self.object.delete()
-            # Enviar mensaje para mostrar alerta
-            messages.success(request, f"{self.object} fue eliminado.")
-
-            # Redirect to success_url
-        except ProtectedError:
-            context = self.get_context_data(
-                object=self.object,
-                error=f"{self.object} no puede ser eliminado porque \
-                    tiene dependencias. Consulte al administrador.",
-            )
-            return self.render_to_response(context)
-        return HttpResponseRedirect(success_url)
