@@ -9,13 +9,8 @@ Información sobre {{ object.razon_social}}
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'proveedores:list' %}">Proveedores</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social}}</li>
-    </ol>
-</nav>
+<div class="d-grid p-3">
+{% include 'breadcrumb.html' with url_listado='proveedores:list' plural="Proveedores" %}
 
 <div class="container">
     <legend class="border-bottom mb-4">
@@ -35,5 +30,6 @@ Información sobre {{ object.razon_social}}
         <li>{{object.detalles}}</li>
         {% endif %}
     </ul>
+</div>
 </div>
 {% endblock content  %}

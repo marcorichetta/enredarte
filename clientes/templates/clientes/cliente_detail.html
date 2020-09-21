@@ -3,25 +3,27 @@
 
 {% block content %}
 
+<div class="d-grid p-3">
 {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" %}
 
-<div class="container">
-    <legend class="border-bottom mb-4">
-        {{ object.nombre }} {{ object.apellido }}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'clientes:update' object.id %}">
-            <span data-feather="edit-3"></span>
-        </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'clientes:delete' object.id %}">
-            <span data-feather="trash"></span>
-        </a>
-    </legend>
-        <ul class="list-group mb-4">
-            <li>{{object.email}}</li>
-            <li>{{object.telefono}}</li>
-            <li>{{object.localidad}}</li>
-            {% if object.detalles %}
-                <li>{{object.detalles}}</li>
-            {% endif %}
-        </ul>
+    <div class="container">
+        <legend class="border-bottom mb-4">
+            {{ object.nombre }} {{ object.apellido }}
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'clientes:update' object.id %}">
+                <span data-feather="edit-3"></span>
+            </a>
+            <a class="btn btn-sm btn-outline-danger" href="{% url 'clientes:delete' object.id %}">
+                <span data-feather="trash"></span>
+            </a>
+        </legend>
+            <ul class="list-group mb-4">
+                <li>{{object.email}}</li>
+                <li>{{object.telefono}}</li>
+                <li>{{object.localidad}}</li>
+                {% if object.detalles %}
+                    <li>{{object.detalles}}</li>
+                {% endif %}
+            </ul>
+    </div>
 </div>
 {% endblock content  %}

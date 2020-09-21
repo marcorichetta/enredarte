@@ -6,13 +6,7 @@
 
 <!-- Form -->
 <div class="d-grid p-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'clientes:list' %}">Cliente</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Crear Cliente</li>
-        </ol>
-    </nav>
+    {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" create=True %}
 
     <div class="form-container">
         <form method="POST">

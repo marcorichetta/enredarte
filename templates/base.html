@@ -3,10 +3,6 @@
 <html lang="en">
 
 <head>
-	{% block select2 %}
-	<!-- Select2 -->
-	{% endblock select2 %}
-
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	<title>{% block title %}Enredarte{% endblock %}</title>
@@ -20,10 +16,10 @@
 	<link rel="stylesheet" href="{% static 'css/custom/sidebar.css' %}" />
 	<link rel="stylesheet" href="{% static 'css/custom/navbar.css' %}" />
 
-	<script src="{% static 'js/jquery.min-341.js' %}"></script>
+	<script src="{% static 'js/jquery-3-41.min.js' %}"></script>
 
 	<!-- Bootstrap Tempus dominus DateTimePicker -->
-  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+  	<link rel="stylesheet" href="{% static 'css/tempusdominus-bootstrap-4.min.css' %}" />
 	
 	{% block extra_head %}{% endblock extra_head %}
 		
@@ -59,13 +55,13 @@
 	<!-- Wrapper end -->
     <!-- BOOTSTRAP JS -->
 
-    <script src="{% static 'js/bootstrap.bundle-452.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-4-52.bundle.min.js' %}"></script>
 
 	<script src="{% static 'js/feather-4-28.min.js' %}"></script>
 
     <!-- Bootstrap datepicker -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="{% static 'js/moment-2-27.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/tempusdominus-bootstrap-4.min.js' %}"></script>
 
 	<script src="{% static 'js/base.js' %}" async></script>
 
