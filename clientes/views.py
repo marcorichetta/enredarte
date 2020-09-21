@@ -1,6 +1,3 @@
-from django.shortcuts import HttpResponseRedirect
-from django.db.models import Q
-from django.db.models import ProtectedError
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
@@ -18,7 +15,7 @@ from .models import Cliente
 
 import django_tables2 as tables
 from django_tables2.export.views import ExportMixin
-from django_filters import FilterSet, CharFilter, ChoiceFilter
+from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
 
 
@@ -65,10 +62,11 @@ class ClienteFilter(FilterSet):
 class ClienteListView(ExportMixin, tables.SingleTableView):
     table_class = ClienteTable
     model = Cliente
+    filter_class = ClienteFilter
     template_name = "clientes/clientes.html"
     export_formats = ("csv", "xlsx")
     table_pagination = {"per_page": 20}
-    filter_class = ClienteFilter
+    exclude_columns = ("opciones",)
 
     def get_table_data(self):
         """
@@ -95,7 +93,7 @@ class ClienteCreateView(SuccessMessageMixin, CreateView):
     success_message = "Creado con éxito."
 
     def get_context_data(self, **kwargs):
-        context = super(ClienteCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Devuelve una lista con los id y los nombres de localidades y provincias
         # Se usan en el form original y en el modal para crear nueva localidad
