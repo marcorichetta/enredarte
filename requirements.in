@@ -11,4 +11,5 @@ ipython==7.13.0
 psycopg2-binary==2.8.5
 Pillow==7.2.0
 sentry-sdk==0.16.5
+tablib[xlsx]==2.0.0
 whitenoise==5.1.0
