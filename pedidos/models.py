@@ -93,4 +93,4 @@ class ProductosPedido(BaseModel):
     @property
     def precio_pedido(self) -> float:
         """ Calcula el precio total de cada producto del pedido """
-        return self.cantidad * self.producto.precio_venta_terminado
+        return self.cantidad * self.producto.precio_venta_terminado()
