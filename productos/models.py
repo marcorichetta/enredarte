@@ -145,7 +145,8 @@ class Producto(BaseModel):
         img = self.images.first()
         return img.imagen.url if img else img
 
-    def precio_costo(self) -> float:
+    # TODO - Optimizar la cantidad de queries que se hacen para traer las variables
+    def precio_costo(self, variables) -> float:
         """ Calcula el precio de costo de un producto en base a las
             medidas del mismo, a los insumos utilizados y al tiempo que lleva
             producirlo. """
@@ -162,11 +163,10 @@ class Producto(BaseModel):
         horas: float = self.tiempo / 60
 
         # Castear a decimal para poder multiplicar con otro decimal
-        precio_tiempo = Decimal(horas) * Variable.objects.get(pk=1).precio_hora
+        precio_tiempo = Decimal(horas) * variables.precio_hora
 
         return precioBase + precioLatCorto + precioLatLargo + precio_tiempo
 
-    @property
     def precio_venta_crudo(self) -> float:
         """ Calcula el precio de venta al público del producto crudo """
 
@@ -175,29 +175,26 @@ class Producto(BaseModel):
             (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
         )
 
-    @property
-    def precio_terminado(self) -> float:
+    def precio_terminado(self, variables: Variable) -> float:
         """ Calcula el precio del producto terminado, sin la ganancia """
 
         tiempo_terminado = (self.tiempo * 2) / 60
 
-        precio_tiempo_terminado = (
-            Decimal(tiempo_terminado) * Variable.objects.get(pk=1).precio_hora
-        )
+        precio_tiempo_terminado = Decimal(tiempo_terminado) * variables.precio_hora
 
         return (
-            self.precio_costo()
-            + Variable.objects.get(pk=1).precio_pintado
+            self.precio_costo(variables)
+            + variables.precio_pintado
             + precio_tiempo_terminado
         )
 
-    @property
     def precio_venta_terminado(self) -> float:
         """ Calcula el precio de venta al público del producto terminado """
+        variables: Variable = Variable.objects.get(pk=1)
 
         # Precio terminado * % de ganancia
-        return self.precio_terminado * (
-            (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
+        return self.precio_terminado(variables) * (
+            (variables.ganancia_por_menor / 100) + 1
         )
 
     @property

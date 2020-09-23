@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -13,45 +14,80 @@ from .models import Producto, Unidad, Insumo, InsumosProducto
 from .forms import ProductoForm, InsumosProductoFormset
 from django.db import transaction
 
-# Create your views here.
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
+import django_tables2 as tables
+from django_tables2.export.views import ExportMixin
+from django_filters import FilterSet, CharFilter, NumberFilter
+from django_filters.views import FilterView
+from django.template.defaultfilters import floatformat
 
 
-class ProductoListView(ListView):
+class ProductoTable(tables.Table):
+    class Meta:
+        model = Producto
+        fields = (
+            "id",
+            "nombre",
+            "insumo_base",
+            "insumo_lados",
+            "precio_venta_terminado",
+            "opciones",
+        )
+        attrs = {"class": "table table-sm table-hover"}
+        order_by = "id"
+
+    def render_precio_venta_terminado(self, value):
+        """ Función para modificar como se muestra el precio de venta en el template """
+        precio = floatformat(value)
+        return f"$ {precio}"
+
+    opciones = tables.TemplateColumn(
+        template_name="botones_tabla.html",
+        extra_context={
+            "detail": "productos:detail",
+            "update": "productos:update",
+            "delete": "productos:delete",
+        },
+    )
+
+
+class ProductoFilter(FilterSet):
+    nombre = CharFilter(
+        field_name="nombre", lookup_expr="icontains", label="Buscar por nombre"
+    )
+
+    class Meta:
+        model = Producto
+        fields = ["nombre"]
+
+
+class ProductoListView(ExportMixin, tables.SingleTableView):
+    table_class = ProductoTable
     model = Producto
+    filter_class = ProductoFilter
     template_name = "productos/productos.html"
-    context_object_name = "productos"
-    ordering = ["id"]
-    paginate_by = 10
+    export_formats = ("csv", "xlsx")
+    table_pagination = {"per_page": 10}
+    exclude_columns = ("opciones",)  # Excluir columnas del export
 
-    def get_queryset(self):
-        """ Permite buscar en un form dentro de la misma página
-        con el formato `q?texto` """
-        queryset = super().get_queryset()
-
-        q = self.request.GET.get("q")
-        if q:
-            return queryset.filter(title__icontains=q)
-        return queryset
+    def get_table_data(self):
+        """
+            Sobreescribe el método utilizado para obtener los registros de la tabla
+            De esta manera se devuelve sólo 1 tabla, que puede o no estar filtrada.
+            https://stackoverflow.com/a/15129259/6389248
+        """
+        self.filter = self.filter_class(
+            self.request.GET, queryset=super().get_table_data()
+        )
+        return self.filter.qs
 
     def get_context_data(self, **kwargs):
         """ Devuelve el texto buscado para usarlo en la paginación """
         context = super().get_context_data(**kwargs)
-        context["search_txt"] = self.request.GET.get("search", "")
+        context["filter"] = self.filter
         return context
-
-
-""" class InsumosProductoInline(InlineFormSetFactory):
-    model = InsumosProducto
-    fields = ['insumo', 'cantidad']
-    factory_kwargs = {'extra': 3, 'max_num': 5, 'can_delete': False}
-
-class ProductoCreateView(CreateWithInlinesView):
-    model = Producto
-    inlines = [
-        InsumosProductoInline
-        ]
-    fields = '__all__'
-    template_name = 'productos/producto_form.html' """
 
 
 class ProductoCreateView(CreateView):
@@ -96,9 +132,10 @@ class ProductoCreateView(CreateView):
         return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
 
 
-class ProductoUpdateView(UpdateView):
+class ProductoUpdateView(SuccessMessageMixin, UpdateView):
     model = Producto
     form_class = ProductoForm
+    success_message = "Producto actualizado con éxito."
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
@@ -144,6 +181,7 @@ class ProductoDetailView(DetailView):
         return context
 
 
-class ProductoDeleteView(DeleteView):
+class ProductoDeleteView(SuccessMessageMixin, DeleteView):
     model = Producto
     success_url = reverse_lazy("productos:list")
+    success_message = "Eliminado con éxito."
