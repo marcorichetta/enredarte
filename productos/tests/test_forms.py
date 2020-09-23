@@ -49,7 +49,7 @@ def test_calculo_precio_producto(form_producto):
         insumos y a las variables globales del sistema
     """
 
-    Variable.objects.create(
+    variables = Variable.objects.create(
         precio_hora=40,
         precio_pintado=50,
         ganancia_por_mayor=45,
@@ -59,7 +59,7 @@ def test_calculo_precio_producto(form_producto):
 
     prod1: Producto = form_producto.save()
 
-    assert round(prod1.precio_costo()) == 42
-    assert round(prod1.precio_venta_crudo) == 64
-    assert round(prod1.precio_terminado) == 158
-    assert round(prod1.precio_venta_terminado) == 245
+    assert round(prod1.precio_costo(variables)) == 42
+    assert round(prod1.precio_venta_crudo()) == 64
+    assert round(prod1.precio_terminado(variables)) == 158
+    assert round(prod1.precio_venta_terminado()) == 245

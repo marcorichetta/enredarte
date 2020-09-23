@@ -169,11 +169,10 @@ class Producto(BaseModel):
 
     def precio_venta_crudo(self) -> float:
         """ Calcula el precio de venta al público del producto crudo """
+        variables: Variable = Variable.objects.get(pk=1)
 
         # Precio costo * % de ganancia
-        return self.precio_costo() * (
-            (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
-        )
+        return self.precio_costo(variables) * ((variables.ganancia_por_menor / 100) + 1)
 
     def precio_terminado(self, variables: Variable) -> float:
         """ Calcula el precio del producto terminado, sin la ganancia """
