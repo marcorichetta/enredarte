@@ -6,9 +6,9 @@
 Información sobre {{ object.nombre }}
 {% endblock seccion %}
 
-
 {% block content %}
 
+<div class="d-grid p-3">
 {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" %}
 
 <div class="container">
@@ -38,5 +38,6 @@ Información sobre {{ object.nombre }}
         <li>{{object.detalles}}</li>
         {% endif %}
     </ul>
+</div>
 </div>
 {% endblock content  %}

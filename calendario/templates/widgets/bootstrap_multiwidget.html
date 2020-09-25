@@ -1,0 +1,8 @@
+<div class="d-flex">
+{% for widget in widget.subwidgets %}
+    {% include widget.template_name %}
+    {% if forloop.first %}
+        <span class="m-2">Hasta</span>
+    {% endif %}
+{% endfor %}
+</div>
