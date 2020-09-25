@@ -40,10 +40,7 @@ class Insumo(BaseModel):
     proveedores = models.ManyToManyField("proveedores.Proveedor")
 
     def __str__(self):
-        if self.descripcion:
-            return f"{self.nombre} - {self.descripcion}"
-        else:
-            return self.nombre
+        return self.nombre
 
     @property
     def precio_m2(self) -> float:
@@ -135,7 +132,7 @@ class Producto(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.nombre} - {self.descripcion}"
+        return self.nombre
 
     def get_absolute_url(self):
         return reverse("productos:detail", kwargs={"pk": self.pk})
