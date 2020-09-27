@@ -1,7 +1,6 @@
 import re
 from django import forms
-from productos.models import Producto, Insumo, InsumosProducto
-
+from productos.models import Producto, Insumo, InsumosProducto, ProductImage
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
@@ -13,7 +12,6 @@ from crispy_forms.layout import (
     HTML,
     ButtonHolder,
     Submit,
-    Button,
 )
 from core.custom_layout_object import Formset
 
@@ -55,13 +53,10 @@ class ProductoForm(forms.ModelForm):
                 ),
                 css_class="d-flex",
             ),
-            Div(
-                Fieldset("Otros insumos", Formset("insumos")),
-                HTML("<br>"),
-                ButtonHolder(
-                    Submit("submit", "Guardar Producto", css_class="btn-success")
-                ),
-            ),
+            Div(Fieldset("Insumos extra", Formset("insumos"))),
+            Div(Fieldset("Imágenes", Formset("imagenes"))),
+            HTML("<br>"),
+            ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
         )
 
 
@@ -99,6 +94,44 @@ InsumosProductoFormset = forms.inlineformset_factory(
     InsumosProducto,
     form=InsumosProductoForm,
     fields=["insumo", "cantidad"],
+    can_delete=True,
+    extra=1,
+    max_num=5,
+)
+
+
+class ProductImageForm(forms.ModelForm):
+    """Form definition for ProductImage."""
+
+    class Meta:
+        """Meta definition for ProductImageform."""
+
+        model = ProductImage
+        fields = ("imagen",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        formtag_prefix = re.sub("-[0-9]+$", "", kwargs.get("prefix", ""))
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = "col-auto"
+        self.helper.field_class = "col-auto"
+        self.helper.layout = Layout(
+            Row(
+                Field("imagen"),
+                Field("DELETE"),
+                css_class=f"formset_row-{formtag_prefix}",
+            )
+        )
+
+
+ProductImageFormset = forms.inlineformset_factory(
+    parent_model=Producto,
+    model=ProductImage,
+    form=ProductImageForm,
+    fields=["imagen"],
     can_delete=True,
     extra=1,
     max_num=5,

@@ -56,6 +56,9 @@ INSTALLED_APPS: List[str] = [
     # 3rd party
     "crispy_forms",
     "django_extensions",
+    "django_tables2",
+    "nplusone.ext.django",
+    "imagefield",
     # My apps
     "core",
     "users",
@@ -69,6 +72,7 @@ INSTALLED_APPS: List[str] = [
 ]
 
 MIDDLEWARE: List[str] = [
+    "nplusone.ext.django.NPlusOneMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -91,7 +95,6 @@ if DEBUG:
     INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]
 
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
-
 
 ROOT_URLCONF = "enredarte.urls"
 
@@ -132,6 +135,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Logging
 # https://docs.djangoproject.com/en/2.2/topics/logging
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {"format": "{levelname} {message}", "style": "{",},
+    },
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "simple"},},
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "INFO", "propagate": False,},
+        "nplusone": {"handlers": ["console"], "level": "WARN",},
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -190,6 +210,14 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True,
 )
+
+IMAGEFIELD_FORMATS = {
+    # image field path, lowercase
+    "yourapp.yourmodel.image": {
+        "square": ["default", ("crop", (200, 200))],
+        "full": ["default", ("thumbnail", (800, 500))],
+    }
+}
 
 if DEBUG:
     try:

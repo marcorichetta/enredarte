@@ -43,6 +43,12 @@ class StockInsumoAdmin(admin.ModelAdmin):
     list_filter = ("insumo",)
 
 
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+
+    list_display = ("imagen", "producto")
+
+
 class InsumoInline(admin.TabularInline):
     """Tabular Inline View for Insumo"""
 
