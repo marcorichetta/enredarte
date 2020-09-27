@@ -1,25 +1,9 @@
-{% extends "base.html" %}
+{% extends "productos/producto_form.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
-<div class="d-grid p-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'productos:list' %}">Productos</a></li>
-        <li class="breadcrumb-item">
-            <a href="{% url 'productos:detail' object.id %}">
-                {{ object.nombre }}
-            </a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Editar</li>
-        </ol>
-    </nav>
 
-    <div class="content-section">
-        <legend class="border-bottom mb-3">Actualizar Producto</legend>
-        <div class="col-8">
-            {% crispy form %}
-        </div>
-    </div>
-</div>
-{% endblock content %}
+
+{% block breadcrumb %}
+{% include 'breadcrumb.html' with url_listado='productos:list' plural="Productos" update=True %}
+{% endblock breadcrumb %}
+
+{% block legend %} Actualizar Producto {% endblock legend %}

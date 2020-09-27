@@ -9,19 +9,26 @@ Información sobre {{ object.nombre }}
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'productos:list' %}">Productos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ object.nombre }}</li>
-    </ol>
-</nav>
+{% include 'breadcrumb.html' with url_listado='productos:list' plural="Productos" detail=True %}
+
+
 
 <div class="container">
+    {% for img in object.images.all %}
+        <h2>{{ img.imagen }}</h2>
+        <h2>{{ img.imagen.full }}</h2>
+        <h2>{{ img.imagen.thumbnail }}</h2>
 
+
+        <a href="{{ img.imagen.url }}">
+            <img class="w-25 rounded-left" alt="" src="{{ img.imagen.url }}"/>    
+        </a>
+
+    {% endfor %}
     <div class="row">
         {% if object.image_url %}
             <img class="w-50 rounded-left" src="{{object.image_url}}" alt="{{object.nombre}}">
+
             {% else %}
             <div class="w-50 rounded-left image-placeholder" alt="Placeholder">
                 <h5>Cargue una imagen para este producto</h5>
@@ -58,6 +65,5 @@ Información sobre {{ object.nombre }}
             </div>
         </div>
     </div>
-
 </div>
 {% endblock content  %}
