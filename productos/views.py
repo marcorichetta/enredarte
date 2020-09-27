@@ -214,6 +214,16 @@ class ProductoDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProductoDetailView, self).get_context_data(*args, **kwargs)
+
+        prod: Producto = self.get_object()
+        var: Variable = Variable.objects.get(pk=1)
+
+        context["precios"] = {
+            "precio_costo": prod.precio_costo(variables=var),
+            "precio_venta_crudo": prod.precio_venta_crudo(),
+            "precio_terminado": prod.precio_terminado(variables=var),
+        }
+
         return context
 
 

@@ -2,9 +2,9 @@
 {% load static %}
 
 
-{% block seccion %}
-Información sobre {{ object.nombre }}
-{% endblock seccion %}
+{% block title %}
+{{ object.nombre }}
+{% endblock title %}
 
 
 {% block content %}
@@ -14,7 +14,7 @@ Información sobre {{ object.nombre }}
 
 
 <div class="container">
-    {% for img in object.images.all %}
+    <!-- {% for img in object.images.all %}
         <h2>{{ img.imagen }}</h2>
         <h2>{{ img.imagen.full }}</h2>
         <h2>{{ img.imagen.thumbnail }}</h2>
@@ -24,7 +24,7 @@ Información sobre {{ object.nombre }}
             <img class="w-25 rounded-left" alt="" src="{{ img.imagen.url }}"/>    
         </a>
 
-    {% endfor %}
+    {% endfor %} -->
     <div class="row">
         {% if object.image_url %}
             <img class="w-50 rounded-left" src="{{object.image_url}}" alt="{{object.nombre}}">
@@ -46,22 +46,53 @@ Información sobre {{ object.nombre }}
                         </a>
                     </h4>
                 </div>
-                <h6 class="card-subtitle mb-2 text-muted">Info extra</h6>
                 <p class="card-text">{{object.descripcion}}</p>
 
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        $ Costo:
-                        <span class="price text-success">{{object.precio_costo|floatformat}}</span>
+                    <li class="list-group-item"><b>$ Costo :</b>
+                        <span class="price text-success">{{precios.precio_costo|floatformat}}</span>
                     </li>
-                    <li class="list-group-item">$ Venta (Terminado) :
+                    <li class="list-group-item"><b>$ Costo (Terminado) :</b>
+                        <span class="price text-success">{{precios.precio_terminado|floatformat}}</span>
+                    </li>
+                    <li class="list-group-item"><b>$ Venta (Crudo) :</b>
+                        <span class="price text-success">{{precios.precio_venta_crudo|floatformat}}</span>
+                    </li>
+                    <li class="list-group-item"><b>$ Venta (Terminado) :</b>
                         <span class="price text-success">{{object.precio_venta_terminado|floatformat}}</span>
                     </li>
-                    <li class="list-group-item">Insumos extra</li>
-                    {% for i in object.get_insumos %}
-                    <li class="list-group-item">{{i}}</li>
-                    {% endfor %}
                 </ul>
+            </div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-sm">
+                    <h5>Insumos principales</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Insumo Base: </b> {{object.insumo_base}}</li>
+                        <li class="list-group-item"><b>Insumo Base: </b> {{object.insumo_lados}}</li>
+                    </ul>
+                </div>
+                <div class="col-sm">
+                    <h5>Insumos extra</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Insumo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in object.get_insumos %}
+                            <tr>
+                                <th scope="row">{{i.cantidad}} {{i.insumo.unidad_medida}}</th>
+                                <td>{{i.insumo}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

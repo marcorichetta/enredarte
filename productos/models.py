@@ -224,5 +224,4 @@ class InsumosProducto(BaseModel):
     cantidad = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.cantidad} de {self.insumo.nombre}\
-            por cada {self.producto.nombre}"
+        return f"{self.cantidad} {self.insumo.unidad_medida} de {self.insumo.nombre}"
