@@ -11,6 +11,7 @@ django-crispy-forms==1.7.2  # via -r requirements.in
 django-environ==0.4.5     # via -r requirements.in
 django-extensions==3.0.3  # via -r requirements.in
 django-filter==2.3.0      # via -r requirements.in
+django-imagefield==0.12.4  # via -r requirements.in
 django-model-utils==4.0.0  # via -r requirements.in
 django-tables2==2.3.1     # via -r requirements.in
 django==2.2.10            # via -r requirements.in, django-filter, django-model-utils, django-tables2
@@ -26,7 +27,7 @@ openpyxl==3.0.5           # via tablib
 parso==0.7.1              # via jedi
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pillow==7.2.0             # via -r requirements.in
+pillow==7.2.0             # via -r requirements.in, django-imagefield
 prompt-toolkit==3.0.6     # via ipython
 psycopg2-binary==2.8.5    # via -r requirements.in
 ptyprocess==0.6.0         # via pexpect

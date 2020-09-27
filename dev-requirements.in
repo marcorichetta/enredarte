@@ -6,6 +6,7 @@ django-stubs==1.5.0
 flake8==3.8.3
 flake8-comprehensions
 mypy==0.770
+nplusone==1.0.0
 pre-commit==2.6.0
 ptvsd==4.3.2
 pytest==6.0.1

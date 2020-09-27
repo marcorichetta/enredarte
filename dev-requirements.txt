@@ -7,6 +7,7 @@
 appdirs==1.4.4            # via black, virtualenv
 attrs==20.1.0             # via pytest
 black==20.8b1             # via -r dev-requirements.in
+blinker==1.4              # via nplusone
 cfgv==3.2.0               # via pre-commit
 click==7.1.2              # via black
 coverage==5.2.1           # via -r dev-requirements.in
@@ -24,6 +25,7 @@ more-itertools==8.4.0     # via pytest
 mypy-extensions==0.4.3    # via black, mypy
 mypy==0.770               # via -r dev-requirements.in, django-stubs
 nodeenv==1.4.0            # via pre-commit
+nplusone==1.0.0           # via -r dev-requirements.in
 packaging==20.4           # via pytest
 pathspec==0.8.0           # via black
 pluggy==0.13.1            # via pytest
@@ -38,7 +40,7 @@ pytest==6.0.1             # via -r dev-requirements.in, pytest-django
 pytz==2019.1              # via -c requirements.txt, django
 pyyaml==5.3.1             # via pre-commit
 regex==2020.7.14          # via black
-six==1.15.0               # via -c requirements.txt, packaging, virtualenv
+six==1.15.0               # via -c requirements.txt, nplusone, packaging, virtualenv
 sqlparse==0.3.0           # via -c requirements.txt, django, django-debug-toolbar
 toml==0.10.1              # via black, pre-commit, pytest
 typed-ast==1.4.1          # via black, mypy
