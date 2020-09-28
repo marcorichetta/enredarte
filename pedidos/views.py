@@ -21,7 +21,7 @@ class PedidoTable(tables.Table):
             "id",
             "estado",
             "cliente",
-            "precio_total",
+            "get_precio_total",
             "fecha_pedido",
             "fecha_entrega",
             "opciones",
@@ -29,7 +29,7 @@ class PedidoTable(tables.Table):
         attrs = {"class": "table table-sm table-hover"}
         order_by = "id"
 
-    def render_precio_total(self, value):
+    def render_get_precio_total(self, value):
         """ Función para modificar como se muestra el precio de venta en el template """
         precio = floatformat(value)
         return f"$ {precio}"
@@ -92,7 +92,7 @@ class PedidoListView(ExportMixin, tables.SingleTableView):
 class PedidoCreateView(SuccessMessageMixin, CreateView):
     model = Pedido
     form_class = PedidoForm
-    success_message = "El pedido %(pk)s fue creado con éxito."
+    success_message = "El pedido fue creado con éxito."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

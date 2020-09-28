@@ -1,4 +1,5 @@
 from django.contrib.messages.views import SuccessMessageMixin
+from core.mixins import DeleteSuccessMessageMixin
 from django.urls import reverse_lazy
 
 from django.views.generic import (
@@ -90,7 +91,7 @@ class ClienteListView(ExportMixin, tables.SingleTableView):
 class ClienteCreateView(SuccessMessageMixin, CreateView):
     model = Cliente
     fields = ["nombre", "apellido", "telefono", "email", "calle", "numero", "localidad"]
-    success_message = "Creado con éxito."
+    success_message = "El cliente fue creado con éxito."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -119,12 +120,13 @@ class ClienteUpdateView(SuccessMessageMixin, UpdateView):
         "localidad",
         "detalles",
     ]
-    success_message = "Actualizado con éxito."
+    success_message = "El cliente fue actualizado con éxito."
 
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
 
-class ClienteDeleteView(DeleteView):
+class ClienteDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Cliente
     success_url = reverse_lazy("clientes:list")
+    success_message = "El cliente fue eliminado con éxito."

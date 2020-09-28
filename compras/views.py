@@ -81,7 +81,7 @@ class CompraListView(ExportMixin, tables.SingleTableView):
 class CompraCreateView(SuccessMessageMixin, CreateView):
     model = Compra
     form_class = CompraForm
-    success_message = "La compra fue creada con éxito"
+    success_message = "La compra fue creada con éxito."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -114,7 +114,7 @@ class CompraCreateView(SuccessMessageMixin, CreateView):
 class CompraUpdateView(SuccessMessageMixin, UpdateView):
     model = Compra
     form_class = CompraForm
-    success_message = "La compra fue actualizada con éxito"
+    success_message = "La compra fue actualizada con éxito."
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+{{ object.nombre }}
+{% endblock title %}
+
+
+{% block content %}
+
+{% include 'breadcrumb.html' with url_listado='productos:insumos-list' plural="Insumos" detail=True %}
+
+<div class="container">
+    <!-- {% for img in object.images.all %}
+        <h2>{{ img.imagen }}</h2>
+        <h2>{{ img.imagen.full }}</h2>
+        <h2>{{ img.imagen.thumbnail }}</h2>
+
+
+        <a href="{{ img.imagen.url }}">
+            <img class="w-25 rounded-left" alt="" src="{{ img.imagen.url }}"/>    
+        </a>
+
+    {% endfor %} -->
+    <div class="row">
+        {% if object.image_url %}
+            <img class="w-50 rounded-left" src="{{object.image_url}}" alt="{{object.nombre}}">
+
+            {% else %}
+            <div class="w-50 rounded-left image-placeholder" alt="Placeholder">
+                <h5>Cargue una imagen para este insumo</h5>
+            </div>
+        {% endif %}
+        <div class="card w-50">
+            <div class="card-body">
+                <div>
+                    <h4 class="card-title">{{object.nombre}}
+                        <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'productos:insumos-update' object.id %}">
+                            <span data-feather="edit-3"></span>
+                        </a>
+                        <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'productos:insumos-delete' object.id %}">
+                            <span data-feather="trash"></span>
+                        </a>
+                    </h4>
+                </div>
+                <p class="card-text">{{object.descripcion}}</p>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>$ Precio :</b>
+                        <span class="price text-success">{{object.precio|floatformat}}</span>
+                    </li>
+                    
+                    {% if "MDF" in object.nombre  %}
+                        
+                        
+                    <li class="list-group-item"><b>$ Precio m2:</b>
+                        <span class="price text-success">{{object.precio_m2|floatformat}}</span>
+                    </li>
+                    <li class="list-group-item"><b>$ Precio :</b>
+                        <span class="price text-success">{{object.precio_recorte|floatformat}}</span>
+                    </li>
+                    {% endif %}
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content  %}

@@ -25,7 +25,12 @@ class Unidad(BaseModel):
 class Insumo(BaseModel):
     nombre = models.CharField(max_length=64, unique=True)
     descripcion = models.TextField(blank=True)
-    medida = models.CharField(max_length=64)
+    medida = models.DecimalField(
+        help_text="Medida del insumo",
+        max_digits=6,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
     # Si se elimina una Unidad de medida asociada
     # a un Insumo se pone el Id de la medida por defecto
     unidad_medida = models.ForeignKey(
@@ -37,7 +42,11 @@ class Insumo(BaseModel):
         decimal_places=2,
         validators=[MinValueValidator(Decimal("0.0"))],
     )
-    proveedores = models.ManyToManyField("proveedores.Proveedor")
+    proveedores = models.ManyToManyField(
+        "proveedores.Proveedor",
+        related_name="insumos",
+        help_text="Proveedores que venden este insumo",
+    )
 
     def __str__(self):
         return self.nombre
@@ -76,6 +85,9 @@ class StockInsumo(models.Model):
 
     def __str__(self):
         return f"{self.cantidad} - {self.insumo}"
+
+    def get_absolute_url(self):
+        return reverse("productos:detail", kwargs={"pk": self.pk})
 
 
 class Producto(BaseModel):

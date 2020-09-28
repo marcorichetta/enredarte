@@ -46,6 +46,8 @@ ALLOWED_HOSTS: List[str] = env.str("ALLOWED_HOSTS").split(" ")
 
 INSTALLED_APPS: List[str] = [
     # Django
+    "dal",
+    "dal_select2",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -175,11 +177,6 @@ LOGIN_REDIRECT_URL = "core:home"
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "login"
 
-
-# SELECT2
-# ------------------------------------------------------------------------------
-SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
-SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
 
 # DJANGO TABLES 2
 # ------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ class InsumoFactory(factory.django.DjangoModelFactory):
     nombre = factory.Sequence(lambda n: "Insumo %d" % n)  # Insumo N
     unidad_medida = factory.SubFactory(UnidadFactory)
     precio = factory.Sequence(lambda n: "%d00" % n)  # 100 - 200 - 300
+    medida = factory.Faker("pyint", min_value=0, max_value=9000)
 
     # ManyToMany Relation
     # https://factoryboy.readthedocs.io/en/latest/recipes.html#simple-many-to-many-relationship

@@ -109,7 +109,7 @@ class Test_Nuevo_Pedido:
         pp_formset.instance = nuevo_pedido
         pp_formset.save()
 
-        assert round(nuevo_pedido.precio_total) == 1701
+        assert round(nuevo_pedido.get_precio_total) == 1701
 
     def NOTEST_pedido_actualizado(self, django_db_setup, productos):
         """ Si se actualiza un pedido el precio total cambia """
@@ -120,4 +120,4 @@ class Test_Nuevo_Pedido:
 
         print([p for p in pedido.productos_pedido.all()])
 
-        assert pedido.precio_total == 1000
+        assert pedido.get_precio_total == 1000

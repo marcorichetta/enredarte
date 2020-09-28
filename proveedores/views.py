@@ -1,4 +1,5 @@
 from django.contrib.messages.views import SuccessMessageMixin
+from core.mixins import DeleteSuccessMessageMixin
 from django.urls import reverse_lazy
 
 from django.views.generic import (
@@ -84,7 +85,7 @@ class ProveedorListView(ExportMixin, tables.SingleTableView):
 class ProveedorCreateView(SuccessMessageMixin, CreateView):
     model = Proveedor
     fields = ["cuit", "razon_social", "telefono", "email", "calle", "numero", "localidad"]
-    success_message = "Creado con éxito."
+    success_message = "El proveedor fue creado con éxito."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -113,12 +114,13 @@ class ProveedorUpdateView(SuccessMessageMixin, UpdateView):
         "localidad",
         "detalles",
     ]
-    success_message = "Actualizado con éxito."
+    success_message = "El proveedor fue actualizado con éxito."
 
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
 
-class ProveedorDeleteView(DeleteView):
+class ProveedorDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Proveedor
     success_url = reverse_lazy("proveedores:list")
+    success_message = "El proveedor fue eliminado con éxito."

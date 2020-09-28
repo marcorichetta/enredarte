@@ -1,10 +1,10 @@
-from datetime import date
-from decimal import Decimal
-
-from core.base_model import BaseModel
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator
+from decimal import Decimal
+from datetime import date
+
+from core.base_model import BaseModel
 
 
 class Pedido(BaseModel):
@@ -56,7 +56,7 @@ class Pedido(BaseModel):
         return sum(producto.tiempo for producto in self.productos_pedido.all())
 
     @property
-    def precio_total(self) -> float:
+    def get_precio_total(self) -> float:
         """ Devuelve el precio total del pedido """
         return sum(producto.precio_pedido for producto in self.productos_pedidos.all())
 

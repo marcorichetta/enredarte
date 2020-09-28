@@ -63,7 +63,7 @@ Pedido # {{ object.id }}
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><b>Total: $ {{object.precio_total|floatformat}}</b></td>
+                    <td><b>Total: $ {{object.get_precio_total|floatformat}}</b></td>
                 </tr>
             </tbody>
         </table>
