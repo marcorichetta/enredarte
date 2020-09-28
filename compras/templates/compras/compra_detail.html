@@ -2,44 +2,66 @@
 {% load static %}
 
 
-{% block seccion %}
-Información sobre {{ object.nombre }}
-{% endblock seccion %}
-
+{% block title %}
+Compra #{{ object.pk }}
+{% endblock title %}
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'compras:list' %}">Compras</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Compra #{{ object.id }}</li>
-    </ol>
-</nav>
+<div class="d-grid p-3">
+{% include 'breadcrumb.html' with url_listado='compras:list' plural="Compras" %}
 
-<div class="container">
-    <legend class="border-bottom mb-4">
-        {{ object.id }} - {{ object.proveedor }}
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'compras:update' object.id %}">
+<div class="container border rounded p-3">
+
+    <div class="d-flex align-items-center border-bottom mb-4">
+        <h4>Compra #{{ object.id }} - {{ object.proveedor }}</h4>
+        <a class="btn btn-sm btn-outline-secondary ml-2" href="{% url 'compras:update' object.id %}">
             <span data-feather="edit-3"></span>
         </a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'compras:delete' object.id %}">
+        <a class="btn btn-sm btn-outline-danger ml-2" href="{% url 'compras:delete' object.id %}">
             <span data-feather="trash"></span>
         </a>
-    </legend>
-    <ul class="list-group mb-4">
-        <li>Fecha: {{object.fecha_compra}}</li>
-        <li>Precio de compra: $ {{object.precio_total|floatformat}}</li>
-
+        <span class="ml-auto"><b>Fecha compra:</b> {{object.fecha_compra}}</span>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h6><b>Cliente: </b> <a href="{% url 'proveedores:detail' object.proveedor.pk %}">{{object.proveedor}}</a></h6>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-divider"></div>
         <h5>Insumos</h5>
-        <!-- p es una referencia a cada producto -->
-        {% for i in object.insumos_comprados.all %}
-        <li>
-            <b>Cantidad:</b> {{ i.cantidad }}
-            <br>
-            <b>Insumo:</b> {{i.insumo.nombre}} - {{i.insumo.descripcion}}
-        </li>
-        {% endfor %}
-    </ul>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Insumo</th>
+                    <th scope="col">Detalles</th>
+                    <th scope="col">Precio Unitario</th>
+                    <th scope="col">Importe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in object.insumos_comprados.all %}
+                <tr>
+                    <th scope="row">{{registro.cantidad}}</th>
+                    <td>{{registro.insumo}}</td>
+                    <td>{{registro.detalles|default:"-"}}</td>
+                    <td>$ {{registro.precio_unitario|floatformat}}</td>
+                    <td>$ {{registro.precio_compra|floatformat}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total: $ {{object.precio_total|floatformat}}</b></td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+
 </div>
 {% endblock content  %}

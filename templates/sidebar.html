@@ -58,15 +58,23 @@
 			</a>
 			<ul class="collapse subMenu" id="PedidosSubmenu">
 				<li>
-					<a href="{% url 'pedidos:list' %}">Pedidos</a>
-				</li>
+					<a href="{% url 'pedidos:list' %}">Listado</a>
+                </li>
 				<li>
-					<a href="#">Page 2</a>
-				</li>
-				<li>
-					<a href="#">Page 3</a>
+					<a href="{% url 'pedidos:create' %}">Crear pedido</a>
 				</li>
 			</ul>
+        </li>
+        <hr class="sidebar-divider my-0" />
+		<li class="nav-item">
+			<a class="nav-link {% active 'compra' %}" href="{% url 'compras:list' %}">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<line x1="12" y1="1" x2="12" y2="23"></line>
+					<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+				</svg>
+				Compras
+			</a>
 		</li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
@@ -102,17 +110,6 @@
 					</path>
 				</svg>
 				Proveedores
-			</a>
-		</li>
-		<hr class="sidebar-divider my-0" />
-		<li class="nav-item">
-			<a class="nav-link {% active 'compra' %}" href="{% url 'compras:list' %}">
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<line x1="12" y1="1" x2="12" y2="23"></line>
-					<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-				</svg>
-				Compras
 			</a>
 		</li>
 		<hr class="sidebar-divider my-0" />

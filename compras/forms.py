@@ -1,21 +1,24 @@
 import re
-from django import forms
-from compras.models import Compra, InsumosCompra
-from calendario.widgets import DatePicker
 
+from calendario.widgets import DatePicker
+from core.custom_layout_object import Formset
+from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
-    Layout,
-    Field,
-    Fieldset,
-    Div,
-    Row,
     HTML,
     ButtonHolder,
+    Div,
+    Field,
+    Fieldset,
+    Layout,
+    Row,
     Submit,
-    Button,
 )
-from core.custom_layout_object import Formset
+from django import forms
+from productos.forms import CustomChoiceField
+from productos.models import Insumo
+
+from compras.models import Compra, InsumosCompra
 
 
 class CompraForm(forms.ModelForm):
@@ -43,7 +46,7 @@ class CompraForm(forms.ModelForm):
                 ),
                 Div(
                     Fieldset("Agregar Insumos", Formset("insumos")),
-                    css_class="col-6 flex-wrap: nowrap",
+                    css_class="flex-wrap: nowrap",
                 ),
             ),
             HTML("<br>"),
@@ -53,6 +56,8 @@ class CompraForm(forms.ModelForm):
 
 class InsumosCompraForm(forms.ModelForm):
     """Estructura del formulario para agregar insumos a la compra. """
+
+    insumo = CustomChoiceField(queryset=Insumo.objects.all(),)
 
     class Meta:
         model = InsumosCompra
@@ -70,8 +75,8 @@ class InsumosCompraForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Field("insumo"),
-                Field("cantidad"),
-                Field("precio_compra"),
+                Field("cantidad", css_class="col-sm"),
+                PrependedText("precio_compra", "$", min=0),
                 Field("DELETE"),
                 css_class=f"formset_row-{formtag_prefix}",
                 style="flex-wrap: nowrap;",

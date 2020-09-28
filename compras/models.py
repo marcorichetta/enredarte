@@ -60,3 +60,8 @@ class InsumosCompra(BaseModel):
 
     def __str__(self):
         return f"{self.cantidad} - {self.insumo.nombre}"
+
+    @property
+    def precio_unitario(self) -> float:
+        """ Calcula el precio unitario de cada insumo de la compra """
+        return self.precio_compra / self.cantidad

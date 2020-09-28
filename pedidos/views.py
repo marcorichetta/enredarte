@@ -21,7 +21,7 @@ class PedidoTable(tables.Table):
             "id",
             "estado",
             "cliente",
-            "get_precio_total",
+            "precio_total",
             "fecha_pedido",
             "fecha_entrega",
             "opciones",
@@ -29,7 +29,7 @@ class PedidoTable(tables.Table):
         attrs = {"class": "table table-sm table-hover"}
         order_by = "id"
 
-    def render_get_precio_total(self, value):
+    def render_precio_total(self, value):
         """ Función para modificar como se muestra el precio de venta en el template """
         precio = floatformat(value)
         return f"$ {precio}"
@@ -112,7 +112,7 @@ class PedidoCreateView(SuccessMessageMixin, CreateView):
         nuevo_pedido = form.save(commit=False)
 
         # Calcular y sobreescribir el precio total del pedido
-        nuevo_pedido.precio_total = form.instance.get_precio_total
+        nuevo_pedido.precio_total = form.instance.precio_total
 
         # Si son válidos los productos se guardan
         if formset_productos.is_valid():
@@ -158,7 +158,7 @@ class PedidoUpdateView(SuccessMessageMixin, UpdateView):
         pedido_actualizado = form.save(commit=False)
 
         # Calcular y sobreescribir el precio total del pedido
-        pedido_actualizado.precio_total = form.instance.get_precio_total
+        pedido_actualizado.precio_total = form.instance.precio_total
 
         # Si son válidos los productos se guardan
         if formset_productos.is_valid():
