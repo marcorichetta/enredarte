@@ -12,14 +12,6 @@
             <div class="modal-body">
                 <form id="localidad-form">
                     <div class="form-group">
-                        <label for="InputCodPostal">Código Postal</label>
-                        <input type="number" class="form-control" style="width: 120px" id="InputCodPostal">
-                    </div>
-                    <div class="form-group">
-                        <label for="InputLocalidad">Localidad</label>
-                        <input type="text" class="form-control" id="InputLocalidad" placeholder="Ingrese una localidad">
-                    </div>
-                    <div class="form-group">
                         <label for="InputProvincia">Provincia</label>
                         <select autocapitalize="characters" class="form-control" id="InputProvincia">
                             
@@ -28,6 +20,19 @@
                             {% endfor %}
                                 
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="InputLocalidad">Localidad</label>
+                        <input type="text" class="form-control" id="InputLocalidad" placeholder="Ingrese una localidad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="InputCodPostal">Código Postal</label>
+                        <input type="text" class="form-control" style="width: 120px" id="InputCodPostal" aria-describedby="HelpCodPostal">
+                        <small id="HelpCodPostal" class="text-muted">
+                            Ejemplo: <b>5921</b>
+                            <br>
+                            <a href="https://www6.oca.com.ar/BuscadorCP/" target="_blank" rel="noreferrer noopener">Buscar código postal</a>
+                          </small>
                     </div>
                 </div>
                 <div class="modal-footer">

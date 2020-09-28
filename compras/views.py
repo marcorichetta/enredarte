@@ -110,6 +110,9 @@ class CompraCreateView(SuccessMessageMixin, CreateView):
         # Repopular form con errores
         return self.render_to_response(self.get_context_data(form=form))
 
+    def get_success_url(self):
+        return reverse_lazy("compras:detail", kwargs={"pk": self.object.pk})
+
 
 class CompraUpdateView(SuccessMessageMixin, UpdateView):
     model = Compra

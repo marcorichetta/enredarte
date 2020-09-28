@@ -51,7 +51,7 @@ class ProductoFilter(FilterSet):
 
     fecha_entrega = DateFromToRangeFilter(
         field_name="fecha_entrega",
-        widget=MultiDatePicker(),
+        widget=MultiDatePicker(attrs={"placeholder": "DD/MM/YYYY"}),
         label="Rango de fechas de entrega",
     )
 

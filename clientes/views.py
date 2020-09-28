@@ -33,6 +33,7 @@ class ClienteTable(tables.Table):
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}
+        order_by = "id"
 
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",
@@ -102,6 +103,9 @@ class ClienteCreateView(SuccessMessageMixin, CreateView):
         context["provincias"] = Provincia.objects.get_queryset()
 
         return context
+
+    def get_success_url(self):
+        return reverse_lazy("clientes:detail", kwargs={"pk": self.object.pk})
 
 
 class ClienteDetailView(DetailView):

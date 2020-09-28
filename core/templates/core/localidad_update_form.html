@@ -1,0 +1,14 @@
+{% extends "core/localidad_form.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Actualizar Localidad
+{% endblock title %}
+    
+{% block breadcrumb %}
+    {% include 'breadcrumb.html' with url_listado='core:localidades-list' plural="Localidades" update=True %}
+{% endblock breadcrumb %}
+
+{% block legend %}
+    Actualizar Localidad
+{% endblock legend %}

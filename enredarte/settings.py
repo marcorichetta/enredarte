@@ -59,6 +59,7 @@ INSTALLED_APPS: List[str] = [
     "crispy_forms",
     "django_extensions",
     "django_tables2",
+    "widget_tweaks",
     # My apps
     "core",
     "users",
@@ -88,12 +89,12 @@ MIDDLEWARE: List[str] = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
 
 # Enable the debug toolbar only in DEBUG mode.
-if DEBUG:
-    INSTALLED_APPS.append("debug_toolbar")
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]
+# if DEBUG:
+#     INSTALLED_APPS.append("debug_toolbar")
+#     MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+#     INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]
 
-    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
+#     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
 
 
 ROOT_URLCONF = "enredarte.urls"
