@@ -1,34 +1,25 @@
-from django.http import JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
-from django.views.decorators.http import require_http_methods
-from pedidos.models import Pedido
+import django_tables2 as tables
 from clientes.models import Cliente
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.http import JsonResponse
+from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    TemplateView,
+    UpdateView,
+)
+from django_filters import CharFilter, FilterSet
+from django_tables2.export.views import ExportMixin
+from pedidos.models import Pedido
 from productos.models import Producto
 
-from .models import Localidad, Provincia
-
-
-from django.contrib.messages.views import SuccessMessageMixin
 from core.mixins import DeleteSuccessMessageMixin
-from django.urls import reverse_lazy
 
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-)
-
-from core.models import Provincia, Localidad
-
-import django_tables2 as tables
-from django_tables2.export.views import ExportMixin
-from django_filters import FilterSet, CharFilter
-from django_filters.views import FilterView
-from django_filters.filters import NumberFilter
+from .models import Localidad, Provincia
 
 # Create your views here.
 
@@ -53,23 +44,36 @@ def LocalidadCreate(request):
     localidad = request.POST.get("localidad")
     provincia_id = request.POST.get("provincia_id")
 
+    if len(cod_postal) != 4:
+
+        mensaje = "ERROR: El código postal ingresado tiene más de 4 dígitos."
+
+        data = {
+            "status": "false",
+            "mensaje": mensaje,
+        }
+
+        return JsonResponse(data, status=400,)
+
+        # return HttpResponse(json.dumps(context), content_type="application/json", status_code=500)
+
     # Obtener instancia de Provincia
     provincia = Provincia.objects.get(pk=provincia_id)
 
     # Crear en DB
-    Localidad.objects.create(
+    nueva_localidad = Localidad.objects.create(
         cod_postal=cod_postal, localidad=localidad, provincia=provincia
     )
 
     # Enviar dict con datos de la nueva Localidad
-    nuevaLocalidad = {
-        "cod_postal": cod_postal,
-        "localidad": localidad,
+    data = {
+        "pk_value": nueva_localidad.pk,
+        "localidad": nueva_localidad.localidad,
         "provincia": provincia_id,
     }
 
     # Devolver info a JS
-    return JsonResponse(nuevaLocalidad)
+    return JsonResponse(data)
 
 
 class LocalidadTable(tables.Table):
@@ -86,11 +90,19 @@ class LocalidadTable(tables.Table):
         order_by = "id"
 
     opciones = tables.TemplateColumn(
-        template_name="botones_tabla.html",
+        template_code="""
+            <a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url detail record.pk %}">
+                <span data-feather="zoom-in"></span>
+            </a>
+            <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url update record.pk %}">
+                <span data-feather="edit-3"></span>
+            </a>
+        """,
+        # template_name="botones_tabla.html",
         extra_context={
             "detail": "core:localidades-detail",
             "update": "core:localidades-update",
-            "delete": "core:localidades-delete",
+            # "delete": "core:localidades-delete",
         },
     )
 

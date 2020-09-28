@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+
+{% block title %}
+    Actualizar Cliente
+{% endblock title %}
+
 {% block content %}
 <div class="d-grid p-3">
 
@@ -10,13 +15,40 @@
             {% csrf_token %}
             <div class="row">
                 <legend class="border-bottom mb-3">Actualizar Cliente</legend>
-                <div class="col-6">
-                    {{ form|crispy }}
+                <div class="">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.nombre|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.apellido|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.telefono|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.calle|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.numero|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 px-0">
+                            {{ form.localidad|as_crispy_field }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-outline-success" type="submit">Actualizar</button>
-                <a href="{% url 'clientes:list' %}" class="btn btn-outline-secondary">Cancelar</a>                
+                <button class="btn btn-outline-success" type="submit">Guardar</button>
+                <a href="{% url 'clientes:list' %}" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </form>
     </div>

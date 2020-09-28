@@ -233,7 +233,12 @@ class InsumosProducto(BaseModel):
     # Misma lógica que ProductosPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField()
+    cantidad = models.DecimalField(
+        default=0,
+        max_digits=4,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
 
     def __str__(self):
         return f"{self.cantidad} {self.insumo.unidad_medida} de {self.insumo.nombre}"
