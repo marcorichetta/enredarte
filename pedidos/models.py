@@ -1,12 +1,10 @@
 from django.db import models
-from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 from datetime import date
 
 from core.base_model import BaseModel
-from productos.models import Producto
 
 
 class Pedido(BaseModel):
@@ -93,4 +91,4 @@ class ProductosPedido(BaseModel):
     @property
     def precio_pedido(self) -> float:
         """ Calcula el precio total de cada producto del pedido """
-        return self.cantidad * self.producto.precio_venta_terminado
+        return self.cantidad * self.producto.precio_venta_terminado()

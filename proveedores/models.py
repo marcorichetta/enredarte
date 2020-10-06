@@ -7,17 +7,18 @@ from core.base_model import BaseModel
 
 
 class Proveedor(BaseModel):
+    razon_social = models.CharField(max_length=64)
     cuit = models.CharField(
         max_length=13,
         unique=True,
         validators=[validar_cuit],
         help_text="Ingrese el CUIT con el siguiente formato: 20-12345678-9",
+        blank=True,
     )
-    razon_social = models.CharField(max_length=64)
-    telefono = models.CharField(max_length=64)
-    email = models.EmailField()
-    calle = models.CharField(max_length=64)
-    numero = models.CharField(max_length=4)
+    telefono = models.CharField(max_length=64, blank=True)
+    email = models.EmailField(blank=True)
+    calle = models.CharField(max_length=64, blank=True)
+    numero = models.CharField(max_length=4, blank=True)
     """ Para eliminar una localidad, primero hay que
         eliminar todos los proveedores de la misma """
     localidad = models.ForeignKey(

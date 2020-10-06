@@ -25,7 +25,12 @@ class Unidad(BaseModel):
 class Insumo(BaseModel):
     nombre = models.CharField(max_length=64, unique=True)
     descripcion = models.TextField(blank=True)
-    medida = models.CharField(max_length=64)
+    medida = models.DecimalField(
+        help_text="Medida del insumo",
+        max_digits=6,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
     # Si se elimina una Unidad de medida asociada
     # a un Insumo se pone el Id de la medida por defecto
     unidad_medida = models.ForeignKey(
@@ -37,13 +42,14 @@ class Insumo(BaseModel):
         decimal_places=2,
         validators=[MinValueValidator(Decimal("0.0"))],
     )
-    proveedores = models.ManyToManyField("proveedores.Proveedor")
+    proveedores = models.ManyToManyField(
+        "proveedores.Proveedor",
+        related_name="insumos",
+        help_text="Proveedores que venden este insumo",
+    )
 
     def __str__(self):
-        if self.descripcion:
-            return f"{self.nombre} - {self.descripcion}"
-        else:
-            return self.nombre
+        return self.nombre
 
     @property
     def precio_m2(self) -> float:
@@ -79,6 +85,9 @@ class StockInsumo(models.Model):
 
     def __str__(self):
         return f"{self.cantidad} - {self.insumo}"
+
+    def get_absolute_url(self):
+        return reverse("productos:detail", kwargs={"pk": self.pk})
 
 
 class Producto(BaseModel):
@@ -135,7 +144,7 @@ class Producto(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.nombre} - {self.descripcion}"
+        return self.nombre
 
     def get_absolute_url(self):
         return reverse("productos:detail", kwargs={"pk": self.pk})
@@ -145,7 +154,8 @@ class Producto(BaseModel):
         img = self.images.first()
         return img.imagen.url if img else img
 
-    def precio_costo(self) -> float:
+    # TODO - Optimizar la cantidad de queries que se hacen para traer las variables
+    def precio_costo(self, variables) -> float:
         """ Calcula el precio de costo de un producto en base a las
             medidas del mismo, a los insumos utilizados y al tiempo que lleva
             producirlo. """
@@ -162,42 +172,37 @@ class Producto(BaseModel):
         horas: float = self.tiempo / 60
 
         # Castear a decimal para poder multiplicar con otro decimal
-        precio_tiempo = Decimal(horas) * Variable.objects.get(pk=1).precio_hora
+        precio_tiempo = Decimal(horas) * variables.precio_hora
 
         return precioBase + precioLatCorto + precioLatLargo + precio_tiempo
 
-    @property
     def precio_venta_crudo(self) -> float:
         """ Calcula el precio de venta al público del producto crudo """
+        variables: Variable = Variable.objects.get(pk=1)
 
         # Precio costo * % de ganancia
-        return self.precio_costo() * (
-            (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
-        )
+        return self.precio_costo(variables) * ((variables.ganancia_por_menor / 100) + 1)
 
-    @property
-    def precio_terminado(self) -> float:
+    def precio_terminado(self, variables: Variable) -> float:
         """ Calcula el precio del producto terminado, sin la ganancia """
 
         tiempo_terminado = (self.tiempo * 2) / 60
 
-        precio_tiempo_terminado = (
-            Decimal(tiempo_terminado) * Variable.objects.get(pk=1).precio_hora
-        )
+        precio_tiempo_terminado = Decimal(tiempo_terminado) * variables.precio_hora
 
         return (
-            self.precio_costo()
-            + Variable.objects.get(pk=1).precio_pintado
+            self.precio_costo(variables)
+            + variables.precio_pintado
             + precio_tiempo_terminado
         )
 
-    @property
     def precio_venta_terminado(self) -> float:
         """ Calcula el precio de venta al público del producto terminado """
+        variables: Variable = Variable.objects.get(pk=1)
 
         # Precio terminado * % de ganancia
-        return self.precio_terminado * (
-            (Variable.objects.get(pk=1).ganancia_por_menor / 100) + 1
+        return self.precio_terminado(variables) * (
+            (variables.ganancia_por_menor / 100) + 1
         )
 
     @property
@@ -228,8 +233,12 @@ class InsumosProducto(BaseModel):
     # Misma lógica que ProductosPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField()
+    cantidad = models.DecimalField(
+        default=0,
+        max_digits=4,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
 
     def __str__(self):
-        return f"{self.cantidad} de {self.insumo.nombre}\
-            por cada {self.producto.nombre}"
+        return f"{self.cantidad} {self.insumo.unidad_medida} de {self.insumo.nombre}"

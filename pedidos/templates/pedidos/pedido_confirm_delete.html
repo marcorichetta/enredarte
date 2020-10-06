@@ -5,8 +5,7 @@
             {% csrf_token %}
             <div class="form-group">
                 <legend class="border-bottom mb-4">Borrar Pedido</legend>
-                <h3>¿Seguro quiere eliminar el pedido <b>"{{ object.id }} - {{ object.cliente }}"</b>?</h3>
-                <span class="form-text text-muted">Esta operación es irreversible.</span>
+                <h3>¿Seguro quiere eliminar el <b>"Pedido #{{ object.id }}"</b>?</h3>
             </div>
             <div class="form-group">
                 <button class="btn btn-outline-danger" type="submit">Borrar</button>

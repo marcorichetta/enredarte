@@ -1,57 +1,101 @@
-from django.http import HttpResponseRedirect
-from django.db.models import ProtectedError, Q
-from django.contrib import messages
-from django.db import transaction
-
+import django_tables2 as tables
+from calendario.widgets import MultiDatePicker
+from clientes.models import Cliente
+from core.mixins import DeleteSuccessMessageMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.template.defaultfilters import floatformat
 from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
+from django_filters import FilterSet
+from django_filters.filters import DateFromToRangeFilter, ModelChoiceFilter
+from django_tables2.export.views import ExportMixin
 
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-)
-
-from .models import Pedido
 from .forms import PedidoForm, ProductosPedidoFormset
+from .models import Pedido
 
-# Create your views here.
+
+class PedidoTable(tables.Table):
+    class Meta:
+        model = Pedido
+        fields = (
+            "id",
+            "estado",
+            "cliente",
+            "get_precio_total",
+            "fecha_pedido",
+            "fecha_entrega",
+            "opciones",
+        )
+        attrs = {"class": "table table-sm table-hover"}
+        order_by = "id"
+
+    def render_get_precio_total(self, value):
+        """ Función para modificar como se muestra el precio de venta en el template """
+        precio = floatformat(value)
+        return f"$ {precio}"
+
+    opciones = tables.TemplateColumn(
+        template_name="botones_tabla.html",
+        extra_context={
+            "detail": "pedidos:detail",
+            "update": "pedidos:update",
+            "delete": "pedidos:delete",
+        },
+    )
 
 
-class PedidoListView(ListView):
+class ProductoFilter(FilterSet):
+    nombre = ModelChoiceFilter(
+        queryset=Cliente.objects.all(), field_name="cliente", label="Buscar por cliente"
+    )
+
+    fecha_entrega = DateFromToRangeFilter(
+        field_name="fecha_entrega",
+        widget=MultiDatePicker(attrs={"placeholder": "DD/MM/YYYY"}),
+        label="Rango de fechas de entrega",
+    )
+
+    class Meta:
+        model = Pedido
+        fields = ["cliente", "fecha_entrega"]
+
+
+class PedidoListView(ExportMixin, tables.SingleTableView):
+    table_class = PedidoTable
     model = Pedido
+    filter_class = ProductoFilter
     template_name = "pedidos/pedidos.html"
-    context_object_name = "pedidos"
-    ordering = ["id"]
-    paginate_by = 10
+    export_formats = ("csv", "xlsx")
+    table_pagination = {"per_page": 10}
+    exclude_columns = ("opciones",)  # Excluir columnas del export
 
-    def get_queryset(self):
-        """ Permite buscar en un form dentro de la misma página
-        con el formato `q?texto` """
-        queryset = super(PedidoListView, self).get_queryset()
+    def get_table_data(self):
+        """
+            Sobreescribe el método utilizado para obtener los registros de la tabla
+            De esta manera se devuelve sólo 1 tabla, que puede o no estar filtrada.
+            https://stackoverflow.com/a/15129259/6389248
+        """
 
-        query = self.request.GET.get("search")
-        if query:
-            return queryset.filter(
-                Q(cliente__nombre__icontains=query) | Q(cliente__nombre__icontains=query)
-            )
-        return queryset
+        # Filtra el queryset que se le enviará a la tabla
+        self.filter = self.filter_class(
+            self.request.GET, queryset=super().get_table_data(),
+        )
+        return self.filter.qs
 
     def get_context_data(self, **kwargs):
-        """ Devuelve el texto buscado para usarlo en la paginación """
-        context = super(PedidoListView, self).get_context_data(**kwargs)
-        context["search_txt"] = self.request.GET.get("search", "")
+        """ Inyecta el filtro en el context para usarlo en el template """
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
         return context
 
 
-class PedidoCreateView(CreateView):
+class PedidoCreateView(SuccessMessageMixin, CreateView):
     model = Pedido
     form_class = PedidoForm
-    success_message = "Pedido %(pk)s fue creado correctamente"
+    success_message = "El pedido fue creado con éxito."
 
     def get_context_data(self, **kwargs):
-        context = super(PedidoCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         # Le agregamos los productos al context para usarlos en el template
         if self.request.POST:
             context["productos"] = ProductosPedidoFormset(self.request.POST)
@@ -68,7 +112,7 @@ class PedidoCreateView(CreateView):
         nuevo_pedido = form.save(commit=False)
 
         # Calcular y sobreescribir el precio total del pedido
-        nuevo_pedido.precio_total = form.instance.get_precio_total
+        nuevo_pedido.precio_total = form.instance.precio_total
 
         # Si son válidos los productos se guardan
         if formset_productos.is_valid():
@@ -83,16 +127,19 @@ class PedidoCreateView(CreateView):
         # Repopular form con errores
         return self.render_to_response(self.get_context_data(form=form))
 
+    def get_success_url(self):
+        return reverse_lazy("pedidos:detail", kwargs={"pk": self.object.pk})
 
-class PedidoUpdateView(UpdateView):
+
+class PedidoUpdateView(SuccessMessageMixin, UpdateView):
     model = Pedido
     form_class = PedidoForm
     # Modify the template used for this view
     template_name_suffix = "_update_form"
-    success_message = "Pedido %(pk)s fue actualizado correctamente"
+    success_message = "El pedido fue actualizado con éxito."
 
     def get_context_data(self, **kwargs):
-        context = super(PedidoUpdateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         # Le agregamos los productos al context para usarlos en el template
         if self.request.POST:
             context["productos"] = ProductosPedidoFormset(
@@ -111,7 +158,7 @@ class PedidoUpdateView(UpdateView):
         pedido_actualizado = form.save(commit=False)
 
         # Calcular y sobreescribir el precio total del pedido
-        pedido_actualizado.precio_total = form.instance.get_precio_total
+        pedido_actualizado.precio_total = form.instance.precio_total
 
         # Si son válidos los productos se guardan
         if formset_productos.is_valid():
@@ -134,29 +181,11 @@ class PedidoDetailView(DetailView):
     model = Pedido
 
     def get_context_data(self, *args, **kwargs):
-        context = super(PedidoDetailView, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         return context
 
 
-class PedidoDeleteView(DeleteView):
+class PedidoDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Pedido
     success_url = reverse_lazy("pedidos:list")
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-
-        try:
-            self.object.delete()
-            # Enviar mensaje para mostrar alerta
-            messages.success(request, f"Pedido {kwargs.get('pk')} fue eliminado.")
-
-            # Redirect to success_url
-        except ProtectedError:
-            context = self.get_context_data(
-                object=self.object,
-                error=f"{self.object} no puede ser eliminado porque \
-                    tiene dependencias. Consulte al administrador.",
-            )
-            return self.render_to_response(context)
-        return HttpResponseRedirect(success_url)
+    success_message = "El pedido fue eliminado con éxito."

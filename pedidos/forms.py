@@ -32,7 +32,7 @@ class PedidoForm(forms.ModelForm):
         self.helper.form_tag = True
         self.helper.form_class = "form-horizontal"
         self.helper.label_class = "col-md-3 create-label"
-        self.helper.field_class = "col-md-9"
+        self.helper.field_class = "col-md-8"
         self.helper.layout = Layout(
             Row(
                 Div(

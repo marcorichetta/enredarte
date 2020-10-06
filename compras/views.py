@@ -1,41 +1,87 @@
-from django.shortcuts import render
+import django_tables2 as tables
+from core.mixins import DeleteSuccessMessageMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.template.defaultfilters import floatformat
 from django.urls import reverse_lazy
-from django.db.models import Q
-from django.db import transaction
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
+from django_filters import FilterSet
+from django_filters.filters import ModelChoiceFilter
+from django_tables2.export.views import ExportMixin
+from proveedores.models import Proveedor
 
-from .models import Compra, InsumosCompra
 from .forms import CompraForm, InsumosCompraFormset
+from .models import Compra
 
 
-class CompraListView(ListView):
+class CompraTable(tables.Table):
+    class Meta:
+        model = Compra
+        fields = ("id", "proveedor", "precio_total", "fecha_compra", "opciones")
+        attrs = {"class": "table table-sm table-hover"}
+        order_by = "id"
+
+    def render_precio_total(self, value):
+        """ Función para modificar como se muestra el precio de venta en el template """
+        precio = floatformat(value)
+        return f"$ {precio}"
+
+    opciones = tables.TemplateColumn(
+        template_name="botones_tabla.html",
+        extra_context={
+            "detail": "compras:detail",
+            "update": "compras:update",
+            "delete": "compras:delete",
+        },
+    )
+
+
+class CompraFilter(FilterSet):
+    nombre = ModelChoiceFilter(
+        queryset=Proveedor.objects.all(),
+        field_name="proveedor",
+        label="Buscar por proveedor",
+    )
+
+    class Meta:
+        model = Compra
+        fields = [
+            "proveedor",
+        ]
+
+
+class CompraListView(ExportMixin, tables.SingleTableView):
     model = Compra
+    table_class = CompraTable
+    filter_class = CompraFilter
     template_name = "compras/compras.html"
-    context_object_name = "compras"
-    ordering = ["id"]
-    paginate_by = 10
+    export_formats = ("csv", "xlsx")
+    table_pagination = {"per_page": 10}
+    exclude_columns = ("opciones",)  # Excluir columnas del export
 
-    def get_queryset(self):
-        """ Permite buscar en un form dentro de la misma página
-        con el formato `q?texto` """
-        queryset = super(CompraListView, self).get_queryset()
+    def get_table_data(self):
+        """
+            Sobreescribe el método utilizado para obtener los registros de la tabla
+            De esta manera se devuelve sólo 1 tabla, que puede o no estar filtrada.
+            https://stackoverflow.com/a/15129259/6389248
+        """
 
-        query = self.request.GET.get("search")
-        if query:
-            return queryset.filter(Q(proveedor__razon_social__icontains=query))
-        return queryset
+        # Filtra el queryset que se le enviará a la tabla
+        self.filter = self.filter_class(
+            self.request.GET, queryset=super().get_table_data(),
+        )
+        return self.filter.qs
 
     def get_context_data(self, **kwargs):
-        """ Devuelve el texto buscado para usarlo en la paginación """
-        context = super(CompraListView, self).get_context_data(**kwargs)
-        context["search_txt"] = self.request.GET.get("search", "")
+        """ Inyecta el filtro en el context para usarlo en el template """
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
         return context
 
 
-class CompraCreateView(CreateView):
+class CompraCreateView(SuccessMessageMixin, CreateView):
     model = Compra
     form_class = CompraForm
-    success_message = "Compra %(pk)s creada con éxito"
+    success_message = "La compra fue creada con éxito."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,11 +110,14 @@ class CompraCreateView(CreateView):
         # Repopular form con errores
         return self.render_to_response(self.get_context_data(form=form))
 
+    def get_success_url(self):
+        return reverse_lazy("compras:detail", kwargs={"pk": self.object.pk})
 
-class CompraUpdateView(UpdateView):
+
+class CompraUpdateView(SuccessMessageMixin, UpdateView):
     model = Compra
     form_class = CompraForm
-    success_message = "Compra %(pk)s actualizada con éxito"
+    success_message = "La compra fue actualizada con éxito."
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
@@ -112,6 +161,7 @@ class CompraDetailView(DetailView):
         return context
 
 
-class CompraDeleteView(DeleteView):
+class CompraDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Compra
-    success_url = reverse_lazy("compras")
+    success_url = reverse_lazy("compras:list")
+    success_message = "La compra fue eliminada con éxito."

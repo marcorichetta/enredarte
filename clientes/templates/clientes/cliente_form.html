@@ -1,56 +1,19 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+
+
+{% block title %}
+    Crear Cliente
+{% endblock title %}
+    
+
 {% block content %}
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Crear una nueva localidad</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="localidad-form">
-                    <div class="form-group">
-                        <label for="InputCodPostal">Código Postal</label>
-                        <input type="number" class="form-control" style="width: 120px" id="InputCodPostal">
-                    </div>
-                    <div class="form-group">
-                        <label for="InputLocalidad">Localidad</label>
-                        <input type="text" class="form-control" id="InputLocalidad" placeholder="Ingrese una localidad">
-                    </div>
-                    <div class="form-group">
-                        <label for="InputProvincia">Provincia</label>
-                        <select autocapitalize="characters" class="form-control" id="InputProvincia">
-                            
-                            {% for p in provincias %}
-                                <option value="{{ p.pk }}">{{ p.provincia }}</option>
-                            {% endfor %}
-                                
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Modal End -->
+
+{% include "core/modal_localidad.html" %}
 
 <!-- Form -->
 <div class="d-grid p-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'clientes:list' %}">Cliente</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Crear Cliente</li>
-        </ol>
-    </nav>
+    {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" create=True %}
 
     <div class="form-container">
         <form method="POST">
@@ -101,52 +64,5 @@
     </div>
 </div>
 <!-- Form End -->
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        document.querySelector('#localidad-form').addEventListener('submit', (e) => {
-            e.preventDefault()
-
-            // Tomar el token del formulario original (Esto puede malir sal)
-            let token = $('input[name=csrfmiddlewaretoken]').val();
-
-            // Mandar la POST request
-            $.ajax({
-                type: 'POST',
-                url: '/localidad/new/',
-                data: {
-                    csrfmiddlewaretoken: token,
-                    cod_postal: $('#InputCodPostal').val(),
-                    localidad: $('#InputLocalidad').val(),
-                    provincia_id: $('#InputProvincia').val(),
-                },
-                dataType: 'json',
-                success: (nuevaLocalidad) => {
-                    window.alert('Se creó la nueva localidad con éxito');
-
-                    // Esconder modal
-                    $('#exampleModal').modal('hide');
-
-                    // Seleccionar select del formulario de cliente
-                    localidadSelect = document.getElementById('id_localidad');
-
-                    // Crear una nueva opción para ese select
-                    localidadSelect.options.add(
-                        new Option(
-                            nuevaLocalidad.localidad,
-                            nuevaLocalidad.cod_postal
-                        )
-                    )
-
-                    // Actualizar el select con la opción creada
-                    localidadSelect.value = nuevaLocalidad.cod_postal
-
-                }
-            })
-        })
-
-    })
-</script>
 
 {% endblock content %}

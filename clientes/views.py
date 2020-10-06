@@ -1,50 +1,101 @@
-from django.shortcuts import HttpResponseRedirect
-from django.db.models import Q
-from django.db.models import ProtectedError
 from django.contrib.messages.views import SuccessMessageMixin
+from core.mixins import DeleteSuccessMessageMixin
 from django.urls import reverse_lazy
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    TemplateView,
+)
 
 from core.models import Provincia, Localidad
 from .models import Cliente
 
+import django_tables2 as tables
+from django_tables2.export.views import ExportMixin
+from django_filters import FilterSet, CharFilter
+from django_filters.views import FilterView
 
-class ClienteListView(ListView):
+
+class ClienteTable(tables.Table):
+    class Meta:
+        model = Cliente
+        fields = (
+            "id",
+            "nombre",
+            "apellido",
+            "email",
+            "telefono",
+            "localidad",
+            "opciones",
+        )
+        attrs = {"class": "table table-sm table-hover"}
+        order_by = "id"
+
+    opciones = tables.TemplateColumn(
+        template_name="botones_tabla.html",
+        extra_context={
+            "detail": "clientes:detail",
+            "update": "clientes:update",
+            "delete": "clientes:delete",
+        },
+    )
+
+
+class ClienteFilter(FilterSet):
+    nombre = CharFilter(
+        field_name="nombre", lookup_expr="icontains", label="Buscar por nombre"
+    )
+    apellido = CharFilter(
+        field_name="apellido", lookup_expr="icontains", label="Buscar por apellido"
+    )
+
+    class Meta:
+        model = Cliente
+        fields = [
+            "nombre",
+            "apellido",
+        ]
+
+
+class ClienteListView(ExportMixin, tables.SingleTableView):
+    table_class = ClienteTable
     model = Cliente
+    filter_class = ClienteFilter
     template_name = "clientes/clientes.html"
-    context_object_name = "clientes"
-    ordering = ["id"]
-    paginate_by = 10
+    export_formats = ("csv", "xlsx")
+    table_pagination = {"per_page": 20}
+    exclude_columns = ("opciones",)
 
-    def get_queryset(self):
-        """ Permite buscar en un form dentro de la misma página
-        con el formato `q?texto` """
-
-        queryset = super(ClienteListView, self).get_queryset()
-        query = self.request.GET.get("q")
-        if query:
-            return queryset.filter(
-                Q(nombre__icontains=query)
-                | Q(apellido__icontains=query)
-                | Q(email__icontains=query)
-            )
-        return queryset
+    def get_table_data(self):
+        """
+            Sobreescribe el método utilizado para obtener los registros de la tabla
+            De esta manera se devuelve sólo 1 tabla, que puede o no estar filtrada.
+            https://stackoverflow.com/a/15129259/6389248
+        """
+        self.filter = self.filter_class(
+            self.request.GET, queryset=super().get_table_data()
+        )
+        return self.filter.qs
 
     def get_context_data(self, **kwargs):
-        """ Devuelve el texto buscado para usarlo en la paginación """
-        context = super(ClienteListView, self).get_context_data(**kwargs)
-        context["search_txt"] = self.request.GET.get("search", "")
+        """ Incluye el filtro en el context para poder instanciarlo en el template """
+
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
         return context
 
 
 class ClienteCreateView(SuccessMessageMixin, CreateView):
     model = Cliente
     fields = ["nombre", "apellido", "telefono", "email", "calle", "numero", "localidad"]
-    success_message = "Creado con éxito."
+    success_message = "El cliente fue creado con éxito."
 
     def get_context_data(self, **kwargs):
-        context = super(ClienteCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Devuelve una lista con los id y los nombres de localidades y provincias
         # Se usan en el form original y en el modal para crear nueva localidad
@@ -52,6 +103,9 @@ class ClienteCreateView(SuccessMessageMixin, CreateView):
         context["provincias"] = Provincia.objects.get_queryset()
 
         return context
+
+    def get_success_url(self):
+        return reverse_lazy("clientes:detail", kwargs={"pk": self.object.pk})
 
 
 class ClienteDetailView(DetailView):
@@ -70,12 +124,13 @@ class ClienteUpdateView(SuccessMessageMixin, UpdateView):
         "localidad",
         "detalles",
     ]
-    success_message = "Actualizado con éxito."
+    success_message = "El cliente fue actualizado con éxito."
 
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
 
-class ClienteDeleteView(DeleteView):
+class ClienteDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Cliente
     success_url = reverse_lazy("clientes:list")
+    success_message = "El cliente fue eliminado con éxito."

@@ -47,7 +47,13 @@ class InsumosCompra(BaseModel):
         Compra, on_delete=models.CASCADE, related_name="insumos_comprados"
     )
     insumo = models.ForeignKey("productos.Insumo", on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField()
+    cantidad = models.DecimalField(
+        default=0,
+        max_digits=4,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
+
     precio_compra = models.DecimalField(
         max_digits=6,
         decimal_places=2,
@@ -60,3 +66,8 @@ class InsumosCompra(BaseModel):
 
     def __str__(self):
         return f"{self.cantidad} - {self.insumo.nombre}"
+
+    @property
+    def precio_unitario(self) -> float:
+        """ Calcula el precio unitario de cada insumo de la compra """
+        return self.precio_compra / self.cantidad

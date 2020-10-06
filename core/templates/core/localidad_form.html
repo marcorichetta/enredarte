@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block title %}
+Crear Localidad
+{% endblock title %}
+
+{% block content %}
+    
+<!-- Form -->
+<div class="d-grid p-3">
+    
+    {% block breadcrumb %}
+        {% include 'breadcrumb.html' with url_listado='core:localidades-list' plural="Localidades" create=True %}
+    {% endblock breadcrumb %}
+
+    <div class="form-container">
+        <legend class="border-bottom mb-3">
+            {% block legend %}
+                Crear Localidad
+            {% endblock legend %}
+        </legend>
+        <div class="col-3">
+            <form method="post">
+            {% csrf_token %}
+            {{ form.provincia|as_crispy_field }}
+            {{ form.localidad|as_crispy_field }}
+
+            {{ form.cod_postal|attr:"type:number"|attr:"min:0"|as_crispy_field }}
+
+            <div class="form-group">
+                <button class="btn btn-outline-success" type="submit">Guardar</button>
+                <a href="{% url 'core:localidades-list' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Form End -->
+
+{% endblock content %}

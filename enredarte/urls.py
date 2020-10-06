@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = []
 
 urlpatterns += [
-    path("admin/", admin.site.urls),
+    path("administracion/", admin.site.urls),
     # Root
     path("", include("core.urls", namespace="core")),
     # Apps
@@ -19,7 +19,7 @@ urlpatterns += [
     path("proveedores/", include("proveedores.urls", namespace="proveedores")),
     path("pedidos/", include("pedidos.urls", namespace="pedidos")),
     path("users/", include("users.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

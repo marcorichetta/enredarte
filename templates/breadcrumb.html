@@ -1,10 +1,26 @@
+{% comment %}
+    Este template se utiliza para mostrar los breadcrumbs en las vistas CRUD.
+    Este es un ejemplo de como se puede utilizar.
+    
+    {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" create=True %}
+{% endcomment %}
+
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{% url url_listado %}">{{ plural }}</a></li>
-        {% if update %}
-            {% include 'update_crumb.html' %}
+        {% if create %}
+            <li class="breadcrumb-item active" aria-current="page">Crear</li>
+        {% elif update %}
+            <li class="breadcrumb-item">
+                <a href="{{ object.get_absolute_url }}">
+                    {{ object }}
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Actualizar</li>
         {% else %}
+            {% comment %} Detail view {% endcomment %}
             <li class="breadcrumb-item active" aria-current="page">{{ object }}</li>
         {% endif %}
     </ol>

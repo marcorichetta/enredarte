@@ -46,6 +46,8 @@ ALLOWED_HOSTS: List[str] = env.str("ALLOWED_HOSTS").split(" ")
 
 INSTALLED_APPS: List[str] = [
     # Django
+    "dal",
+    "dal_select2",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -56,6 +58,8 @@ INSTALLED_APPS: List[str] = [
     # 3rd party
     "crispy_forms",
     "django_extensions",
+    "django_tables2",
+    "widget_tweaks",
     # My apps
     "core",
     "users",
@@ -85,12 +89,12 @@ MIDDLEWARE: List[str] = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
 
 # Enable the debug toolbar only in DEBUG mode.
-if DEBUG:
-    INSTALLED_APPS.append("debug_toolbar")
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]
+# if DEBUG:
+#     INSTALLED_APPS.append("debug_toolbar")
+#     MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+#     INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]
 
-    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
+#     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}
 
 
 ROOT_URLCONF = "enredarte.urls"
@@ -175,10 +179,9 @@ LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "login"
 
 
-# SELECT2
+# DJANGO TABLES 2
 # ------------------------------------------------------------------------------
-SELECT2_JS = os.path.join(os.path.dirname(STATIC_URL), "js/select2.min.js")
-SELECT2_CSS = os.path.join(os.path.dirname(STATIC_URL), "css/select2.min.css")
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 # SENTRY
 # ------------------------------------------------------------------------------

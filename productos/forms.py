@@ -5,15 +5,16 @@ from productos.models import Producto, Insumo, InsumosProducto
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
-    Layout,
+    Button,
+    ButtonHolder,
+    Column,
+    Div,
     Field,
     Fieldset,
-    Div,
-    Row,
     HTML,
-    ButtonHolder,
+    Layout,
+    Row,
     Submit,
-    Button,
 )
 from core.custom_layout_object import Formset
 
@@ -42,10 +43,19 @@ class ProductoForm(forms.ModelForm):
         self.helper.label_class = "col-md-3 create-label"
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
-            Div(Field("nombre"), Field("descripcion")),
+            Div(
+                Field("nombre"),
+                Field("descripcion", style="height: 5rem"),
+                css_class="col-8",
+            ),
             Div(
                 Fieldset(
-                    "Medidas", "largo", "ancho", "alto", "tiempo", css_class="col-6"
+                    "Medidas",
+                    Field("largo", min=0),
+                    Field("ancho", min=0),
+                    Field("alto", min=0),
+                    "tiempo",
+                    css_class="col-4",
                 ),
                 Fieldset(
                     "Fibrofacil utilizado",
@@ -55,18 +65,22 @@ class ProductoForm(forms.ModelForm):
                 ),
                 css_class="d-flex",
             ),
-            Div(
-                Fieldset("Otros insumos", Formset("insumos")),
-                HTML("<br>"),
-                ButtonHolder(
-                    Submit("submit", "Guardar Producto", css_class="btn-success")
-                ),
-            ),
+            Div(Fieldset("Insumos extra", Formset("insumos")),),
+            HTML("<br>"),
+            ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
         )
+
+
+class CustomChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        """ Modifica las opciones que se muestran en el select generado """
+        return f"{obj.descripcion} ({obj.unidad_medida})"
 
 
 class InsumosProductoForm(forms.ModelForm):
     """Estructura del formulario para agregar insumos al crear un producto. """
+
+    insumo = CustomChoiceField(queryset=Insumo.objects.all(),)
 
     class Meta:
         model = InsumosProducto

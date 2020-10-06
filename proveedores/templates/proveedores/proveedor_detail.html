@@ -2,20 +2,15 @@
 {% load static %}
 
 
-{% block seccion %}
-Información sobre {{ object.razon_social}}
-{% endblock seccion %}
+{% block title %}
+Proveedor {{ object.razon_social }}
+{% endblock title %}
 
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'proveedores:list' %}">Proveedores</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ object.razon_social}}</li>
-    </ol>
-</nav>
+<div class="d-grid p-3">
+{% include 'breadcrumb.html' with url_listado='proveedores:list' plural="Proveedores" %}
 
 <div class="container">
     <legend class="border-bottom mb-4">
@@ -27,13 +22,30 @@ Información sobre {{ object.razon_social}}
             <span data-feather="trash"></span>
         </a>
     </legend>
-    <ul class="list-group mb-4">
-        <li>{{object.email}}</li>
-        <li>{{object.telefono}}</li>
-        <li>{{object.cuit}}</li>
-        {% if object.detalles %}
-        <li>{{object.detalles}}</li>
-        {% endif %}
-    </ul>
+    <div class="col-6">
+        <ul class="list-group mb-4">
+            <li class="list-group-item"><b>CUIT:</b>
+                {{ object.cuit }}
+            </li>
+            <li class="list-group-item"><b>Email:</b>
+                {{ object.email }}
+            </li>
+            <li class="list-group-item"><b>Teléfono:</b>
+                {{ object.telefono }}
+            </li>
+            <li class="list-group-item"><b>Domicilio:</b>
+                {{ object.calle }} {{ object.numero }}
+            </li>
+            <li class="list-group-item"><b>Localidad:</b>
+                {{ object.localidad }}
+            </li>
+            {% if object.detalles %}
+                <li class="list-group-item"><b>Localidad:</b>
+                    {{ object.detalles }}
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
 </div>
 {% endblock content  %}

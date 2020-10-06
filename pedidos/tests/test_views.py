@@ -111,7 +111,8 @@ class Test_Nuevo_Pedido:
 
         assert round(nuevo_pedido.get_precio_total) == 1701
 
-    def NOTEST_pedido_actualizado(self, django_db_setup, productos):
+    @pytest.mark.skip(reason="Lo estoy haciendo mal")
+    def test_pedido_actualizado(self, django_db_setup, productos):
         """ Si se actualiza un pedido el precio total cambia """
 
         pedido = PedidoFactory()

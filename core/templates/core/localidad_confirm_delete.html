@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <legend class="border-bottom mb-4">Borrar Localidad</legend>
+                <h3>¿Seguro quiere eliminar la localidad<b>"{{ object.localidad }}"</b>?</h3>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Borrar</button>
+                <a href="{% url 'core:localidades-list' %}" class="btn btn-outline-secondary">Cancelar</a>                
+            </div>
+        </form>
+    </div>
+{% endblock content %}

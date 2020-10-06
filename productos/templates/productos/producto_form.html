@@ -2,18 +2,24 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="d-grid p-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'productos:list' %}">Productos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Crear Producto</li>
-        </ol>
-    </nav>
+
+
+    {% block breadcrumb %}
+    {% include 'breadcrumb.html' with url_listado='productos:list' plural="Productos" create=True %}
+    {% endblock breadcrumb %}
+
 
     <div class="content-section">
-        <legend class="border-bottom mb-3">Crear Producto</legend>
+        <legend class="border-bottom mb-3">
+            {% block legend %} Crear Producto {% endblock legend %}
+        </legend>
         <div class="col-8">
-            {% crispy form %}
+            {% comment %}
+            Incluyo el form manualmente para agregar el tipo de encoding
+            {% endcomment %}
+            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% crispy form %}
+            </form>
         </div>
     </div>
 </div>

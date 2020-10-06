@@ -1,0 +1,14 @@
+
+{% comment %}
+    Agrega 3 botones en la columna "opciones" en cada registro de una tabla
+{% endcomment %}
+    
+<a title="Detalles" class="btn btn-sm btn-outline-primary" href="{% url detail record.pk %}">
+    <span data-feather="zoom-in"></span>
+</a>
+<a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url update record.pk %}">
+    <span data-feather="edit-3"></span>
+</a>
+<a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url delete record.pk %}">
+    <span data-feather="trash"></span>
+</a>

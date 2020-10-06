@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+    {{object.localidad}}
+{% endblock title %}
+    
+
+{% block content %}
+
+<div class="d-grid p-3">
+{% include 'breadcrumb.html' with url_listado='core:localidades-list' plural="Localidades" %}
+
+    <div class="container">
+        <legend class="border-bottom mb-4">
+            {{ object.localidad }}
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'core:localidades-update' object.id %}">
+                <span data-feather="edit-3"></span>
+            </a>
+            <a class="btn btn-sm btn-outline-danger" href="{% url 'core:localidades-delete' object.id %}">
+                <span data-feather="trash"></span>
+            </a>
+        </legend>
+        <div class="col-6">
+            <ul class="list-group">
+                <li class="list-group-item"><b>Provincia:</b>
+                    {{ object.provincia }}
+                </li>
+                <li class="list-group-item"><b>Código Postal:</b>
+                    {{ object.cod_postal }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content  %}
