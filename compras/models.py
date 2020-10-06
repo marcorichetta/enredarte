@@ -47,7 +47,13 @@ class InsumosCompra(BaseModel):
         Compra, on_delete=models.CASCADE, related_name="insumos_comprados"
     )
     insumo = models.ForeignKey("productos.Insumo", on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField()
+    cantidad = models.DecimalField(
+        default=0,
+        max_digits=4,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
+
     precio_compra = models.DecimalField(
         max_digits=6,
         decimal_places=2,

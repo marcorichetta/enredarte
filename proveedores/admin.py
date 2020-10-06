@@ -5,6 +5,12 @@ from .models import Proveedor
 
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):
+
+    # https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display
+    # Modificar el qs para que muestre los objetos que fueron eliminados
+    def get_queryset(self, request):
+        return Proveedor.all_objects.all()
+
     list_display = (
         "cuit",
         "razon_social",

@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
+
+{% block title %}
+Cliente {{ object.nombre }} {{ object.apellido }}
+{% endblock title %}
+
 {% block content %}
 
 <div class="d-grid p-3">
@@ -16,14 +21,27 @@
                 <span data-feather="trash"></span>
             </a>
         </legend>
+        <div class="col-6">
             <ul class="list-group mb-4">
-                <li>{{object.email}}</li>
-                <li>{{object.telefono}}</li>
-                <li>{{object.localidad}}</li>
+                <li class="list-group-item"><b>Email:</b>
+                    {{ object.email }}
+                </li>
+                <li class="list-group-item"><b>Teléfono:</b>
+                    {{ object.telefono }}
+                </li>
+                <li class="list-group-item"><b>Domicilio:</b>
+                    {{ object.calle }} {{ object.numero }}
+                </li>
+                <li class="list-group-item"><b>Localidad:</b>
+                    {{ object.localidad }}
+                </li>
                 {% if object.detalles %}
-                    <li>{{object.detalles}}</li>
+                    <li class="list-group-item"><b>Localidad:</b>
+                        {{ object.detalles }}
+                    </li>
                 {% endif %}
             </ul>
+        </div>
     </div>
 </div>
 {% endblock content  %}
