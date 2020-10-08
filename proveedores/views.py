@@ -3,21 +3,19 @@ from core.mixins import DeleteSuccessMessageMixin
 from django.urls import reverse_lazy
 
 from django.views.generic import (
-    ListView,
     DetailView,
     CreateView,
     UpdateView,
     DeleteView,
-    TemplateView,
 )
 
 from core.models import Localidad, Provincia
 from .models import Proveedor
+from .forms import ProveedorForm
 
 import django_tables2 as tables
 from django_tables2.export.views import ExportMixin
-from django_filters import FilterSet, CharFilter, NumberFilter
-from django_filters.views import FilterView
+from django_filters import FilterSet, CharFilter
 
 
 class ProveedorTable(tables.Table):
@@ -33,6 +31,7 @@ class ProveedorTable(tables.Table):
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}
+        order_by = "id"
 
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",
@@ -84,7 +83,7 @@ class ProveedorListView(ExportMixin, tables.SingleTableView):
 
 class ProveedorCreateView(SuccessMessageMixin, CreateView):
     model = Proveedor
-    fields = ["cuit", "razon_social", "telefono", "email", "calle", "numero", "localidad"]
+    form_class = ProveedorForm
     success_message = "El proveedor fue creado con éxito."
 
     def get_context_data(self, **kwargs):

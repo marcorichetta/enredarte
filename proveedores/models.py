@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from .helpers import validar_cuit
 from core.base_model import BaseModel
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -34,3 +35,19 @@ class Proveedor(BaseModel):
 
     def get_absolute_url(self) -> str:
         return reverse("proveedores:detail", kwargs={"pk": self.pk})
+
+    def save(self, *args, **kwargs):
+        """ Si el CUIT existe entre los borrados no se puede crear el proveedor."""
+
+        qs = Proveedor.all_objects.filter(cuit=self.cuit)
+
+        # Si es mayor a 1 significa que existe un registro soft-deleted
+        if qs.count() > 1:
+
+            raise ValidationError(
+                "Un proveedor con el CUIT %(cuit)s ya existe",
+                code="cuit inválido",
+                params={"cuit": self.cuit},
+            )
+
+        return super().save(*args, **kwargs)
