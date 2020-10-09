@@ -221,7 +221,7 @@ class ProductImage(BaseModel):
 
     class Meta:
         verbose_name = "Imagen de Producto"
-        verbose_name_plural = "Imágenes de Producto"
+        verbose_name_plural = "Imágenes del Producto"
 
     def __str__(self):
         """Unicode representation of ProductImage."""
@@ -239,6 +239,10 @@ class InsumosProducto(BaseModel):
         decimal_places=1,
         validators=[MinValueValidator(Decimal("0.0"))],
     )
+
+    class Meta:
+        verbose_name = "Insumo del Producto"
+        verbose_name_plural = "Insumos del Producto"
 
     def __str__(self):
         return f"{self.cantidad} {self.insumo.unidad_medida} de {self.insumo.nombre}"

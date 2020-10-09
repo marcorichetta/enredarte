@@ -62,7 +62,7 @@ class InsumosCompra(BaseModel):
     )
 
     class Meta:
-        verbose_name_plural = "InsumosCompras"
+        verbose_name_plural = "Insumos Comprados"
 
     def __str__(self):
         return f"{self.cantidad} - {self.insumo.nombre}"

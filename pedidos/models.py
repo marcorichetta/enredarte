@@ -85,6 +85,9 @@ class ProductosPedido(BaseModel):
     producto = models.ForeignKey("productos.Producto", on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
 
+    class Meta:
+        verbose_name_plural = "Productos Pedidos"
+
     def __str__(self) -> str:
         return f"{self.cantidad} - {self.producto.nombre}"
 
