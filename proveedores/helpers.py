@@ -9,7 +9,7 @@ def validar_cuit(cuit):
     cuit = cuit.replace(" ", "")
     if len(cuit) != 11:
         raise ValidationError(
-            ("%(value)s debe contener 11 dígitos"), params={"value": cuit},
+            ("El CUIT %(value)s debe contener 11 dígitos"), params={"value": cuit},
         )
     if not cuit.isdigit():
         raise ValidationError(

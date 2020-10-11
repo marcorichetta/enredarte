@@ -103,16 +103,7 @@ class ProveedorDetailView(DetailView):
 
 class ProveedorUpdateView(SuccessMessageMixin, UpdateView):
     model = Proveedor
-    fields = [
-        "cuit",
-        "razon_social",
-        "telefono",
-        "email",
-        "calle",
-        "numero",
-        "localidad",
-        "detalles",
-    ]
+    form_class = ProveedorForm
     success_message = "El proveedor fue actualizado con éxito."
 
     # Modify the template used for this view

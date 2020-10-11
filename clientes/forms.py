@@ -1,18 +1,19 @@
-from proveedores.models import Proveedor
+from clientes.models import Cliente
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
 
-class ProveedorForm(ModelForm):
-    """Form definition for Proveedor."""
+class ClienteForm(ModelForm):
+    """Form definition for Cliente."""
 
     class Meta:
-        """Meta definition for Proveedorform."""
+        """Meta definition for Clienteform."""
 
-        model = Proveedor
+        model = Cliente
         fields = (
+            "nombre",
+            "apellido",
             "cuit",
-            "razon_social",
             "telefono",
             "email",
             "calle",
@@ -21,7 +22,7 @@ class ProveedorForm(ModelForm):
         )
 
     def clean_cuit(self):
-        """ Validar no existe un proveedor soft-deleted con el mismo CUIT"""
+        """ Validar no existe un cliente soft-deleted con el mismo CUIT"""
 
         cuit = self.cleaned_data.get("cuit")
 
@@ -33,7 +34,7 @@ class ProveedorForm(ModelForm):
 
         if qs.exists():
             error = ValidationError(
-                "Un proveedor con el CUIT %(cuit)s ya existe. Por favor avise al administrador.",
+                "Un cliente con el CUIT %(cuit)s ya existe. Por favor avise al administrador.",
                 code="cuit duplicado",
                 params={"cuit": cuit},
             )

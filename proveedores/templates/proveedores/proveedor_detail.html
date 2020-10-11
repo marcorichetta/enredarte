@@ -25,7 +25,7 @@ Proveedor {{ object.razon_social }}
     <div class="col-6">
         <ul class="list-group mb-4">
             <li class="list-group-item"><b>CUIT:</b>
-                {{ object.cuit }}
+                {{ object.cuit|default:"" }}
             </li>
             <li class="list-group-item"><b>Email:</b>
                 {{ object.email }}

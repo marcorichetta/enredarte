@@ -12,9 +12,10 @@ class Proveedor(BaseModel):
     cuit = models.CharField(
         max_length=13,
         unique=True,
+        blank=True,
+        null=True,
         validators=[validar_cuit],
         help_text="Ingrese el CUIT con el siguiente formato: 20-12345678-9",
-        blank=True,
     )
     telefono = models.CharField(max_length=64, blank=True)
     email = models.EmailField(blank=True)
@@ -39,15 +40,16 @@ class Proveedor(BaseModel):
     def save(self, *args, **kwargs):
         """ Si el CUIT existe entre los borrados no se puede crear el proveedor."""
 
-        qs = Proveedor.all_objects.filter(cuit=self.cuit)
+        if self.cuit:
+            qs = Proveedor.all_objects.filter(cuit=self.cuit)
 
-        # Si es mayor a 1 significa que existe un registro soft-deleted
-        if qs.count() > 1:
+            # Si es mayor a 1 significa que existe un registro soft-deleted
+            if qs.count() > 1:
 
-            raise ValidationError(
-                "Un proveedor con el CUIT %(cuit)s ya existe",
-                code="cuit inválido",
-                params={"cuit": self.cuit},
-            )
+                raise ValidationError(
+                    "Un proveedor con el CUIT %(cuit)s ya existe",
+                    code="cuit duplicado",
+                    params={"cuit": self.cuit},
+                )
 
         return super().save(*args, **kwargs)
