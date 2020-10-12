@@ -49,3 +49,31 @@ def test_form_proveedor_cuit_duplicado_muestra_error_SOFT_DELETE(form_proveedor)
     error_cuit = errores.get("cuit")[0]
 
     assert error_cuit.code == "cuit duplicado"
+
+
+def forms_cuit_en_blanco():
+
+    # El pk de la localidad está hardcoded. Se crea en el siguiente test.
+    return [
+        {"cuit": "", "razon_social": "Prueba 3", "localidad": 1,},
+        {"cuit": "   ", "razon_social": "Prueba 3", "localidad": 1,},
+    ]
+
+
+@pytest.mark.django_db()
+@pytest.mark.parametrize("form_data", forms_cuit_en_blanco())
+def test_form_con_cuit_en_blanco(form_data):
+    """
+        Si se crea un proveedor con el cuit vacío se guarda con None.
+
+        https://docs.djangoproject.com/en/3.1/ref/models/fields/#null
+        https://stackoverflow.com/a/15534514/6389248
+    """
+
+    LocalidadFactory()
+
+    form = ProveedorForm(data=form_data)
+
+    assert form.is_valid()
+    assert form.cleaned_data["cuit"] is None
+    assert form.instance.cuit is None

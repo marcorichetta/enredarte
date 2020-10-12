@@ -1,11 +1,21 @@
 from django.db import models
 from django.urls import reverse
 from core.base_model import BaseModel
+from proveedores.helpers import validar_cuit
+from django.core.exceptions import ValidationError
 
 
 class Cliente(BaseModel):
     nombre = models.CharField(max_length=64)
     apellido = models.CharField(max_length=64)
+    cuit = models.CharField(
+        max_length=13,
+        unique=True,
+        blank=True,
+        null=True,
+        validators=[validar_cuit],
+        help_text="Ingrese el CUIT con el siguiente formato: 20-12345678-9",
+    )
     email = models.EmailField(blank=True)
     telefono = models.CharField(max_length=64, blank=True)
     calle = models.CharField(max_length=64, blank=True)
@@ -29,3 +39,20 @@ class Cliente(BaseModel):
 
     def get_absolute_url(self) -> str:
         return reverse("clientes:detail", kwargs={"pk": self.id})
+
+    def save(self, *args, **kwargs):
+        """ Si el CUIT existe entre los borrados no se puede crear el cliente."""
+
+        if self.cuit:
+            qs = Cliente.all_objects.filter(cuit=self.cuit)
+
+            # Si es mayor a 1 significa que existe un registro soft-deleted
+            if qs.count() > 1:
+
+                raise ValidationError(
+                    "Un cliente con el CUIT %(cuit)s ya existe",
+                    code="cuit duplicado",
+                    params={"cuit": self.cuit},
+                )
+
+        return super().save(*args, **kwargs)

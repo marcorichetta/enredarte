@@ -5,7 +5,6 @@ from django.db import IntegrityError
 
 
 @pytest.mark.django_db()
-# @pytest.mark.skip(reason="No tiene sentido ahora")
 def test_soft_delete_no_deja_crear_en_BD_unique_key():
     """ Crear proveedor con mismo CUIT que un registro existente da error de integridad """
 

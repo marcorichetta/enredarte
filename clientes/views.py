@@ -1,23 +1,14 @@
-from django.contrib.messages.views import SuccessMessageMixin
-from core.mixins import DeleteSuccessMessageMixin
-from django.urls import reverse_lazy
-
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-)
-
-from core.models import Provincia, Localidad
-from .models import Cliente
-
 import django_tables2 as tables
+from core.mixins import DeleteSuccessMessageMixin
+from core.models import Localidad, Provincia
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
+from django_filters import CharFilter, FilterSet
 from django_tables2.export.views import ExportMixin
-from django_filters import FilterSet, CharFilter
-from django_filters.views import FilterView
+
+from .forms import ClienteForm
+from .models import Cliente
 
 
 class ClienteTable(tables.Table):
@@ -91,7 +82,7 @@ class ClienteListView(ExportMixin, tables.SingleTableView):
 
 class ClienteCreateView(SuccessMessageMixin, CreateView):
     model = Cliente
-    fields = ["nombre", "apellido", "telefono", "email", "calle", "numero", "localidad"]
+    form_class = ClienteForm
     success_message = "El cliente fue creado con éxito."
 
     def get_context_data(self, **kwargs):
@@ -114,16 +105,7 @@ class ClienteDetailView(DetailView):
 
 class ClienteUpdateView(SuccessMessageMixin, UpdateView):
     model = Cliente
-    fields = [
-        "nombre",
-        "apellido",
-        "telefono",
-        "email",
-        "calle",
-        "numero",
-        "localidad",
-        "detalles",
-    ]
+    form_class = ClienteForm
     success_message = "El cliente fue actualizado con éxito."
 
     # Modify the template used for this view
