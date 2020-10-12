@@ -1,7 +1,7 @@
 /* SIDEBAR STYLES */
 
 #sidebar {
-	width: 14rem !important; /* Igual que width de navbar 'Enredarte' */
+	width: 12rem !important; /* Igual que width de navbar 'Enredarte' */
 	min-height: 100vh;
 	z-index: 100; /* Behind the navbar */
 	box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
@@ -13,10 +13,10 @@
 	text-decoration: none;
 	font-size: 1rem;
 	font-weight: 800;
-	padding: 1.5rem 1rem;
-	text-align: center;
+    padding: 0.75rem;
+	/* text-align: center;
 	text-transform: uppercase;
-	letter-spacing: 0.05rem;
+	letter-spacing: 0.05rem; */
 	z-index: 1;
 }
 
@@ -26,7 +26,7 @@
 }
 
 #sidebar.hide {
-	margin-left: -14rem;
+	margin-left: -12rem;
 }
 
 .sidebar-sticky {
@@ -50,6 +50,11 @@
 
 .sidebar .nav-link.active {
 	color: #007bff;
+}
+
+#sidebar ul li a:hover {
+    color: #007bff;
+    background: #fff;
 }
 
 .sidebar .nav-link:hover .feather,

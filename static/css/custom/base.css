@@ -31,7 +31,7 @@ body {
 }
 
 .content-wrapper {
-	width: calc(100% - 14rem); /* Tamaño de la sidebar */
+	width: calc(100% - 12rem); /* Tamaño de la sidebar */
 	min-height: 100vh;
 	transition: all 0.3s;
 }
