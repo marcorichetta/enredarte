@@ -43,6 +43,7 @@ INSTALLED_APPS: List[str] = [
     "dal",
     "dal_select2",
     "jazzmin",
+    "django.contrib.admindocs",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

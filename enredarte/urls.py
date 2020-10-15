@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = []
 
 urlpatterns += [
+    path("administracion/doc/", include("django.contrib.admindocs.urls")),
     path("administracion/", admin.site.urls),
     # Root
     path("", include("core.urls", namespace="core")),

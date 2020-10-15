@@ -23,6 +23,7 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
         # Url that gets reversed (Permissions can be added)
         {"name": "Inicio", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Volver al sitio", "url": "core:home", "new_window": True},
         # external url that opens in a new window (Permissions can be added)
         {"name": "Soporte", "url": "https://marcorichetta.now.sh", "new_window": True},
         # model admin to link to (Permissions checked against model)
@@ -103,7 +104,7 @@ JAZZMIN_SETTINGS = {
     "custom_css": None,
     "custom_js": None,
     # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": True,
+    "show_ui_builder": False,
     ###############
     # Change view #
     ###############
