@@ -1,17 +1,15 @@
 import re
 from django import forms
-from productos.models import Producto, Insumo, InsumosProducto
-
+from productos.models import Producto, Insumo, InsumosProducto, Regular, Irregular
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
-    Button,
     ButtonHolder,
-    Column,
     Div,
     Field,
     Fieldset,
     HTML,
+    Hidden,
     Layout,
     Row,
     Submit,
@@ -19,7 +17,17 @@ from crispy_forms.layout import (
 from core.custom_layout_object import Formset
 
 
-class ProductoForm(forms.ModelForm):
+# class ProductoIrregularForm(forms.ModelForm):
+#     """Form para producto irregular"""
+
+#     class Meta:
+#         """Meta definition for ProductoIrregularform."""
+
+#         model = Producto
+#         fields = ('nombre', 'descripcion', 'detalles', 'tiempo', 'insumos')
+
+
+class ProductoRegularForm(forms.ModelForm):
     """ Formulario principal del Producto. Se utiliza para la creación y update de los mismos """
 
     # Filtra los insumos disponibles para base y lados
@@ -32,11 +40,11 @@ class ProductoForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Producto
+        model = Regular
         exclude = ("insumos",)
 
     def __init__(self, *args, **kwargs):
-        super(ProductoForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.form_class = "form-horizontal"
@@ -45,6 +53,7 @@ class ProductoForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field("nombre"),
+                Hidden("tipo", "regular"),  # Campo 'tipo' oculto con valor regular
                 Field("descripcion", style="height: 5rem"),
                 css_class="col-8",
             ),

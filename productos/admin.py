@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import Insumo, Unidad, Producto, StockInsumo, InsumosProducto, ProductImage
+from .models import (
+    Insumo,
+    Unidad,
+    Producto,
+    StockInsumo,
+    InsumosProducto,
+    ProductImage,
+    Regular,
+    Irregular,
+)
 
 # Register your models here.
 
@@ -71,19 +80,78 @@ class ProductoAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "nombre",
+        "tipo",
         "descripcion",
+        "tiempo",
+        "created",
+        "modified",
+        "is_removed",
+    )
+
+    search_fields = ["id, nombre"]
+    inlines = [ProductImageInline, InsumoInline]
+
+
+@admin.register(Regular)
+class RegularAdmin(admin.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        """ Renderizar el form con el campo irregular por defecto """
+
+        form = super().get_form(request, obj=None, **kwargs)
+        form.base_fields["tipo"].initial = "regular"
+
+        return form
+
+    list_display = (
+        "id",
+        "tipo",
+        "nombre",
+        "descripcion",
+        "tiempo",
         "largo",
         "ancho",
         "alto",
-        "tiempo",
         "insumo_base",
         "insumo_lados",
         "created",
         "modified",
         "is_removed",
     )
+    list_filter = (
+        "created",
+        "modified",
+        "is_removed",
+        "insumo_base",
+        "insumo_lados",
+    )
 
-    list_filter = ("insumo_base", "insumo_lados", "created", "modified", "is_removed")
+    search_fields = ["id, nombre"]
+    inlines = [ProductImageInline, InsumoInline]
+
+
+@admin.register(Irregular)
+class IrregularAdmin(admin.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        """ Renderizar el form con el campo irregular por defecto """
+
+        form = super().get_form(request, obj=None, **kwargs)
+        form.base_fields["tipo"].initial = "irregular"
+
+        return form
+
+    list_display = (
+        "id",
+        "tipo",
+        "nombre",
+        "descripcion",
+        "tiempo",
+        "detalles",
+        "precio",
+        "created",
+        "modified",
+        "is_removed",
+    )
+    list_filter = ("created", "modified", "is_removed")
     search_fields = ["id, nombre"]
     inlines = [ProductImageInline, InsumoInline]
 

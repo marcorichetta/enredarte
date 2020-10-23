@@ -2,8 +2,8 @@ from django.urls import path, include
 from .views import (
     ProductoListView,
     ProductoDetailView,
-    ProductoCreateView,
-    ProductoUpdateView,
+    ProductoRegularCreateView,
+    ProductoRegularUpdateView,
     ProductoDeleteView,
 )
 
@@ -26,10 +26,10 @@ insumos_urlpatterns = [
 app_name = "productos"
 urlpatterns = [
     path("", ProductoListView.as_view(), name="list"),
-    path("new/", ProductoCreateView.as_view(), name="create"),
+    path("new/", ProductoRegularCreateView.as_view(), name="create"),
     path("<int:pk>/", ProductoDetailView.as_view(), name="detail"),
     path("<int:pk>/delete", ProductoDeleteView.as_view(), name="delete"),
-    path("<int:pk>/update/", ProductoUpdateView.as_view(), name="update"),
+    path("<int:pk>/update/", ProductoRegularUpdateView.as_view(), name="update"),
     # Insumos
     path("insumos/", include(insumos_urlpatterns)),
 ]

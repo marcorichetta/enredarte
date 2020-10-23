@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from decimal import Decimal
 from django.core.validators import MinValueValidator
+from model_utils import Choices
 from core.base_model import BaseModel
 
 from variables.models import Variable
@@ -93,8 +94,45 @@ class StockInsumo(models.Model):
 class Producto(BaseModel):
     """ Este modelo se refiere al Producto Genérico: Bandeja, Bastidor, Reloj """
 
+    TIPOS = Choices(("regular", "Regular"), ("irregular", "Irregular"))
+
+    ### Campos comunes
+
+    tipo = models.CharField(max_length=20, choices=TIPOS, default=TIPOS.regular)
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField(blank=True)
+    tiempo = models.PositiveIntegerField(
+        default=30, help_text="Minutos para realizar el producto"
+    )
+
+    # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
+    insumos = models.ManyToManyField(
+        Insumo, through="InsumosProducto", through_fields=("producto", "insumo")
+    )
+
+    def __str__(self):
+        return self.nombre
+
+    def get_absolute_url(self):
+        return reverse("productos:detail", kwargs={"pk": self.pk})
+
+    def image_url(self):
+        """ Devuelve la url de la 1ra imagen si es que existe """
+        img = self.images.first()
+        return img.imagen.url if img else img
+
+    def get_precio(self):
+
+        if self.tipo == self.TIPOS.irregular:
+            # Accede a la instancia del modelo Irregular y devuelve el campo 'precio'
+            return self.irregular.precio
+
+        return self.regular.precio_venta_terminado()
+
+
+class Regular(Producto):
+    """Producto Regular."""
+
     largo = models.DecimalField(
         default=0,
         help_text="Largo en cm",
@@ -116,9 +154,6 @@ class Producto(BaseModel):
         decimal_places=1,
         validators=[MinValueValidator(Decimal("0.0"))],
     )
-    tiempo = models.PositiveIntegerField(
-        default=30, help_text="Minutos para realizar el producto"
-    )
 
     # Default - MDF-3mm
     insumo_base = models.ForeignKey(
@@ -138,21 +173,15 @@ class Producto(BaseModel):
         help_text="Insumo utilizado para los lados",
     )
 
-    # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through_fields
-    insumos = models.ManyToManyField(
-        Insumo, through="InsumosProducto", through_fields=("producto", "insumo")
-    )
+    class Meta:
+        """Meta definition for Regular."""
+
+        verbose_name = "Producto Regular"
+        verbose_name_plural = "Productos Regulares"
 
     def __str__(self):
+        """Unicode representation of Regular."""
         return self.nombre
-
-    def get_absolute_url(self):
-        return reverse("productos:detail", kwargs={"pk": self.pk})
-
-    def image_url(self):
-        """ Devuelve la url de la 1ra imagen si es que existe """
-        img = self.images.first()
-        return img.imagen.url if img else img
 
     # TODO - Optimizar la cantidad de queries que se hacen para traer las variables
     def precio_costo(self, variables) -> float:
@@ -208,6 +237,28 @@ class Producto(BaseModel):
     @property
     def get_insumos(self):
         return self.insumosproducto_set.all()
+
+
+class Irregular(Producto):
+    """Producto Irregular."""
+
+    detalles = models.TextField(help_text="Detalles de armado del producto", blank=True)
+    precio = models.DecimalField(
+        help_text="Precio de venta del producto en $",
+        max_digits=6,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
+
+    class Meta:
+        """Meta definition for Irregular."""
+
+        verbose_name = "Producto Irregular"
+        verbose_name_plural = "Productos Irregulares"
+
+    def __str__(self):
+        """Unicode representation of Irregular."""
+        return self.nombre
 
 
 class ProductImage(BaseModel):

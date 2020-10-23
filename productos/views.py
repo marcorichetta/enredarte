@@ -21,8 +21,10 @@ from django_filters.views import FilterView
 from django_tables2.export.views import ExportMixin
 from variables.models import Variable
 
-from .forms import InsumosProductoFormset, ProductoForm
+from .forms import InsumosProductoFormset, ProductoRegularForm
 from .models import Insumo, InsumosProducto, Producto, Unidad
+from django_filters.filters import ChoiceFilter
+from productos.models import Regular
 
 
 class ProductoTable(tables.Table):
@@ -30,10 +32,11 @@ class ProductoTable(tables.Table):
         model = Producto
         fields = (
             "id",
+            "tipo",
             "nombre",
-            "insumo_base",
-            "insumo_lados",
+            "descripcion",
             "precio_venta_terminado",
+            "precio",
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}
@@ -59,9 +62,13 @@ class ProductoFilter(FilterSet):
         field_name="nombre", lookup_expr="icontains", label="Buscar por nombre"
     )
 
+    tipo = ChoiceFilter(
+        field_name="tipo", label="Filtrar por tipo", choices=Producto.TIPOS
+    )
+
     class Meta:
         model = Producto
-        fields = ["nombre"]
+        fields = ["nombre", "tipo"]
 
 
 class ProductoListView(ExportMixin, tables.SingleTableView):
@@ -110,9 +117,9 @@ class ProductoListView(ExportMixin, tables.SingleTableView):
         return context
 
 
-class ProductoCreateView(SuccessMessageMixin, CreateView):
-    model = Producto
-    form_class = ProductoForm
+class ProductoRegularCreateView(SuccessMessageMixin, CreateView):
+    model = Regular
+    form_class = ProductoRegularForm
     template_name = "productos/producto_form.html"
     success_message = "El producto fue creado con éxito."
 
@@ -148,9 +155,9 @@ class ProductoCreateView(SuccessMessageMixin, CreateView):
         return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
 
 
-class ProductoUpdateView(SuccessMessageMixin, UpdateView):
-    model = Producto
-    form_class = ProductoForm
+class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
+    model = Regular
+    form_class = ProductoRegularForm
     success_message = "El producto fue actualizado con éxito."
     # Modify the template used for this view
     template_name_suffix = "_update_form"
@@ -190,7 +197,7 @@ class ProductoUpdateView(SuccessMessageMixin, UpdateView):
 
 
 class ProductoDetailView(DetailView):
-    model = Producto
+    model = Regular
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()
@@ -213,9 +220,9 @@ class ProductoDetailView(DetailView):
     #     return qs
 
     def get_context_data(self, *args, **kwargs):
-        context = super(ProductoDetailView, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
 
-        prod: Producto = self.get_object()
+        prod: Regular = self.get_object()
         var: Variable = Variable.objects.get(pk=1)
 
         context["precios"] = {
