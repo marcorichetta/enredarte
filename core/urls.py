@@ -13,19 +13,21 @@ app_name = "core"
 urlpatterns = [
     path("", Dashboard.as_view(), name="home"),
     # Usada con AJAX en el modalform de creación del cliente
-    path("localidad/", LocalidadListView.as_view(), name="localidades-list"),
-    path("localidad/new/", LocalidadCreateView.as_view(), name="localidades-create"),
-    path("localidad/<int:pk>/", LocalidadDetailView.as_view(), name="localidades-detail"),
+    path("localidades/", LocalidadListView.as_view(), name="localidades-list"),
+    path("localidades/new/", LocalidadCreateView.as_view(), name="localidades-create"),
     path(
-        "localidad/<int:pk>/update/",
+        "localidades/<int:pk>/", LocalidadDetailView.as_view(), name="localidades-detail"
+    ),
+    path(
+        "localidades/<int:pk>/update/",
         LocalidadUpdateView.as_view(),
         name="localidades-update",
     ),
     path(
-        "localidad/<int:pk>/delete/",
+        "localidades/<int:pk>/delete/",
         LocalidadDeleteView.as_view(),
         name="localidades-delete",
     ),
     # AJAX
-    path("localidad/ajax-new/", LocalidadCreate, name="crearLocalidad"),
+    path("localidades/ajax-new/", LocalidadCreate, name="crearLocalidad"),
 ]
