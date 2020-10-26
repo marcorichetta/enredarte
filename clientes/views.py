@@ -33,6 +33,7 @@ class ClienteTable(tables.Table):
             "update": "clientes:update",
             "delete": "clientes:delete",
         },
+        orderable=False,
     )
 
 

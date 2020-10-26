@@ -40,6 +40,7 @@ class ProveedorTable(tables.Table):
             "update": "proveedores:update",
             "delete": "proveedores:delete",
         },
+        orderable=False,
     )
 
 

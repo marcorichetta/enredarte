@@ -25,6 +25,8 @@ class CompraTable(tables.Table):
         precio = floatformat(value)
         return f"$ {precio}"
 
+    precio_total = tables.Column(verbose_name="Precio total", orderable=False)
+
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",
         extra_context={
@@ -32,6 +34,7 @@ class CompraTable(tables.Table):
             "update": "compras:update",
             "delete": "compras:delete",
         },
+        orderable=False,
     )
 
 

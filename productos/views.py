@@ -10,6 +10,9 @@ from django.shortcuts import get_object_or_404, redirect
 
 
 class ProductoTable(tables.Table):
+
+    get_precio = tables.Column(verbose_name="Precio", orderable=False)
+
     class Meta:
         model = Producto
         fields = (
@@ -17,14 +20,13 @@ class ProductoTable(tables.Table):
             "tipo",
             "nombre",
             "descripcion",
-            "precio_venta_terminado",
-            "precio",
+            "get_precio",
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}
         order_by = "id"
 
-    def render_precio_venta_terminado(self, value):
+    def render_get_precio(self, value):
         """ Función para modificar como se muestra el precio de venta en el template """
         precio = floatformat(value)
         return f"$ {precio}"
@@ -36,6 +38,7 @@ class ProductoTable(tables.Table):
             "update": "productos:update",
             "delete": "productos:delete",
         },
+        orderable=False,
     )
 
 
@@ -61,6 +64,17 @@ class ProductoListView(ExportMixin, tables.SingleTableView):
     export_formats = ("csv", "xlsx")
     table_pagination = {"per_page": 10}
     exclude_columns = ("opciones",)  # Excluir columnas del export
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        modified_qs = (
+            qs.select_related("regular")
+            .select_related("irregular")
+            .prefetch_related("insumos")
+        )
+
+        return modified_qs
 
     def get_table_data(self):
         """

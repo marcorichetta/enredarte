@@ -43,6 +43,7 @@ class PedidoTable(tables.Table):
             "update": "pedidos:update",
             "delete": "pedidos:delete",
         },
+        orderable=False,
     )
 
 

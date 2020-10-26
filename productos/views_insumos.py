@@ -43,6 +43,7 @@ class InsumoTable(tables.Table):
             "update": "productos:insumos-update",
             "delete": "productos:insumos-delete",
         },
+        orderable=False,
     )
 
 

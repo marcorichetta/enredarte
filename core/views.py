@@ -104,6 +104,7 @@ class LocalidadTable(tables.Table):
             "update": "core:localidades-update",
             # "delete": "core:localidades-delete",
         },
+        orderable=False,
     )
 
 
@@ -136,6 +137,11 @@ class LocalidadListView(ExportMixin, tables.SingleTableView):
     export_formats = ("csv", "xlsx")
     table_pagination = {"per_page": 20}
     exclude_columns = ("opciones",)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        return qs.select_related("provincia")
 
     def get_table_data(self):
         """
