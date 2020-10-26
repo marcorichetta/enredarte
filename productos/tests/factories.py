@@ -33,7 +33,7 @@ class InsumoFactory(factory.django.DjangoModelFactory):
 
 class ProductoFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = "productos.Producto"
+        model = "productos.Regular"
 
     nombre = factory.Sequence(lambda n: "Producto %d" % n)  # Producto N
     tiempo = factory.Faker("pyint", min_value=0, max_value=360)

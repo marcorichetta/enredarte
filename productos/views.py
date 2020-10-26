@@ -1,28 +1,12 @@
 import django_tables2 as tables
-from core.mixins import DeleteSuccessMessageMixin
-from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
-from django.db import transaction
-from django.db.models import DecimalField, ExpressionWrapper
-from django.db.models.expressions import F
-from django.shortcuts import render
 from django.template.defaultfilters import floatformat
-from django.urls import reverse_lazy
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    FormView,
-    ListView,
-    UpdateView,
-)
-from django_filters import CharFilter, FilterSet, NumberFilter
-from django_filters.views import FilterView
+from django_filters.filters import CharFilter, ChoiceFilter
+from django_filters import FilterSet
 from django_tables2.export.views import ExportMixin
-from variables.models import Variable
 
-from .forms import InsumosProductoFormset, ProductoForm
-from .models import Insumo, InsumosProducto, Producto, Unidad
+from .models import Producto
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
 
 
 class ProductoTable(tables.Table):
@@ -30,10 +14,11 @@ class ProductoTable(tables.Table):
         model = Producto
         fields = (
             "id",
+            "tipo",
             "nombre",
-            "insumo_base",
-            "insumo_lados",
+            "descripcion",
             "precio_venta_terminado",
+            "precio",
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}
@@ -59,9 +44,13 @@ class ProductoFilter(FilterSet):
         field_name="nombre", lookup_expr="icontains", label="Buscar por nombre"
     )
 
+    tipo = ChoiceFilter(
+        field_name="tipo", label="Filtrar por tipo", choices=Producto.TIPOS
+    )
+
     class Meta:
         model = Producto
-        fields = ["nombre"]
+        fields = ["nombre", "tipo"]
 
 
 class ProductoListView(ExportMixin, tables.SingleTableView):
@@ -110,124 +99,30 @@ class ProductoListView(ExportMixin, tables.SingleTableView):
         return context
 
 
-class ProductoCreateView(SuccessMessageMixin, CreateView):
-    model = Producto
-    form_class = ProductoForm
-    template_name = "productos/producto_form.html"
-    success_message = "El producto fue creado con éxito."
+def product_dispatch(request, pk: int):
+    """
+        View para redireccionar los productos regulares e irregulares.
+        Recibe la request con el pk del producto y redirige según el tipo de producto.
+    """
+    prod: Producto = get_object_or_404(Producto, pk=pk)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Le agregamos los insumos al context para usarlos en el template
-        if self.request.POST:
-            context["insumos"] = InsumosProductoFormset(self.request.POST)
-        else:
-            context["insumos"] = InsumosProductoFormset()
-        return context
+    if prod.tipo == Producto.TIPOS.regular:
 
-    def form_valid(self, form):
-        # Obtener info de producto e insumos posteados en el form
-        context = self.get_context_data()
-        formset_insumos = context["insumos"]
+        if "update" in request.path:
+            return redirect("productos:regular-update", pk=pk)
 
-        # Guardar el Producto
-        self.object = form.save()
+        if "delete" in request.path:
+            return redirect("productos:regular-delete", pk=pk)
 
-        # Si son válidos los insumos se guardan
-        if formset_insumos.is_valid():
-            formset_insumos.instance = self.object
-            formset_insumos.save()
+        return redirect("productos:regular-detail", pk=pk)
 
-            # Guardar producto completo
-            return super().form_valid(form)
+    else:
+        if "update" in request.path:
+            return redirect("productos:irregular-update", pk=pk)
 
-        # Repopular form con errores
-        return self.render_to_response(self.get_context_data(form=form))
+        if "delete" in request.path:
+            return redirect("productos:irregular-delete", pk=pk)
 
-    def get_success_url(self):
-        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
+        return redirect("productos:irregular-detail", pk=pk)
 
-
-class ProductoUpdateView(SuccessMessageMixin, UpdateView):
-    model = Producto
-    form_class = ProductoForm
-    success_message = "El producto fue actualizado con éxito."
-    # Modify the template used for this view
-    template_name_suffix = "_update_form"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Enviar el objeto como instancia para ser actualizado
-        if self.request.POST:
-            context["insumos"] = InsumosProductoFormset(
-                self.request.POST, instance=self.object
-            )
-        else:
-            context["insumos"] = InsumosProductoFormset(instance=self.object)
-        return context
-
-    def form_valid(self, form):
-        # Obtenemos info de producto e insumos posteados en el form
-        context = self.get_context_data()
-        formset_insumos = context["insumos"]
-
-        # Guardar producto
-        self.object = form.save()
-
-        if formset_insumos.is_valid():
-            formset_insumos.instance = self.object
-            formset_insumos.save()
-
-            # Guardar producto completo
-            return super().form_valid(form)
-
-        # Repopular form con errores
-        return self.render_to_response(self.get_context_data(form=form))
-
-    def get_success_url(self):
-        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
-
-
-class ProductoDetailView(DetailView):
-    model = Producto
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-
-    #     v: Variable = Variable.objects.get(pk=1)
-    #     qs = queryset.annotate(
-    #         precioBase=(F('largo') / 100) * (F('ancho') / 100) * F('insumo_base__precio'),
-    #         precioLatCorto=(F('ancho') / 100) * (F('alto') / 100),
-    #         precioLatLargo=(F('largo') / 100) * (F('alto') / 100),
-    #         horas=F('tiempo') / 60,
-    #         precio_tiempo=F('horas') * v.precio_hora,
-    #         precio_costo=ExpressionWrapper(F('precioBase') + F('precioLatCorto') + F('precioLatLargo') + F('precio_tiempo'), output_field=DecimalField()),
-    #         precio_venta_crudo=F('precio_costo') * ((v.ganancia_por_menor / 100) + 1),
-    #         tiempo_terminado=F('tiempo') * 2 / 60,
-    #         precio_tiempo_terminado=F('tiempo_terminado') * v.precio_hora,
-    #         precio_terminado=ExpressionWrapper(F('precio_costo') + v.precio_pintado + F('precio_tiempo_terminado'), output_field=DecimalField()),
-    #         precio_venta_terminado=F('precio_terminado') * ((v.ganancia_por_menor / 100) + 1)
-    #     )
-
-    #     return qs
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ProductoDetailView, self).get_context_data(*args, **kwargs)
-
-        prod: Producto = self.get_object()
-        var: Variable = Variable.objects.get(pk=1)
-
-        context["precios"] = {
-            "precio_costo": prod.precio_costo(variables=var),
-            "precio_venta_crudo": prod.precio_venta_crudo(),
-            "precio_terminado": prod.precio_terminado(variables=var),
-        }
-
-        return context
-
-
-class ProductoDeleteView(DeleteSuccessMessageMixin, DeleteView):
-    model = Producto
-    success_url = reverse_lazy("productos:list")
-    success_message = "El producto fue eliminado con éxito."
+    raise Http404()

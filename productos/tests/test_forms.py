@@ -1,27 +1,26 @@
 import pytest
-from django.test import TestCase
 
-from productos.forms import InsumosProductoFormset, ProductoForm
-from productos.models import Insumo, Producto, Unidad
-from productos.tests.factories import InsumoFactory, UnidadFactory
+from productos.forms import ProductoRegularForm
+from productos.models import Producto
+from productos.tests.factories import InsumoFactory
 from variables.models import Variable
-from variables.tests.factories import VariableFactory
 
 # Unit tests para el form de creación de Producto
 
 
 @pytest.fixture
-def form_producto() -> ProductoForm:
+def form_producto() -> ProductoRegularForm:
     """ Set up de un formulario de producto """
 
     insumo1 = InsumoFactory(nombre="MDF-3", precio=100)  # MDF-3
 
     insumo2 = InsumoFactory(nombre="MDF-5", precio=200)  # MDF-5
 
-    form = ProductoForm(
+    form = ProductoRegularForm(
         {
             "nombre": "MDF-Prueba",
             "descripcion": "Prueba",
+            "tipo": "regular",
             "largo": "20",
             "ancho": "15",
             "alto": "4",
@@ -38,6 +37,7 @@ def form_producto() -> ProductoForm:
 def test_insumos_correctos(django_db_setup, form_producto):
     """ Insumo base y lados deben mostrar solamente opciones de Fibrofacil """
 
+    print(form_producto.errors)
     assert form_producto.is_valid()
     assert form_producto.cleaned_data["insumo_base"].nombre == "MDF-3"
     assert form_producto.cleaned_data["insumo_lados"].nombre == "MDF-5"
@@ -45,7 +45,7 @@ def test_insumos_correctos(django_db_setup, form_producto):
 
 @pytest.mark.django_db
 def test_calculo_precio_producto(form_producto):
-    """ Se calcula el precio de un producto en base a sus 
+    """ Se calcula el precio de un producto en base a sus
         insumos y a las variables globales del sistema
     """
 

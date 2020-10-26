@@ -34,6 +34,8 @@ class PedidoTable(tables.Table):
         precio = floatformat(value)
         return f"$ {precio}"
 
+    get_precio_total = tables.Column(verbose_name="Precio total", orderable=False)
+
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",
         extra_context={

@@ -48,17 +48,17 @@
 
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><b>$ Precio :</b>
-                        <span class="price text-success">{{object.precio|floatformat}}</span>
+                        <span class="text-success">{{object.precio|floatformat}}</span>
                     </li>
                     
                     {% if "MDF" in object.nombre  %}
                         
                         
                     <li class="list-group-item"><b>$ Precio m2:</b>
-                        <span class="price text-success">{{object.precio_m2|floatformat}}</span>
+                        <span class="text-success">{{object.precio_m2|floatformat}}</span>
                     </li>
                     <li class="list-group-item"><b>$ Precio :</b>
-                        <span class="price text-success">{{object.precio_recorte|floatformat}}</span>
+                        <span class="text-success">{{object.precio_recorte|floatformat}}</span>
                     </li>
                     {% endif %}
 

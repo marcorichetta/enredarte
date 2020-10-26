@@ -14,7 +14,7 @@ urlpatterns = [
     path("", ProveedorListView.as_view(), name="list"),
     path("new/", ProveedorCreateView.as_view(), name="create"),
     path("<int:pk>/", ProveedorDetailView.as_view(), name="detail"),
-    path("<int:pk>/delete", ProveedorDeleteView.as_view(), name="delete"),
+    path("<int:pk>/delete/", ProveedorDeleteView.as_view(), name="delete"),
     path("<int:pk>/update/", ProveedorUpdateView.as_view(), name="update"),
     path("proveedor-autocomplete/", ProveedorAutocomplete.as_view(), name="autocomplete"),
 ]
