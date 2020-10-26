@@ -17,14 +17,37 @@ from crispy_forms.layout import (
 from core.custom_layout_object import Formset
 
 
-# class ProductoIrregularForm(forms.ModelForm):
-#     """Form para producto irregular"""
+class ProductoIrregularForm(forms.ModelForm):
+    """Form para producto irregular"""
 
-#     class Meta:
-#         """Meta definition for ProductoIrregularform."""
+    class Meta:
+        """Meta definition for ProductoIrregularform."""
 
-#         model = Producto
-#         fields = ('nombre', 'descripcion', 'detalles', 'tiempo', 'insumos')
+        model = Irregular
+        exclude = ("insumos",)
+        # fields = ('nombre', 'descripcion', 'detalles', 'tiempo', 'insumos')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-md-3 create-label"
+        self.helper.field_class = "col-md-9"
+        self.helper.layout = Layout(
+            Div(
+                Field("nombre"),
+                Hidden("tipo", "irregular"),  # Campo 'tipo' oculto con valor Irregular
+                Field("descripcion", style="height: 5rem"),
+                Field("tiempo"),
+                Field("detalles", style="height: 5rem"),
+                Field("precio"),
+                css_class="col-8",
+            ),
+            Div(Fieldset("Insumos extra", Formset("insumos")),),
+            HTML("<br>"),
+            ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
+        )
 
 
 class ProductoRegularForm(forms.ModelForm):

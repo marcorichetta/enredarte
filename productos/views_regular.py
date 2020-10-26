@@ -22,6 +22,9 @@ class ProductoRegularCreateView(SuccessMessageMixin, CreateView):
             context["insumos"] = InsumosProductoFormset(self.request.POST)
         else:
             context["insumos"] = InsumosProductoFormset()
+
+        context["titulo"] = "Crear Producto Regular"
+
         return context
 
     def form_valid(self, form):
@@ -44,7 +47,7 @@ class ProductoRegularCreateView(SuccessMessageMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:regular-detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
@@ -63,6 +66,9 @@ class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
             )
         else:
             context["insumos"] = InsumosProductoFormset(instance=self.object)
+
+        context["titulo"] = "Actualizar Producto Regular"
+
         return context
 
     def form_valid(self, form):
@@ -84,12 +90,12 @@ class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:regular-detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoRegularDetailView(DetailView):
     model = Regular
-    template_name = "productos/regulares/regular_detail.html"
+    template_name = "productos/regular_detail.html"
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()

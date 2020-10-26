@@ -5,12 +5,12 @@ from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 
 from productos.models import Irregular
 
-from .forms import InsumosProductoFormset, ProductoRegularForm
+from .forms import InsumosProductoFormset, ProductoIrregularForm
 
 
 class ProductoIrregularCreateView(SuccessMessageMixin, CreateView):
     model = Irregular
-    form_class = ProductoRegularForm
+    form_class = ProductoIrregularForm
     template_name = "productos/producto_form.html"
     success_message = "El producto fue creado con éxito."
 
@@ -21,6 +21,9 @@ class ProductoIrregularCreateView(SuccessMessageMixin, CreateView):
             context["insumos"] = InsumosProductoFormset(self.request.POST)
         else:
             context["insumos"] = InsumosProductoFormset()
+
+        context["titulo"] = "Crear Producto Irregular"
+
         return context
 
     def form_valid(self, form):
@@ -43,12 +46,12 @@ class ProductoIrregularCreateView(SuccessMessageMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:irregular-detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
     model = Irregular
-    form_class = ProductoRegularForm
+    form_class = ProductoIrregularForm
     success_message = "El producto fue actualizado con éxito."
     template_name = "productos/producto_update_form.html"
 
@@ -62,6 +65,9 @@ class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
             )
         else:
             context["insumos"] = InsumosProductoFormset(instance=self.object)
+
+        context["titulo"] = "Actualizar Producto Irregular"
+
         return context
 
     def form_valid(self, form):
@@ -83,46 +89,12 @@ class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:irregular-detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoIrregularDetailView(DetailView):
     model = Irregular
-    template_name = "productos/regulares/regular_detail.html"
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-
-    #     v: Variable = Variable.objects.get(pk=1)
-    #     qs = queryset.annotate(
-    #         precioBase=(F('largo') / 100) * (F('ancho') / 100) * F('insumo_base__precio'),
-    #         precioLatCorto=(F('ancho') / 100) * (F('alto') / 100),
-    #         precioLatLargo=(F('largo') / 100) * (F('alto') / 100),
-    #         horas=F('tiempo') / 60,
-    #         precio_tiempo=F('horas') * v.precio_hora,
-    #         precio_costo=ExpressionWrapper(F('precioBase') + F('precioLatCorto') + F('precioLatLargo') + F('precio_tiempo'), output_field=DecimalField()),
-    #         precio_venta_crudo=F('precio_costo') * ((v.ganancia_por_menor / 100) + 1),
-    #         tiempo_terminado=F('tiempo') * 2 / 60,
-    #         precio_tiempo_terminado=F('tiempo_terminado') * v.precio_hora,
-    #         precio_terminado=ExpressionWrapper(F('precio_costo') + v.precio_pintado + F('precio_tiempo_terminado'), output_field=DecimalField()),
-    #         precio_venta_terminado=F('precio_terminado') * ((v.ganancia_por_menor / 100) + 1)
-    #     )
-
-    #     return qs
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super().get_context_data(*args, **kwargs)
-
-    #     prod: Irregular = self.get_object()
-    #     var: Variable = Variable.objects.get(pk=1)
-
-    #     context["precios"] = {
-    #         "precio_costo": prod.precio_costo(variables=var),
-    #         "precio_venta_crudo": prod.precio_venta_crudo(),
-    #         "precio_terminado": prod.precio_terminado(variables=var),
-    #     }
-
-    #     return context
+    template_name = "productos/irregular_detail.html"
 
 
 class ProductoIrregularDeleteView(DeleteSuccessMessageMixin, DeleteView):

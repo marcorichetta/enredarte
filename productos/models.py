@@ -129,6 +129,10 @@ class Producto(BaseModel):
 
         return self.regular.precio_venta_terminado()
 
+    @property
+    def get_insumos(self):
+        return self.insumosproducto_set.all()
+
 
 class Regular(Producto):
     """Producto Regular."""
@@ -233,10 +237,6 @@ class Regular(Producto):
         return self.precio_terminado(variables) * (
             (variables.ganancia_por_menor / 100) + 1
         )
-
-    @property
-    def get_insumos(self):
-        return self.insumosproducto_set.all()
 
 
 class Irregular(Producto):

@@ -49,30 +49,20 @@
                 <p class="card-text">{{object.descripcion}}</p>
 
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><b>$ Costo :</b>
-                        <span class="price text-success">{{precios.precio_costo|floatformat}}</span>
+                    <li class="list-group-item"><b>$ Venta :</b>
+                        <span class="text-success">{{object.get_precio | floatformat}}</span>
                     </li>
-                    <li class="list-group-item"><b>$ Costo (Terminado) :</b>
-                        <span class="price text-success">{{precios.precio_terminado|floatformat}}</span>
-                    </li>
-                    <li class="list-group-item"><b>$ Venta (Crudo) :</b>
-                        <span class="price text-success">{{precios.precio_venta_crudo|floatformat}}</span>
-                    </li>
-                    <li class="list-group-item"><b>$ Venta (Terminado) :</b>
-                        <span class="price text-success">{{object.precio_venta_terminado|floatformat}}</span>
+                    <li class="list-group-item"><b>Tiempo de fabricación :</b>
+                        <span>{{ object.tiempo }} minutos</span>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="dropdown-divider"></div>
         <div class="container mt-4">
             <div class="row">
                 <div class="col-sm">
-                    <h5>Insumos principales</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><b>Insumo Base: </b> {{object.insumo_base}}</li>
-                        <li class="list-group-item"><b>Insumo Base: </b> {{object.insumo_lados}}</li>
-                    </ul>
+                    <h4>Instrucciones de fabricación</h4>
+                    <span>{{ object.detalles }}</span>
                 </div>
                 <div class="col-sm">
                     <h5>Insumos extra</h5>
