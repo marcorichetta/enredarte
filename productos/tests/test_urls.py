@@ -1,51 +1,31 @@
 # Tests para urls de productos regulares/irregulares
 
 from django.urls import reverse
+import pytest
+
+urls = [
+    ("regular-create", {}, "regular/new/"),
+    ("regular-detail", {"pk": 1}, "regular/1/"),
+    ("regular-update", {"pk": 1}, "regular/1/update/"),
+    ("regular-delete", {"pk": 1}, "regular/1/delete/"),
+    ("irregular-create", {}, "irregular/new/"),
+    ("irregular-detail", {"pk": 1}, "irregular/1/"),
+    ("irregular-update", {"pk": 1}, "irregular/1/update/"),
+    ("irregular-delete", {"pk": 1}, "irregular/1/delete/"),
+    ("insumos-create", {}, "insumos/new/"),
+    ("insumos-detail", {"pk": 1}, "insumos/1/"),
+    ("insumos-update", {"pk": 1}, "insumos/1/update/"),
+    ("insumos-delete", {"pk": 1}, "insumos/1/delete/"),
+]
 
 
-def test_urls():
+@pytest.mark.parametrize("name, kwargs, path", urls)
+def test_productos_urls(name, kwargs, path):
 
-    # PRODUCTOS
-    assert reverse("productos:list") == "/productos/"
+    url_to_reverse = f"productos:{name}"
 
-    assert reverse("productos:regular-create") == "/productos/regular/new/"
-    assert (
-        reverse("productos:regular-detail", kwargs={"pk": 1}) == "/productos/regular/1/"
-    )
-    assert (
-        reverse("productos:regular-update", kwargs={"pk": 1})
-        == "/productos/regular/1/update/"
-    )
-    assert (
-        reverse("productos:regular-delete", kwargs={"pk": 1})
-        == "/productos/regular/1/delete/"
-    )
+    reversed_url = reverse(url_to_reverse, kwargs=kwargs)
 
-    assert reverse("productos:irregular-create") == "/productos/irregular/new/"
-    assert (
-        reverse("productos:irregular-detail", kwargs={"pk": 1})
-        == "/productos/irregular/1/"
-    )
-    assert (
-        reverse("productos:irregular-update", kwargs={"pk": 1})
-        == "/productos/irregular/1/update/"
-    )
-    assert (
-        reverse("productos:irregular-delete", kwargs={"pk": 1})
-        == "/productos/irregular/1/delete/"
-    )
+    expected = f"/productos/{path}"
 
-    # INSUMOS
-    assert reverse("productos:insumos-list") == "/productos/insumos/"
-    assert reverse("productos:insumos-create") == "/productos/insumos/new/"
-    assert (
-        reverse("productos:insumos-detail", kwargs={"pk": 1}) == "/productos/insumos/1/"
-    )
-    assert (
-        reverse("productos:insumos-update", kwargs={"pk": 1})
-        == "/productos/insumos/1/update/"
-    )
-    assert (
-        reverse("productos:insumos-delete", kwargs={"pk": 1})
-        == "/productos/insumos/1/delete/"
-    )
+    assert reversed_url == expected
