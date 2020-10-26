@@ -184,8 +184,7 @@ class Regular(Producto):
         verbose_name_plural = "Productos Regulares"
 
     def __str__(self):
-        """Unicode representation of Regular."""
-        return self.nombre
+        return f"{self.nombre} ({self.tipo.capitalize()})"
 
     # TODO - Optimizar la cantidad de queries que se hacen para traer las variables
     def precio_costo(self, variables) -> float:
@@ -257,8 +256,7 @@ class Irregular(Producto):
         verbose_name_plural = "Productos Irregulares"
 
     def __str__(self):
-        """Unicode representation of Irregular."""
-        return self.nombre
+        return f"{self.nombre} ({self.tipo.capitalize()})"
 
 
 class ProductImage(BaseModel):
