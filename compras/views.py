@@ -100,10 +100,12 @@ class CompraCreateView(SuccessMessageMixin, CreateView):
         context = self.get_context_data()
         formset_insumos = context["insumos"]
 
-        # Guardar la compra
-        self.object = form.save()
-        # Si son válidos los insumos se guardan
-        if formset_insumos.is_valid():
+        # Si compra e insumos son válidos
+        if form.is_valid() and formset_insumos.is_valid():
+
+            # Guardar la compra
+            self.object = form.save()
+
             formset_insumos.instance = self.object
             formset_insumos.save()
 
@@ -139,15 +141,19 @@ class CompraUpdateView(SuccessMessageMixin, UpdateView):
     def form_valid(self, form):
         # Obtenemos info de la compra e insumos posteados en el form
         context = self.get_context_data()
-        insumos = context["insumos"]
+        formset_insumos = context["insumos"]
 
-        self.object = form.save()
+        # Si compra e insumos son válidos
+        if form.is_valid() and formset_insumos.is_valid():
 
-        if insumos.is_valid():
-            insumos.instance = self.object
-            insumos.save()
-            # Guardar compra completo
-            return super(CompraUpdateView, self).form_valid(form)
+            # Guardar la compra
+            self.object = form.save()
+
+            formset_insumos.instance = self.object
+            formset_insumos.save()
+
+            # Guardar compra completa
+            return super().form_valid(form)
 
         # Repopular form con errores
         return self.render_to_response(self.get_context_data(form=form))
@@ -160,7 +166,7 @@ class CompraDetailView(DetailView):
     model = Compra
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CompraDetailView, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         return context
 
 

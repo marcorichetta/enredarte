@@ -41,13 +41,21 @@ class ProductoIrregularForm(forms.ModelForm):
                 Field("descripcion", style="height: 5rem"),
                 Field("tiempo"),
                 Field("detalles", style="height: 5rem"),
-                Field("precio"),
+                Field("precio", value=0),
                 css_class="col-8",
             ),
             Div(Fieldset("Insumos extra", Formset("insumos")),),
             HTML("<br>"),
             ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
         )
+
+
+class PrecioSoloLecturaForm(ProductoIrregularForm):
+    """ Form para producto irregular con el campo precio como readonly """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper["precio"].update_attributes(readonly=True)
 
 
 class ProductoRegularForm(forms.ModelForm):

@@ -32,15 +32,15 @@ class ProductoRegularCreateView(SuccessMessageMixin, CreateView):
         context = self.get_context_data()
         formset_insumos = context["insumos"]
 
-        # Guardar el Producto
-        self.object = form.save()
+        # Producto e insumos son válidos
+        if form.is_valid() and formset_insumos.is_valid():
 
-        # Si son válidos los insumos se guardan
-        if formset_insumos.is_valid():
+            # Guardar el Producto
+            self.object = form.save()
+
             formset_insumos.instance = self.object
             formset_insumos.save()
 
-            # Guardar producto completo
             return super().form_valid(form)
 
         # Repopular form con errores
@@ -76,14 +76,15 @@ class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
         context = self.get_context_data()
         formset_insumos = context["insumos"]
 
-        # Guardar producto
-        self.object = form.save()
+        # Producto e insumos son válidos
+        if form.is_valid() and formset_insumos.is_valid():
 
-        if formset_insumos.is_valid():
+            # Guardar el Producto
+            self.object = form.save()
+
             formset_insumos.instance = self.object
             formset_insumos.save()
 
-            # Guardar producto completo
             return super().form_valid(form)
 
         # Repopular form con errores

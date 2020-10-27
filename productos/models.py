@@ -252,6 +252,10 @@ class Irregular(Producto):
     class Meta:
         """Meta definition for Irregular."""
 
+        permissions = [
+            ("change_product_price", "Can modify an Irregular product price"),
+        ]
+
         verbose_name = "Producto Irregular"
         verbose_name_plural = "Productos Irregulares"
 

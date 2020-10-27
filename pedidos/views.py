@@ -111,18 +111,19 @@ class PedidoCreateView(SuccessMessageMixin, CreateView):
         context = self.get_context_data()
         formset_productos = context["productos"]
 
-        # Pre guardado del pedido
-        nuevo_pedido = form.save(commit=False)
+        # Pedido y productos son válidos
+        if form.is_valid() and formset_productos.is_valid():
 
-        # Calcular y sobreescribir el precio total del pedido
-        nuevo_pedido.precio_total = form.instance.precio_total
+            # Pre guardado del pedido
+            pedido = form.save(commit=False)
 
-        # Si son válidos los productos se guardan
-        if formset_productos.is_valid():
+            # Calcular y sobreescribir el precio total del pedido
+            pedido.precio_total = form.instance.precio_total
+
             # Guardar pedido
-            nuevo_pedido.save()
+            pedido.save()
 
-            formset_productos.instance = nuevo_pedido
+            formset_productos.instance = pedido
             formset_productos.save()
 
             return super().form_valid(form)
@@ -157,18 +158,19 @@ class PedidoUpdateView(SuccessMessageMixin, UpdateView):
         context = self.get_context_data()
         formset_productos = context["productos"]
 
-        # Pre guardar el pedido
-        pedido_actualizado = form.save(commit=False)
+        # Pedido y productos son válidos
+        if form.is_valid() and formset_productos.is_valid():
 
-        # Calcular y sobreescribir el precio total del pedido
-        pedido_actualizado.precio_total = form.instance.precio_total
+            # Pre guardado del pedido
+            pedido = form.save(commit=False)
 
-        # Si son válidos los productos se guardan
-        if formset_productos.is_valid():
+            # Calcular y sobreescribir el precio total del pedido
+            pedido.precio_total = form.instance.precio_total
+
             # Guardar pedido
-            pedido_actualizado.save()
+            pedido.save()
 
-            formset_productos.instance = pedido_actualizado
+            formset_productos.instance = pedido
             formset_productos.save()
 
             return super().form_valid(form)
