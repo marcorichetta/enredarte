@@ -47,7 +47,7 @@ class ProductoRegularCreateView(SuccessMessageMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:regular-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:regular:detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
@@ -90,7 +90,7 @@ class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:regular-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:regular:detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoRegularDetailView(DetailView):

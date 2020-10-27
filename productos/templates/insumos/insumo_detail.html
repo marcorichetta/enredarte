@@ -9,7 +9,7 @@
 
 {% block content %}
 
-{% include 'breadcrumb.html' with url_listado='productos:insumos-list' plural="Insumos" detail=True %}
+{% include 'breadcrumb.html' with url_listado='productos:insumos:list' plural="Insumos" detail=True %}
 
 <div class="container">
     <!-- {% for img in object.images.all %}
@@ -36,10 +36,10 @@
             <div class="card-body">
                 <div>
                     <h4 class="card-title">{{object.nombre}}
-                        <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'productos:insumos-update' object.id %}">
+                        <a title="Editar" class="btn btn-sm btn-outline-secondary" href="{% url 'productos:insumos:update' object.id %}">
                             <span data-feather="edit-3"></span>
                         </a>
-                        <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'productos:insumos-delete' object.id %}">
+                        <a title="Borrar" class="btn btn-sm btn-outline-danger" href="{% url 'productos:insumos:delete' object.id %}">
                             <span data-feather="trash"></span>
                         </a>
                     </h4>

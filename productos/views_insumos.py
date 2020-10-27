@@ -39,9 +39,9 @@ class InsumoTable(tables.Table):
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",
         extra_context={
-            "detail": "productos:insumos-detail",
-            "update": "productos:insumos-update",
-            "delete": "productos:insumos-delete",
+            "detail": "productos:insumos:detail",
+            "update": "productos:insumos:update",
+            "delete": "productos:insumos:delete",
         },
         orderable=False,
     )
@@ -92,7 +92,7 @@ class InsumoCreateView(SuccessMessageMixin, CreateView):
     success_message = "El insumo fue creado con éxito."
 
     def get_success_url(self):
-        return reverse_lazy("productos:insumos-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:insumos:detail", kwargs={"pk": self.object.pk})
 
 
 class InsumoUpdateView(SuccessMessageMixin, UpdateView):
@@ -104,7 +104,7 @@ class InsumoUpdateView(SuccessMessageMixin, UpdateView):
     success_message = "El insumo fue actualizado con éxito."
 
     def get_success_url(self):
-        return reverse_lazy("productos:insumos-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:insumos:detail", kwargs={"pk": self.object.pk})
 
 
 class InsumoDetailView(DetailView):
@@ -116,5 +116,5 @@ class InsumoDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Insumo
     template_name = "insumos/insumo_confirm_delete.html"
 
-    success_url = reverse_lazy("productos:insumos-list")
+    success_url = reverse_lazy("productos:insumos:list")
     success_message = "El insumo fue eliminado con éxito."

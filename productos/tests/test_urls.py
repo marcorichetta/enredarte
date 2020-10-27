@@ -4,18 +4,18 @@ from django.urls import reverse
 import pytest
 
 urls = [
-    ("regular-create", {}, "regular/new/"),
-    ("regular-detail", {"pk": 1}, "regular/1/"),
-    ("regular-update", {"pk": 1}, "regular/1/update/"),
-    ("regular-delete", {"pk": 1}, "regular/1/delete/"),
-    ("irregular-create", {}, "irregular/new/"),
-    ("irregular-detail", {"pk": 1}, "irregular/1/"),
-    ("irregular-update", {"pk": 1}, "irregular/1/update/"),
-    ("irregular-delete", {"pk": 1}, "irregular/1/delete/"),
-    ("insumos-create", {}, "insumos/new/"),
-    ("insumos-detail", {"pk": 1}, "insumos/1/"),
-    ("insumos-update", {"pk": 1}, "insumos/1/update/"),
-    ("insumos-delete", {"pk": 1}, "insumos/1/delete/"),
+    ("regular:create", {}, "regular/new/"),
+    ("regular:detail", {"pk": 1}, "regular/1/"),
+    ("regular:update", {"pk": 1}, "regular/1/update/"),
+    ("regular:delete", {"pk": 1}, "regular/1/delete/"),
+    ("irregular:create", {}, "irregular/new/"),
+    ("irregular:detail", {"pk": 1}, "irregular/1/"),
+    ("irregular:update", {"pk": 1}, "irregular/1/update/"),
+    ("irregular:delete", {"pk": 1}, "irregular/1/delete/"),
+    ("insumos:create", {}, "insumos/new/"),
+    ("insumos:detail", {"pk": 1}, "insumos/1/"),
+    ("insumos:update", {"pk": 1}, "insumos/1/update/"),
+    ("insumos:delete", {"pk": 1}, "insumos/1/delete/"),
 ]
 
 

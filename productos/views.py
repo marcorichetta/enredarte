@@ -123,20 +123,20 @@ def product_dispatch(request, pk: int):
     if prod.tipo == Producto.TIPOS.regular:
 
         if "update" in request.path:
-            return redirect("productos:regular-update", pk=pk)
+            return redirect("productos:regular:update", pk=pk)
 
         if "delete" in request.path:
-            return redirect("productos:regular-delete", pk=pk)
+            return redirect("productos:regular:delete", pk=pk)
 
-        return redirect("productos:regular-detail", pk=pk)
+        return redirect("productos:regular:detail", pk=pk)
 
     else:
         if "update" in request.path:
-            return redirect("productos:irregular-update", pk=pk)
+            return redirect("productos:irregular:update", pk=pk)
 
         if "delete" in request.path:
-            return redirect("productos:irregular-delete", pk=pk)
+            return redirect("productos:irregular:delete", pk=pk)
 
-        return redirect("productos:irregular-detail", pk=pk)
+        return redirect("productos:irregular:detail", pk=pk)
 
     raise Http404()

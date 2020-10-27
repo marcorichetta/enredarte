@@ -79,16 +79,16 @@
 					<a href="{% url 'productos:list' %}">Listado</a>
                 </li>
 				<li>
-					<a href="{% url 'productos:regular-create' %}">+ Producto regular</a>
+					<a href="{% url 'productos:regular:create' %}">Producto regular</a>
                 </li>
                 <li>
-					<a href="{% url 'productos:irregular-create' %}">+ Producto irregular</a>
+					<a href="{% url 'productos:irregular:create' %}">Producto irregular</a>
 				</li>
 			</ul>
         </li>
         <hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link {% active 'productos/insumos/' %}" href="{% url 'productos:insumos-list' %}">
+			<a class="nav-link {% active 'productos/insumos/' %}" href="{% url 'productos:insumos:list' %}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<circle cx="10" cy="20.5" r="1" />

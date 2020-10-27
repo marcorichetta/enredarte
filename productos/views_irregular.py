@@ -46,7 +46,7 @@ class ProductoIrregularCreateView(SuccessMessageMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:irregular-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:irregular:detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
@@ -89,7 +89,7 @@ class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        return reverse_lazy("productos:irregular-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("productos:irregular:detail", kwargs={"pk": self.object.pk})
 
 
 class ProductoIrregularDetailView(DetailView):
