@@ -13,6 +13,7 @@ from django_tables2.export.views import ExportMixin
 
 from .forms_insumos import InsumoForm
 from .models import Insumo
+from django.template.defaultfilters import floatformat
 
 
 class InsumoTable(tables.Table):
@@ -35,6 +36,11 @@ class InsumoTable(tables.Table):
             (Valor más la unidad de medida en la misma celda)
         """
         return f"{value} {record.unidad_medida}"
+
+    def render_precio(self, value):
+        """ Función para modificar como se muestra el precio de venta en el template """
+        precio = floatformat(value)
+        return f"$ {precio}"
 
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",

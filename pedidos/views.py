@@ -12,6 +12,7 @@ from django_tables2.export.views import ExportMixin
 
 from .forms import PedidoForm, ProductosPedidoFormset
 from .models import Pedido
+from pedidos.forms import DescuentoSoloLecturaForm
 
 
 class PedidoTable(tables.Table):
@@ -31,8 +32,9 @@ class PedidoTable(tables.Table):
 
     def render_get_precio_total(self, value):
         """ Función para modificar como se muestra el precio de venta en el template """
-        precio = floatformat(value)
-        return f"$ {precio}"
+        # precio_total, _ = value
+        precio_total = floatformat(value)
+        return f"$ {precio_total}"
 
     get_precio_total = tables.Column(verbose_name="Precio total", orderable=False)
 
@@ -104,6 +106,11 @@ class PedidoCreateView(SuccessMessageMixin, CreateView):
             context["productos"] = ProductosPedidoFormset(self.request.POST)
         else:
             context["productos"] = ProductosPedidoFormset()
+
+        # Campo descuento como readonly si el usuario no tiene el permiso
+        if not self.request.user.has_perm("pedidos.change_discount"):
+            context["form"] = DescuentoSoloLecturaForm()
+
         return context
 
     def form_valid(self, form):
@@ -151,6 +158,11 @@ class PedidoUpdateView(SuccessMessageMixin, UpdateView):
             )
         else:
             context["productos"] = ProductosPedidoFormset(instance=self.object)
+
+            # Campo descuento como readonly si el usuario no tiene el permiso
+            if not self.request.user.has_perm("pedidos.change_discount"):
+                context["form"] = DescuentoSoloLecturaForm(instance=self.object)
+
         return context
 
     def form_valid(self, form):
@@ -187,6 +199,18 @@ class PedidoDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+
+        pedido: Pedido = self.get_object()
+
+        descuento = pedido.get_precio_total * (pedido.descuento / 100)
+
+        precio_final = pedido.get_precio_total - descuento
+
+        context["precios"] = {
+            "precio_final": precio_final,
+            "descuento": descuento,
+        }
+
         return context
 
 

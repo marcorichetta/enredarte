@@ -12,7 +12,7 @@ class Cliente(BaseModel):
         max_length=13,
         unique=True,
         blank=True,
-        null=True,
+        null=True,  # Es necesario ya que el cuit es unique
         validators=[validar_cuit],
         help_text="Ingrese el CUIT con el siguiente formato: 20-12345678-9",
     )
@@ -34,12 +34,6 @@ class Cliente(BaseModel):
     def __str__(self) -> str:
         return f"{self.nombre} {self.apellido}"
 
-    def get_email(self) -> str:
-        return self.email
-
-    def get_absolute_url(self) -> str:
-        return reverse("clientes:detail", kwargs={"pk": self.id})
-
     def save(self, *args, **kwargs):
         """ Si el CUIT existe entre los borrados no se puede crear el cliente."""
 
@@ -56,3 +50,9 @@ class Cliente(BaseModel):
                 )
 
         return super().save(*args, **kwargs)
+
+    def get_absolute_url(self) -> str:
+        return reverse("clientes:detail", kwargs={"pk": self.id})
+
+    def get_email(self) -> str:
+        return self.email

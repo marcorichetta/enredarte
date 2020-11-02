@@ -186,6 +186,9 @@ class Regular(Producto):
     def __str__(self):
         return f"{self.nombre} ({self.tipo.capitalize()})"
 
+    # TODO
+    # Función que calcule todos los precios y los devuelva en un array
+
     # TODO - Optimizar la cantidad de queries que se hacen para traer las variables
     def precio_costo(self, variables) -> float:
         """ Calcula el precio de costo de un producto en base a las
@@ -282,6 +285,7 @@ class ProductImage(BaseModel):
 
 
 class InsumosProducto(BaseModel):
+    """ Modelo intermedio que guarda la cantidad de insumos necesarios para un producto """
 
     # Misma lógica que ProductosPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)

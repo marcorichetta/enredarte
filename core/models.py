@@ -1,19 +1,10 @@
 from django.db import models
-from .validators import validar_cpi
 from django.urls import reverse
-from django.core.validators import (
-    MaxLengthValidator,
-    MaxValueValidator,
-    MinValueValidator,
-)
-from django.forms.widgets import TextInput
-
-# Create your models here.
 
 
 class Provincia(models.Model):
-    cod_provincia = models.CharField(max_length=10, blank=False, default="AR-")
-    provincia = models.CharField(max_length=50, blank=False, default="Provincia")
+    cod_provincia = models.CharField(max_length=10, default="AR-")
+    provincia = models.CharField(max_length=50, default="Provincia")
 
     class Meta:
         ordering = ["provincia"]

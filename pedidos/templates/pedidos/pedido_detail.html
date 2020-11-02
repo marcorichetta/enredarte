@@ -52,20 +52,55 @@ Pedido # {{ object.id }}
                 {% for registro in object.productos_pedidos.all %}
                 <tr>
                     <th scope="row">{{registro.cantidad}}</th>
-                    <td>{{registro.producto}}</td>
+                    <td><a href="{% url 'productos:detail' registro.producto.pk %}">{{registro.producto}}</a></td>
                     <td>{{registro.detalles|default:"-"}}</td>
-                    <td>$ {{registro.producto.precio_venta_terminado|floatformat}}</td>
+                    <td>$ {{registro.producto.get_precio|floatformat}}</td>
                     <td>$ {{registro.precio_pedido|floatformat}}</td>
                 </tr>
                 {% endfor %}
-                <tr>
-                    <th scope="row"></th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><b>Total: $ {{object.get_precio_total|floatformat}}</b></td>
-                </tr>
             </tbody>
+            <tfoot>
+                
+                {% if object.descuento > 0 %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <b>Descuento:</b>
+                            <span class="text-success">
+                                $ {{precios.descuento|floatformat}} ({{ object.descuento }}%)
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <b>Total:</b>
+                            <span class="text-success">
+                                $ {{precios.precio_final|floatformat}}
+                            </span>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <b>Total:</b>
+                            <span class="text-success">
+                                $ {{object.get_precio_total|floatformat}}
+                            </span>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tfoot>
         </table>
         <div class="dropdown-divider"></div>
         <h5>Observaciones</h5>

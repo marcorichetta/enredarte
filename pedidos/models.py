@@ -7,6 +7,7 @@ from datetime import date
 from core.base_model import BaseModel
 
 
+# TODO - Registrar usuario que crea el pedido
 class Pedido(BaseModel):
 
     CREADO = 0
@@ -35,16 +36,28 @@ class Pedido(BaseModel):
         default=0,
         validators=[MinValueValidator(Decimal("0.0"))],
     )
+    descuento = models.DecimalField(
+        help_text="% de descuento.",
+        max_digits=2,
+        decimal_places=0,
+        default=0,
+        validators=[MinValueValidator(Decimal("0.0"))],
+    )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
     fecha_pedido = models.DateField(default=date.today, verbose_name="Fecha de pedido")
     fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada", blank=True)
 
+    class Meta:
+
+        permissions = [
+            ("change_discount", "Can modify a Pedido discount"),
+        ]
+
+        ordering = ["-fecha_entrega", "-modified"]
+
     def __str__(self) -> str:
         return f"Pedido #{self.id}"
-
-    class Meta:
-        ordering = ["-fecha_entrega", "-modified"]
 
     def get_absolute_url(self) -> str:
         """ Utilizada después de actualizar o eliminar un pedido"""
