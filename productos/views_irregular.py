@@ -24,7 +24,7 @@ class ProductoIrregularCreateView(SuccessMessageMixin, CreateView):
             context["insumos"] = InsumosProductoFormset()
 
             # Campo precio como readonly si el usuario no tiene el permiso
-            if not self.request.user.has_perm("Irregular.change_product_price"):
+            if not self.request.user.has_perm("productos.change_product_price"):
                 context["form"] = PrecioSoloLecturaForm()
 
         context["titulo"] = "Crear Producto Irregular"
@@ -72,7 +72,7 @@ class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
             context["insumos"] = InsumosProductoFormset(instance=self.object)
 
             # Campo precio como readonly si el usuario no tiene el permiso
-            if not self.request.user.has_perm("Irregular.change_product_price"):
+            if not self.request.user.has_perm("productos.change_product_price"):
                 context["form"] = PrecioSoloLecturaForm(instance=self.object)
 
         context["titulo"] = "Actualizar Producto Irregular"

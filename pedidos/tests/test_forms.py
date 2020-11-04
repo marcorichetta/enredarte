@@ -15,7 +15,12 @@ class Test_Form_Pedido:
 
         cliente = ClienteFactory()
 
-        data = {"cliente": cliente.pk, "estado": 0, "fecha_entrega": "06/08/2020"}
+        data = {
+            "cliente": cliente.pk,
+            "estado": 0,
+            "fecha_entrega": "06/08/2020",
+            "descuento": 0,
+        }
 
         form = PedidoForm(data=data)
 

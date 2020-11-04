@@ -14,6 +14,7 @@ class Command(BaseCommand):
         )
 
         User.objects.create_superuser(username="root", password="root", email=None)
-        User.objects.create_user(username="test", password="test")
+        User.objects.create_user(username="gerencia", password="gerencia")
+        User.objects.create_user(username="operador", password="operador")
 
         self.stdout.write(self.style.SUCCESS("--- Usuarios creados ---"))

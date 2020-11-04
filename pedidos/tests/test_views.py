@@ -1,6 +1,3 @@
-from django.test import TestCase
-from django import urls
-from django.forms import inlineformset_factory
 import pytest
 
 from variables.models import Variable
@@ -11,6 +8,8 @@ from clientes.tests.factories import ClienteFactory
 from pedidos.tests.factories import PedidoFactory
 
 from core.utils import build_formset_data
+from productos.models import Producto
+from django.template.defaultfilters import floatformat
 
 
 @pytest.fixture
@@ -47,6 +46,7 @@ def form_pedido():
         "detalles": "123",
         "estado": "0",
         "fecha_entrega": "06/08/2020",
+        "descuento": 0,
     }
 
     form = PedidoForm(data=data)
@@ -111,14 +111,16 @@ class Test_Nuevo_Pedido:
 
         assert round(nuevo_pedido.get_precio_total) == 1701
 
-    @pytest.mark.skip(reason="Lo estoy haciendo mal")
+    # @pytest.mark.skip(reason="Lo estoy haciendo mal")
     def test_pedido_actualizado(self, django_db_setup, productos):
         """ Si se actualiza un pedido el precio total cambia """
 
-        pedido = PedidoFactory()
-        # https://factoryboy.readthedocs.io/en/latest/recipes.html#many-to-many-relation-with-a-through
-        pedido.productos_pedido.add(productos[0])
+        pedido: Pedido = PedidoFactory()
 
-        print([p for p in pedido.productos_pedido.all()])
+        prods = Producto.objects.all()[:2]
 
-        assert pedido.get_precio_total == 1000
+        pedido.productos_pedido.add(*prods, through_defaults={"cantidad": 2})
+
+        assert (
+            floatformat(pedido.get_precio_total) == "873,3"
+        ), "El precio del pedido no coincide con el esperado"

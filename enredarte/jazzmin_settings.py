@@ -7,7 +7,7 @@ JAZZMIN_SETTINGS = {
     # Title on the brand, and the login screen (19 chars max)
     "site_header": "Administración",
     # square logo to use for your site, must be present in static files, used for favicon and brand on top left
-    "site_logo": "/images/logo.svg",
+    # "site_logo": "/images/logo.svg",
     # Welcome text on the login screen
     "welcome_sign": "Bienvenido al panel de administración",
     # Copyright on the footer

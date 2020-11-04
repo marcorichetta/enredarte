@@ -11,8 +11,6 @@ from .models import (
     Irregular,
 )
 
-# Register your models here.
-
 
 @admin.register(Unidad)
 class UnidadAdmin(admin.ModelAdmin):

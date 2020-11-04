@@ -13,7 +13,6 @@ from crispy_forms.layout import (
     HTML,
     ButtonHolder,
     Submit,
-    Button,
 )
 from core.custom_layout_object import Formset
 
@@ -23,11 +22,11 @@ class PedidoForm(forms.ModelForm):
 
     class Meta:
         model = Pedido
-        fields = ("cliente", "detalles", "estado", "fecha_entrega")
+        fields = ("cliente", "detalles", "estado", "fecha_entrega", "descuento")
         widgets = {"fecha_entrega": DatePicker()}
 
     def __init__(self, *args, **kwargs):
-        super(PedidoForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.form_class = "form-horizontal"
@@ -40,6 +39,7 @@ class PedidoForm(forms.ModelForm):
                     Field("estado"),
                     Field("fecha_entrega"),
                     Field("detalles", style="height: 5rem"),
+                    Field("descuento"),
                     css_class="col-6",
                 ),
                 Div(
@@ -50,6 +50,12 @@ class PedidoForm(forms.ModelForm):
             HTML("<br>"),
             ButtonHolder(Submit("submit", "Guardar Pedido", css_class="btn-success")),
         )
+
+
+class DescuentoSoloLecturaForm(PedidoForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper["descuento"].update_attributes(readonly=True)
 
 
 class ProductosPedidoForm(forms.ModelForm):

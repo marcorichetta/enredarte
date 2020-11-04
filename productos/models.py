@@ -186,7 +186,12 @@ class Regular(Producto):
     def __str__(self):
         return f"{self.nombre} ({self.tipo.capitalize()})"
 
-    # TODO - Optimizar la cantidad de queries que se hacen para traer las variables
+    # TODO
+    # Función que calcule todos los precios y los devuelva en un array
+    # def super_precio(self):
+    #     variables: Variable = Variable.objects.first()
+    #     return [precio_costo, precio_venta_crudo, precio_venta_terminado]
+
     def precio_costo(self, variables) -> float:
         """ Calcula el precio de costo de un producto en base a las
             medidas del mismo, a los insumos utilizados y al tiempo que lleva
@@ -206,7 +211,14 @@ class Regular(Producto):
         # Castear a decimal para poder multiplicar con otro decimal
         precio_tiempo = Decimal(horas) * variables.precio_hora
 
-        return precioBase + precioLatCorto + precioLatLargo + precio_tiempo
+        # Precio de los insumos extra que usa el producto
+        precio_insumos = sum(
+            insumo.precio_insumos for insumo in self.insumosproducto_set.all()
+        )
+
+        return (
+            precioBase + precioLatCorto + precioLatLargo + precio_tiempo + precio_insumos
+        )
 
     def precio_venta_crudo(self) -> float:
         """ Calcula el precio de venta al público del producto crudo """
@@ -282,6 +294,7 @@ class ProductImage(BaseModel):
 
 
 class InsumosProducto(BaseModel):
+    """ Modelo intermedio que guarda la cantidad de insumos necesarios para un producto """
 
     # Misma lógica que ProductosPedido
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
@@ -299,3 +312,8 @@ class InsumosProducto(BaseModel):
 
     def __str__(self):
         return f"{self.cantidad} {self.insumo.unidad_medida} de {self.insumo.nombre}"
+
+    @property
+    def precio_insumos(self) -> float:
+        """ Calcula el precio total de cada insumo del producto """
+        return self.cantidad * self.insumo.precio

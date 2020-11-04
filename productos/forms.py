@@ -155,5 +155,6 @@ InsumosProductoFormset = forms.inlineformset_factory(
     fields=["insumo", "cantidad"],
     can_delete=True,
     extra=1,
+    min_num=0,
     max_num=5,
 )
