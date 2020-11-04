@@ -38,7 +38,7 @@ class Proveedor(BaseModel):
         return reverse("proveedores:detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
-        """ Si el CUIT existe entre los borrados no se puede crear el proveedor."""
+        """ Si el CUIT existe entre los borrados no se puede crear el proveedor. (Excepto CUITs vacíos)"""
 
         if self.cuit:
             qs = Proveedor.all_objects.filter(cuit=self.cuit)

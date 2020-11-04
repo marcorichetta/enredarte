@@ -40,3 +40,26 @@ def test_proveedor_se_puede_restaurar():
     prov.save()
 
     assert Proveedor.objects.count() == 1
+
+
+@pytest.mark.django_db()
+def test_proveedor_soft_deleted_CUIT():
+    """ Crear proveedor con CUIT == None habiendo otro proveedor soft-deleted también con CUIT None """
+
+    proveedor = ProveedorFactory(razon_social="Prueba 1")
+
+    assert Proveedor.all_objects.count() == 1
+
+    proveedor.delete()
+
+    # El manager `objects` devuelve sólo las instancias activas
+    assert Proveedor.objects.count() == 0
+    # El manager `all_objects` devuelve todas las instancias creadas
+    assert Proveedor.all_objects.count() == 1
+
+    # Nuevo proveedor con mismo cuit (Unique key) da error de integridad
+    proveedor = ProveedorFactory(razon_social="Prueba 2")
+
+    # Existen 2 proveedores con cuit None, 1 activo / 1 S-D
+    assert Proveedor.objects.count() == 1
+    assert Proveedor.all_objects.count() == 2

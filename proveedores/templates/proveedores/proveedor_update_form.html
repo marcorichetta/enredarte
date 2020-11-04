@@ -16,24 +16,24 @@
                 <legend class="border-bottom mb-3">Actualizar Proveedor</legend>
                 <div>
                     <div class="form-row">
-                        <div class="form-group col-md-4">
-                            {{ form.cuit|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             {{ form.razon_social|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
+                            {{ form.cuit|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
                             {{ form.email|as_crispy_field }}
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             {{ form.telefono|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             {{ form.calle|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             {{ form.numero|as_crispy_field }}
                         </div>
                     </div>
@@ -41,6 +41,11 @@
                     <div class="form-group">
                         <div class="col-md-4 px-0">
                             {{ form.localidad|as_crispy_field }}
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Agregar localidad
+                            </button>
                         </div>
                     </div>
                 </div>

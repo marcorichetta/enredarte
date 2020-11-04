@@ -3,12 +3,19 @@ from core.mixins import DeleteSuccessMessageMixin
 from core.models import Localidad, Provincia
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    UpdateView,
+)
 from django_filters import CharFilter, FilterSet
 from django_tables2.export.views import ExportMixin
 
 from .forms import ClienteForm
 from .models import Cliente
+from django.db.models.aggregates import Count
+from django.http.response import JsonResponse
 
 
 class ClienteTable(tables.Table):
@@ -117,3 +124,21 @@ class ClienteDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Cliente
     success_url = reverse_lazy("clientes:list")
     success_message = "El cliente fue eliminado con éxito."
+
+
+def reporte_clientes(request):
+
+    labels = []
+    data = []
+
+    qs = (
+        Localidad.objects.values("localidad")
+        .annotate(num_clientes=Count("clientes"))
+        .exclude(num_clientes__lte=0)
+    )
+
+    for c in qs:
+        labels.append(c["localidad"])
+        data.append(c["num_clientes"])
+
+    return JsonResponse(data={"labels": labels, "num_clientes": data})

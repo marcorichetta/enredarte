@@ -35,7 +35,7 @@ class Cliente(BaseModel):
         return f"{self.nombre} {self.apellido}"
 
     def save(self, *args, **kwargs):
-        """ Si el CUIT existe entre los borrados no se puede crear el cliente."""
+        """ Si el CUIT existe entre los borrados no se puede crear el cliente. (Excepto CUITs vacíos)"""
 
         if self.cuit:
             qs = Cliente.all_objects.filter(cuit=self.cuit)

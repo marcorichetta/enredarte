@@ -22,11 +22,14 @@ class ClienteForm(ModelForm):
         )
 
     def clean_cuit(self):
-        """ Validar no existe un cliente soft-deleted con el mismo CUIT"""
+        """ Validar no existe un cliente soft-deleted con el mismo CUIT (Excepto CUITs vacíos)"""
 
         cuit = self.cleaned_data.get("cuit")
-
         modelo = self.Meta.model
+
+        # Excepción para registros soft-deleted con CUIT vacío
+        if cuit is None:
+            return cuit
 
         # Validación sólo para casos de soft-delete
         # Si existe y no fue borrado se muestra la validación por defecto de Django

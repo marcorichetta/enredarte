@@ -76,7 +76,7 @@ class ProductosPedidoForm(forms.ModelForm):
         self.helper.field_class = "col-auto"
         self.helper.layout = Layout(
             Row(
-                Field("producto"),
+                Field("producto", css_class="w-auto"),
                 Field("cantidad"),
                 Field("DELETE"),
                 css_class=f"formset_row-{formtag_prefix}",
