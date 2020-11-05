@@ -68,3 +68,26 @@ def test_Cliente_se_puede_restaurar():
     client.save()
 
     assert Cliente.objects.count() == 1
+
+
+@pytest.mark.django_db()
+def test_cliente_soft_deleted_CUIT():
+    """ Crear cliente con CUIT == None habiendo otro cliente soft-deleted también con CUIT None """
+
+    cliente = ClienteFactory(nombre="Cliente", apellido="1")
+
+    assert Cliente.all_objects.count() == 1
+
+    cliente.delete()
+
+    # El manager `objects` devuelve sólo las instancias activas
+    assert Cliente.objects.count() == 0
+    # El manager `all_objects` devuelve todas las instancias creadas
+    assert Cliente.all_objects.count() == 1
+
+    # Nuevo cliente con mismo cuit (Unique key) da error de integridad
+    cliente = ClienteFactory(nombre="Cliente", apellido="2")
+
+    # Existen 2 clientes con cuit None, 1 activo / 1 S-D
+    assert Cliente.objects.count() == 1
+    assert Cliente.all_objects.count() == 2

@@ -17,31 +17,40 @@
                 <legend class="border-bottom mb-3">Actualizar Cliente</legend>
                 <div class="">
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             {{ form.nombre|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             {{ form.apellido|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
-                            {{ form.email|as_crispy_field }}
+                        <div class="form-group col-md-3">
+                            {{ form.cuit|as_crispy_field }}
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
                             {{ form.telefono|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
                             {{ form.calle|as_crispy_field }}
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             {{ form.numero|as_crispy_field }}
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-4 px-0">
-                            {{ form.localidad|as_crispy_field }}
+                        <div class="form-group col-md-3">
+                            <div>
+                                {{ form.localidad|as_crispy_field }}
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Agregar localidad
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
