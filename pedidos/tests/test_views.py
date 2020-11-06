@@ -1,15 +1,16 @@
 import pytest
-
-from variables.models import Variable
-from pedidos.models import Pedido
-from pedidos.forms import PedidoForm, ProductosPedidoFormset
-from productos.tests.factories import ProductoFactory, InsumoFactory
 from clientes.tests.factories import ClienteFactory
-from pedidos.tests.factories import PedidoFactory
-
-from core.utils import build_formset_data
-from productos.models import Producto
 from django.template.defaultfilters import floatformat
+from django.test import RequestFactory
+from pedidos.forms import PedidoForm, ProductosPedidoFormset
+from pedidos.models import Pedido
+from pedidos.tests.factories import PedidoFactory
+from productos.models import Producto
+from productos.tests.factories import InsumoFactory, ProductoFactory
+from users.tests.factories import CustomUserFactory
+from variables.models import Variable
+from django.urls import reverse
+from pedidos.views import PedidoCreateView
 
 
 @pytest.fixture
@@ -111,16 +112,48 @@ class Test_Nuevo_Pedido:
 
         assert round(nuevo_pedido.get_precio_total) == 1701
 
-    # @pytest.mark.skip(reason="Lo estoy haciendo mal")
     def test_pedido_actualizado(self, django_db_setup, productos):
-        """ Si se actualiza un pedido el precio total cambia """
+        """ Si se actualiza un pedido con nuevos productos el precio total cambia """
 
+        # Crear el pedido
         pedido: Pedido = PedidoFactory()
 
+        # Estos productos son creados con el fixture `productos`
         prods = Producto.objects.all()[:2]
 
+        # Agregar los productos a través de la tabla relacional
+        # especificando 2 de cada uno
         pedido.productos_pedido.add(*prods, through_defaults={"cantidad": 2})
 
         assert (
             floatformat(pedido.get_precio_total) == "873,3"
         ), "El precio del pedido no coincide con el esperado"
+
+
+@pytest.mark.skip()
+def test_usuario_registrado_en_pedido(db):
+    factory = RequestFactory()
+    user = CustomUserFactory()
+    cliente = ClienteFactory()
+    producto = ProductoFactory()
+
+    data = {
+        "cliente": str(cliente.pk),
+        "detalles": "123",
+        "estado": "0",
+        "fecha_entrega": "06/08/2020",
+        "productos_pedidos-TOTAL_FORMS": 1,
+        "productos_pedidos-INITIAL_FORMS": 0,
+        "productos_pedidos-MIN_NUM_FORMS": 1,
+        "productos_pedidos-MAX_NUM_FORMS": 5,
+        "productos_pedidos-0-producto": producto.pk,
+        "productos_pedidos-0-cantidad": 3,
+    }
+
+    request = factory.post(reverse("pedidos:create"), data)
+    request.user = user
+
+    response = PedidoCreateView.as_view()(request)
+
+    assert response.status_code == 200
+    assert Pedido.objects.count() == 1

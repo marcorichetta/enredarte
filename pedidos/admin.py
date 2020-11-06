@@ -21,6 +21,7 @@ class PedidoAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
+        "usuario",
         "cliente",
         "precio_total",
         "detalles",
