@@ -1,8 +1,7 @@
 # !/usr/bin/python
 
 from django.core.management.base import BaseCommand
-import sys
-from django.contrib.auth.models import User
+from users.models import CustomUser
 
 
 class Command(BaseCommand):
@@ -13,8 +12,8 @@ class Command(BaseCommand):
             self.style.SUCCESS("--- Creando superusuario y usuario de prueba ---")
         )
 
-        User.objects.create_superuser(username="root", password="root", email=None)
-        User.objects.create_user(username="gerencia", password="gerencia")
-        User.objects.create_user(username="operador", password="operador")
+        CustomUser.objects.create_superuser(username="root", password="root", email=None)
+        CustomUser.objects.create_user(username="gerencia", password="gerencia")
+        CustomUser.objects.create_user(username="operador", password="operador")
 
         self.stdout.write(self.style.SUCCESS("--- Usuarios creados ---"))

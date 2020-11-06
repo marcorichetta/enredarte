@@ -20,6 +20,8 @@ urlpatterns += [
     path("proveedores/", include("proveedores.urls", namespace="proveedores")),
     path("pedidos/", include("pedidos.urls", namespace="pedidos")),
     path("users/", include("users.urls")),
+    path("users/", include("django.contrib.auth.urls")),
+    # path("reportes/", ReporteView.as_view(), name="reporte")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

@@ -124,6 +124,9 @@ class PedidoCreateView(SuccessMessageMixin, CreateView):
             # Pre guardado del pedido
             pedido = form.save(commit=False)
 
+            # Asignar al usuario que guarda el formulario
+            pedido.usuario = self.request.user
+
             # Calcular y sobreescribir el precio total del pedido
             pedido.precio_total = form.instance.precio_total
 

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.urls import reverse
 import pytest
 
@@ -8,7 +8,7 @@ import pytest
 def test_login_and_logout(client):
     """Tests logging in and logging out"""
     # Create a fake user
-    user = User.objects.create_user("test", "test@user.com", "test_password")
+    user = CustomUser.objects.create_user("test", "test@user.com", "test_password")
     user.save()
 
     login_url = reverse("login")

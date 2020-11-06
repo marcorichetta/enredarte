@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.core.validators import MinValueValidator
 from decimal import Decimal
@@ -22,6 +23,12 @@ class Pedido(BaseModel):
         (PAGADO, "Pagado"),
     )
 
+    usuario = models.ForeignKey(
+        get_user_model(),
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="Usuario que registra el pedido",
+    )
     # Un cliente no se puede eliminar si tiene pedidos asociados
     cliente = models.ForeignKey(
         "clientes.Cliente", on_delete=models.PROTECT, related_name="clientes"

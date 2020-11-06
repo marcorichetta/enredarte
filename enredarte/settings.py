@@ -174,6 +174,7 @@ LOGIN_REDIRECT_URL = "core:home"
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "login"
 
+AUTH_USER_MODEL = "users.CustomUser"
 
 # DJANGO TABLES 2
 # ------------------------------------------------------------------------------
