@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Pedido, ProductosPedido
+from .models import Pedido, ProductosPedido, OrdenTrabajo
 
 
 class ProductoInline(admin.TabularInline):
@@ -52,3 +52,25 @@ class ProductosPedidoAdmin(admin.ModelAdmin):
         "cantidad",
     )
     list_filter = ("created", "modified", "is_removed", "pedido", "producto")
+
+
+@admin.register(OrdenTrabajo)
+class OrdenTrabajoAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        return OrdenTrabajo.all_objects.all()
+
+    list_display = (
+        "id",
+        "pedido",
+        "estado",
+        "detalles",
+        "created",
+        "modified",
+        "is_removed",
+    )
+    list_filter = (
+        "created",
+        "modified",
+        "is_removed",
+        "pedido",
+    )

@@ -8,19 +8,20 @@ from datetime import date
 from core.base_model import BaseModel
 
 
-# TODO - Registrar usuario que crea el pedido
 class Pedido(BaseModel):
 
     CREADO = 0
-    EN_PROCESO = 1
-    ENTREGADO = 2
-    PAGADO = 3
+    PAGADO = 1
+    EN_PROCESO = 2
+    LISTO = 3
+    FINALIZADO = 4
 
     ESTADO_PEDIDO_CHOICES = (
         (CREADO, "Creado"),
-        (EN_PROCESO, "En proceso"),
-        (ENTREGADO, "Entregado"),
         (PAGADO, "Pagado"),
+        (EN_PROCESO, "En proceso"),
+        (LISTO, "Listo para entrega"),
+        (FINALIZADO, "Finalizado"),
     )
 
     usuario = models.ForeignKey(
@@ -70,6 +71,19 @@ class Pedido(BaseModel):
         """ Utilizada después de actualizar o eliminar un pedido"""
         return reverse("pedidos:detail", kwargs={"pk": self.id})
 
+    def save(self, *args, **kwargs):
+        """ Cuando se guarde un pedido se crea o actualiza la OT correspondiente. """
+
+        if self.estado == Pedido.PAGADO:
+
+            # Si cambia el pedido -> Actualizar OT
+            # Si no existe -> Crear OT
+            orden_trabajo, created = OrdenTrabajo.objects.update_or_create(
+                pedido=self, defaults={"cliente": self.cliente,}
+            )
+
+        super().save(*args, **kwargs)
+
     @property
     def tiempo_total(self) -> int:
         """ Devuelve la sumatoria de tiempo para producir todos los productos del pedido """
@@ -115,3 +129,45 @@ class ProductosPedido(BaseModel):
     def precio_pedido(self) -> float:
         """ Calcula el precio total de cada producto del pedido """
         return self.cantidad * self.producto.get_precio()
+
+
+class OrdenTrabajo(BaseModel):
+
+    CREADO = 0
+    MARCADO = 1
+    CORTADO = 2
+    ENSAMBLADO = 3
+    LIJADO = 4
+    ACABADO = 5
+    TRASLADO = 6
+    FINALIZADO = 7
+
+    ESTADO_ORDEN_TRABAJO_CHOICES = (
+        (CREADO, "Creado"),
+        (MARCADO, "Marcado"),
+        (CORTADO, "Cortado"),
+        (ENSAMBLADO, "Ensamblado"),
+        (LIJADO, "Lijado"),
+        (ACABADO, "Acabado"),
+        (TRASLADO, "Traslado"),
+        (FINALIZADO, "Finalizada"),
+    )
+
+    pedido = models.OneToOneField(
+        Pedido, on_delete=models.PROTECT, related_name="orden_de_trabajo"
+    )
+    estado = models.IntegerField(default=CREADO, choices=ESTADO_ORDEN_TRABAJO_CHOICES)
+
+    detalles = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = "Orden de Trabajo"
+        verbose_name_plural = "Órdenes de Trabajo"
+
+    def __str__(self) -> str:
+        """Unicode representation of OrdenTrabajo."""
+        return f"Orden de trabajo #{self.id}"
+
+    def get_absolute_url(self):
+        """Return absolute url for OrdenTrabajo."""
+        return reverse("pedidos:detail", kwargs={"pk": self.id})
