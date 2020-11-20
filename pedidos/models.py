@@ -15,6 +15,7 @@ class Pedido(BaseModel):
     EN_PROCESO = 2
     LISTO = 3
     FINALIZADO = 4
+    CANCELADO = 9
 
     ESTADO_PEDIDO_CHOICES = (
         (CREADO, "Creado"),
@@ -22,6 +23,7 @@ class Pedido(BaseModel):
         (EN_PROCESO, "En proceso"),
         (LISTO, "Listo para entrega"),
         (FINALIZADO, "Finalizado"),
+        (CANCELADO, "Cancelado"),
     )
 
     usuario = models.ForeignKey(
@@ -133,30 +135,19 @@ class ProductosPedido(BaseModel):
 
 class OrdenTrabajo(BaseModel):
 
-    CREADO = 0
-    MARCADO = 1
-    CORTADO = 2
-    ENSAMBLADO = 3
-    LIJADO = 4
-    ACABADO = 5
-    TRASLADO = 6
-    FINALIZADO = 7
+    INICIADA = 0
+    FINALIZADA = 1
 
     ESTADO_ORDEN_TRABAJO_CHOICES = (
-        (CREADO, "Creado"),
-        (MARCADO, "Marcado"),
-        (CORTADO, "Cortado"),
-        (ENSAMBLADO, "Ensamblado"),
-        (LIJADO, "Lijado"),
-        (ACABADO, "Acabado"),
-        (TRASLADO, "Traslado"),
-        (FINALIZADO, "Finalizada"),
+        (INICIADA, "Iniciada"),
+        (FINALIZADA, "Finalizada"),
     )
 
+    # Borrar OT si se borra el pedido asociado
     pedido = models.OneToOneField(
-        Pedido, on_delete=models.PROTECT, related_name="orden_de_trabajo"
+        Pedido, on_delete=models.CASCADE, related_name="orden_de_trabajo"
     )
-    estado = models.IntegerField(default=CREADO, choices=ESTADO_ORDEN_TRABAJO_CHOICES)
+    estado = models.IntegerField(default=INICIADA, choices=ESTADO_ORDEN_TRABAJO_CHOICES)
 
     detalles = models.TextField(blank=True)
 
@@ -170,4 +161,4 @@ class OrdenTrabajo(BaseModel):
 
     def get_absolute_url(self):
         """Return absolute url for OrdenTrabajo."""
-        return reverse("pedidos:detail", kwargs={"pk": self.id})
+        return reverse("pedidos:ot_detail", kwargs={"pk": self.id})

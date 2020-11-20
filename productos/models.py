@@ -131,7 +131,7 @@ class Producto(BaseModel):
 
     @property
     def get_insumos(self):
-        return self.insumosproducto_set.all()
+        return self.insumos_por_producto.all()
 
 
 class Regular(Producto):
@@ -213,7 +213,7 @@ class Regular(Producto):
 
         # Precio de los insumos extra que usa el producto
         precio_insumos = sum(
-            insumo.precio_insumos for insumo in self.insumosproducto_set.all()
+            insumo.precio_insumos for insumo in self.insumos_por_producto.all()
         )
 
         return (
@@ -297,7 +297,9 @@ class InsumosProducto(BaseModel):
     """ Modelo intermedio que guarda la cantidad de insumos necesarios para un producto """
 
     # Misma lógica que ProductosPedido
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(
+        Producto, on_delete=models.CASCADE, related_name="insumos_por_producto"
+    )
     insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE)
     cantidad = models.DecimalField(
         default=0,

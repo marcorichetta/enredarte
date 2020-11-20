@@ -35,6 +35,14 @@ Pedido # {{ object.id }}
                     <h6><b>Fecha entrega estimada:</b> {{object.fecha_entrega}}</h6>
                 </div>
             </div>
+            
+            {% if object.orden_de_trabajo %}
+                <div class="row">
+                    <a class="btn btn-outline-info" href="{% url 'pedidos:ot_detail' object.orden_de_trabajo.pk %}">
+                        {{ object.orden_de_trabajo }}
+                    </a>
+                </div>
+            {% endif %}
         </div>
         <div class="dropdown-divider"></div>
         <h5>Productos</h5>

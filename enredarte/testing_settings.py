@@ -3,6 +3,10 @@
 
 from .settings import *  # noqa
 
+# Pop Debug Toolbar Middleware
+# It conflicts with some tests that use HTTP requests
+MIDDLEWARE.pop(1)
+
 # An in-memory database should be good enough for now.
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 

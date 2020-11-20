@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Orden de Trabajo # {{ object.id }}
+{% endblock title %}
+
+{% block content %}
+
+<div class="d-grid p-3">
+    {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" detail=True %}
+
+    <div class="container border rounded p-3">
+
+        <div class="d-flex align-items-center border-bottom mb-4">
+            <h3>Orden de Trabajo #{{ object.id }} - 
+                <a href="{% url 'pedidos:detail' object.pedido.pk %}">
+                    {{ object.pedido }}
+                </a>
+            </h3>
+            <a class="btn btn-sm btn-outline-secondary ml-2" href="{% url 'pedidos:update' object.id %}">
+                <span data-feather="edit-3"></span>
+            </a>
+            <a class="btn btn-sm btn-outline-danger ml-2" href="{% url 'pedidos:delete' object.id %}">
+                <span data-feather="trash"></span>
+            </a>
+            <span class="ml-auto"><b>Fecha del pedido:</b> {{object.pedido.fecha_pedido}}</span>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <h6><b>Estado del proceso: </b> {{object.get_estado_display}}</h6>
+                    <h6><b>Cliente: </b> <a href="{% url 'clientes:detail' object.pedido.cliente.pk %}">{{object.pedido.cliente}}</a></h6>
+                </div>
+                <div class="col-auto text-right">
+                    <h6><b>Inicio del proceso:</b> {{ object.created | date }}</h6>
+                    <h6><b>Última modificación:</b> {{object.modified | date }}</h6>
+                    <h6><b>Entrega estimada:</b> {{object.pedido.fecha_entrega}} ({{ object.pedido.fecha_entrega | timeuntil }})</h6>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <h4>Productos</h4>
+        {% for registro in object.pedido.productos_pedidos.all %}
+
+        {% with producto_del_pedido=registro.producto %}
+            <div class="accordion" id="accordionProductos-{{forloop.counter}}">
+                <div class="card w-100">
+                    <div class="card-header" id="heading-{{forloop.counter}}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ forloop.counter }}" aria-expanded="true" aria-controls="#collapse-{{forloop.counter}}">
+                                {{producto_del_pedido}} - Cantidad: {{registro.cantidad}} 
+                            </button>
+                        </h2>
+                    </div>
+                
+                    <div id="collapse-{{forloop.counter}}" class="collapse" aria-labelledby="heading-{{forloop.counter}}" data-parent="#accordionProductos-{{forloop.counter}}">
+                        <div class="card-body">
+                            <h5>Insumos necesarios</h5>    
+                                {% if producto_del_pedido.tipo == "regular" %}
+                                    <b>Base</b>
+                                    <ul>
+                                        <li>Base: {{ producto_del_pedido.regular.insumo_base }}</li>
+                                        <li>Lados: {{ producto_del_pedido.regular.insumo_lados }}</li>
+                                    </ul>
+                                {% endif %}
+
+                            <b>Extra</b>
+                            <ul>
+                                {% for insumo in producto_del_pedido.insumos_por_producto.all %}
+                                    <li>{{ insumo }}</li>
+                                {% endfor %}
+                            </ul>
+                            <a class="btn btn-outline-info" href="{% url 'productos:detail' producto_del_pedido.pk %}">
+                                Ver producto
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {% endwith %}
+
+        {% endfor %}
+        <!--
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Detalles</th>
+                </tr>
+            </thead>
+             <tbody>
+                {% for registro in object.pedido.productos_pedidos.all %}
+                <tr>
+                    <th scope="row">{{registro.cantidad}}</th>
+                    <td><a href="{% url 'productos:detail' registro.producto.pk %}">{{registro.producto}}</a></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody> 
+        </table>-->
+        <div class="dropdown-divider"></div>
+        <h5>Observaciones</h5>
+        {{ object.detalles }}
+    </div>
+</div>
+{% endblock content  %}

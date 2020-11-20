@@ -7,6 +7,8 @@ from .views import (
     PedidoDeleteView,
 )
 
+from .views_orden_trabajo import OrdenTrabajoDetailView
+
 app_name = "pedidos"
 urlpatterns = [
     path("", PedidoListView.as_view(), name="list"),
@@ -14,4 +16,5 @@ urlpatterns = [
     path("<int:pk>/", PedidoDetailView.as_view(), name="detail"),
     path("<int:pk>/delete/", PedidoDeleteView.as_view(), name="delete"),
     path("<int:pk>/update/", PedidoUpdateView.as_view(), name="update"),
+    path("orden_trabajo/<int:pk>/", OrdenTrabajoDetailView.as_view(), name="ot_detail"),
 ]
