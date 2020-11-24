@@ -16,7 +16,7 @@
             ],
             "port": 4000,
             "host": "localhost",
-            "justMyCode": false
+            "justMyCode": false,
         }
     ]
 }
