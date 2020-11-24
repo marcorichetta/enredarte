@@ -80,9 +80,7 @@ class Pedido(BaseModel):
 
             # Si cambia el pedido -> Actualizar OT
             # Si no existe -> Crear OT
-            orden_trabajo, created = OrdenTrabajo.objects.update_or_create(
-                pedido=self, defaults={"cliente": self.cliente,}
-            )
+            orden_trabajo, created = OrdenTrabajo.objects.update_or_create(pedido=self,)
 
         super().save(*args, **kwargs)
 

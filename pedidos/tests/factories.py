@@ -1,6 +1,6 @@
 import factory
 from factory import fuzzy
-from pedidos.models import Pedido
+from pedidos.models import OrdenTrabajo, Pedido
 import datetime
 
 
@@ -10,9 +10,6 @@ class PedidoFactory(factory.django.DjangoModelFactory):
 
     cliente = factory.SubFactory("clientes.tests.factories.ClienteFactory")
 
-    estado = fuzzy.FuzzyChoice(
-        choices=Pedido.ESTADO_PEDIDO_CHOICES, getter=lambda c: c[0]
-    )
     precio_total = fuzzy.FuzzyDecimal(low=100, high=5000)
     fecha_entrega = fuzzy.FuzzyDate(start_date=datetime.date(2020, 9, 1))
 
@@ -26,3 +23,14 @@ class PedidoFactory(factory.django.DjangoModelFactory):
             # Una lista de productos fueron pasados como arg, usálos
             for producto in extracted:
                 self.productos_pedido.add(producto)
+
+
+class OrdenTrabajoFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "pedidos.OrdenTrabajo"
+
+    pedido = factory.SubFactory(PedidoFactory)
+
+    estado = fuzzy.FuzzyChoice(
+        choices=OrdenTrabajo.ESTADO_ORDEN_TRABAJO_CHOICES, getter=lambda c: c[0]
+    )
