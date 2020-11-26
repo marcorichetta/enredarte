@@ -26,6 +26,7 @@ class PedidoAdmin(admin.ModelAdmin):
         "precio_total",
         "detalles",
         "estado",
+        "pagado",
         "fecha_entrega",
         "created",
         "modified",

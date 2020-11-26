@@ -11,18 +11,16 @@ from core.base_model import BaseModel
 class Pedido(BaseModel):
 
     CREADO = 0
-    PAGADO = 1
-    EN_PROCESO = 2
-    LISTO = 3
-    FINALIZADO = 4
-    CANCELADO = 9
+    EN_PROCESO = 1
+    LISTO = 2
+    ENTREGADO = 3
+    CANCELADO = 4
 
     ESTADO_PEDIDO_CHOICES = (
         (CREADO, "Creado"),
-        (PAGADO, "Pagado"),
         (EN_PROCESO, "En proceso"),
         (LISTO, "Listo para entrega"),
-        (FINALIZADO, "Finalizado"),
+        (ENTREGADO, "Entregado"),
         (CANCELADO, "Cancelado"),
     )
 
@@ -55,6 +53,7 @@ class Pedido(BaseModel):
     )
     detalles = models.TextField(blank=True)
     estado = models.IntegerField(default=CREADO, choices=ESTADO_PEDIDO_CHOICES)
+    pagado = models.BooleanField(default=False, verbose_name="Pagado")
     fecha_pedido = models.DateField(default=date.today, verbose_name="Fecha de pedido")
     fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada", blank=True)
 
@@ -74,15 +73,17 @@ class Pedido(BaseModel):
         return reverse("pedidos:detail", kwargs={"pk": self.id})
 
     def save(self, *args, **kwargs):
-        """ Cuando se guarde un pedido se crea o actualiza la OT correspondiente. """
+        """
+        Cuando se guarde un pedido con estado `En Proceso`
+        se crea o actualiza la OT correspondiente.
+        """
 
-        if self.estado == Pedido.PAGADO:
+        super().save(*args, **kwargs)
 
+        if self.estado == Pedido.EN_PROCESO:
             # Si cambia el pedido -> Actualizar OT
             # Si no existe -> Crear OT
             orden_trabajo, created = OrdenTrabajo.objects.update_or_create(pedido=self,)
-
-        super().save(*args, **kwargs)
 
     @property
     def tiempo_total(self) -> int:
@@ -160,3 +161,17 @@ class OrdenTrabajo(BaseModel):
     def get_absolute_url(self):
         """Return absolute url for OrdenTrabajo."""
         return reverse("pedidos:ot_detail", kwargs={"pk": self.id})
+
+    def finalizar_orden_trabajo(self) -> None:
+        """
+        Cambia el estado de:
+        Orden de Trabajo => Finalizada
+        Pedido => Listo para entrega
+        """
+
+        self.estado = OrdenTrabajo.FINALIZADA
+        self.pedido.estado = Pedido.LISTO
+
+        self.pedido.save()
+
+        self.save()

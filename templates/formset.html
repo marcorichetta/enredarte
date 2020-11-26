@@ -12,15 +12,15 @@
 
 {% for form in formset.forms %}
 
-{# Incluir los campos ocultos del form #}
+    {# Incluir los campos ocultos del form #}
 
-{% for hidden in form.hidden_fields %}
-{{ hidden|as_crispy_field }}
-{% endfor %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden|as_crispy_field }}
+    {% endfor %}
 
-<div class="formset">
-    {% crispy form %}
-</div>
+    <div class="formset">
+        {% crispy form %}
+    </div>
 
 {% endfor %}
 

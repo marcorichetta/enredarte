@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %} Enredarte {% endblock title %}
+{% block title %} Calendario {% endblock title %}
 
 {% block extra_head %}
 <!-- Fullcalendar CSS -->
@@ -30,7 +30,7 @@
     <div id='calendar'></div>
 </div>
 
-    {% include 'pedido_modal.html' %}
+    {% include 'calendario/pedido_modal.html' %}
 </div>
 
 <!-- Dashboard End -->
@@ -70,18 +70,22 @@
             dayMaxEventRows: 4,
             eventTextColor: 'white',
             eventSources: [{
-                url: '{% url "calendario:get_pedidos" idEstado=0 %}'
+                url: '{% url "calendario:get_pedidos" idEstado=9 %}'
             }],
             eventDidMount: function (info) {
                 $(info.el).tooltip({ 
-                    title: info.event.title,
-                    // TODO - Incluir otro tipo de info más útil 
+                    // Mostrar estado en tooltip (views.py -> get_pedidos)
+                    title: info.event.extendedProps.status_display,
                 });     
             },
             eventClick: function (info) {
                 cargarDataForm(info.event);
                 $("#PedidoModal").modal('show');
-            }
+            },
+            // https://fullcalendar.io/docs/eventDrop
+            // eventDrop: function (info) {
+            //     console.log(info.event.title, info.oldResource, info)
+            // }
         });
 
         calendar.render();
