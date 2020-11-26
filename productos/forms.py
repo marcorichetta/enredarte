@@ -114,7 +114,7 @@ class ProductoRegularForm(forms.ModelForm):
 class CustomChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         """ Modifica las opciones que se muestran en el select generado """
-        return f"{obj.descripcion} ({obj.unidad_medida})"
+        return f"{obj.nombre} ({obj.unidad_medida})"
 
 
 class InsumosProductoForm(forms.ModelForm):
@@ -138,9 +138,9 @@ class InsumosProductoForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Field("insumo"),
-                Field("cantidad"),
+                Field("cantidad", min=1),
                 Field("DELETE"),
-                css_class=f"formset_row-{formtag_prefix}",
+                css_class=f"formset_row-{formtag_prefix}",  # Reemplaza a formCssClass
             )
         )
 
@@ -156,5 +156,5 @@ InsumosProductoFormset = forms.inlineformset_factory(
     can_delete=True,
     extra=1,
     min_num=0,
-    max_num=5,
+    max_num=20,
 )

@@ -16,8 +16,9 @@ class Calendario(LoginRequiredMixin, TemplateView):
         context["estados_pedidos"] = {
             "Creado": Pedido.CREADO,
             "En Proceso": Pedido.EN_PROCESO,
+            "Listo para entrega": Pedido.LISTO,
             "Entregado": Pedido.ENTREGADO,
-            "Pagado": Pedido.PAGADO,
+            "Cancelado": Pedido.CANCELADO,
         }
 
         return context
@@ -44,6 +45,7 @@ def get_pedidos(request: HttpRequest, idEstado: int == 9) -> JsonResponse:
             "title": str(p.cliente),
             "start": p.fecha_pedido.isoformat(),
             "status": p.estado,
+            "status_display": p.get_estado_display(),
         }
         for p in pedidos
     ]

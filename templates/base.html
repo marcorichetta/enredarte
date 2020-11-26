@@ -16,15 +16,20 @@
 	<link rel="stylesheet" href="{% static 'css/custom/sidebar.css' %}" />
 	<link rel="stylesheet" href="{% static 'css/custom/navbar.css' %}" />
 
+    <!-- PrintJS -->
     <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
-  
+
     <script src="{% static 'js/jquery-3-41.min.js' %}"></script>
 
     <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
 
 	<!-- Bootstrap Tempus dominus DateTimePicker -->
   	<link rel="stylesheet" href="{% static 'css/tempusdominus-bootstrap-4.min.css' %}" />
-	
+
+    <!-- Toastr -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/toastr-214.css' %}" media="all">
+    <script type="text/javascript" src="{% static 'js/toastr-214.min.js' %}" ></script>  
+
 	{% block extra_head %}{% endblock extra_head %}
 		
 </head>
@@ -38,13 +43,7 @@
 		<main id="principal" role="main" class="content-wrapper fullPage">
 			{% include 'navbar.html' %}
 
-			<!-- Alertas -->
-			{% if messages %} {% for message in messages %}
-			<div class="alert alert-{{ message.tags }} mt-3 mb-0">
-				{{ message }}
-			</div>
-			{% endfor %} {% endif %}
-			<!-- Alertas end -->
+            {% include 'toastr.html' %}
 
 			<!-- Errores -->
 			<!-- {% include 'msg_errors.html' %} -->
@@ -70,6 +69,7 @@
     <!-- Select2 -->
     <script src="{% static 'js/select2.min.js' %}"></script>
 
+    <!-- PrintJS -->
     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
 
 

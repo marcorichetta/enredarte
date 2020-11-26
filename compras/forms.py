@@ -44,10 +44,7 @@ class CompraForm(forms.ModelForm):
                     Field("detalles", style="height: 5rem"),
                     css_class="col-6",
                 ),
-                Div(
-                    Fieldset("Agregar Insumos", Formset("insumos")),
-                    css_class="flex-wrap: nowrap",
-                ),
+                Div(Fieldset("Agregar Insumos", Formset("insumos")),),
             ),
             HTML("<br>"),
             ButtonHolder(Submit("submit", "Guardar Compra", css_class="btn-success")),
@@ -74,12 +71,11 @@ class InsumosCompraForm(forms.ModelForm):
         self.helper.field_class = "col-auto"
         self.helper.layout = Layout(
             Row(
-                Field("insumo"),
-                Field("cantidad", css_class="col-sm"),
-                PrependedText("precio_compra", "$", min=0),
+                Field("insumo", css_class="w-auto"),
+                Field("cantidad", min=1,),
+                PrependedText("precio_compra", "$", min=0,),
                 Field("DELETE"),
-                css_class=f"formset_row-{formtag_prefix}",
-                style="flex-wrap: nowrap;",
+                css_class=f"formset_row-{formtag_prefix} flex-nowrap",  # Reemplaza a formCssClass
             )
         )
 
@@ -95,5 +91,5 @@ InsumosCompraFormset = forms.inlineformset_factory(
     can_delete=True,
     extra=0,
     min_num=1,
-    max_num=5,
+    max_num=20,
 )

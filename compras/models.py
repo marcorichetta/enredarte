@@ -57,7 +57,7 @@ class InsumosCompra(BaseModel):
     precio_compra = models.DecimalField(
         max_digits=6,
         decimal_places=2,
-        help_text="Precio unitario",
+        help_text="Precio total",
         validators=[MinValueValidator(Decimal("0.0"))],
     )
 

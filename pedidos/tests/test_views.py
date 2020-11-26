@@ -1,7 +1,6 @@
 import pytest
 from clientes.tests.factories import ClienteFactory
 from django.template.defaultfilters import floatformat
-from django.test import RequestFactory
 from pedidos.forms import PedidoForm, ProductosPedidoFormset
 from pedidos.models import Pedido
 from pedidos.tests.factories import PedidoFactory
@@ -10,7 +9,6 @@ from productos.tests.factories import InsumoFactory, ProductoFactory
 from users.tests.factories import CustomUserFactory
 from variables.models import Variable
 from django.urls import reverse
-from pedidos.views import PedidoCreateView
 
 
 @pytest.fixture
@@ -131,8 +129,7 @@ class Test_Nuevo_Pedido:
 
 
 @pytest.mark.skip()
-def test_usuario_registrado_en_pedido(db):
-    factory = RequestFactory()
+def test_usuario_registrado_en_pedido(db, client):
     user = CustomUserFactory()
     cliente = ClienteFactory()
     producto = ProductoFactory()
@@ -150,10 +147,13 @@ def test_usuario_registrado_en_pedido(db):
         "productos_pedidos-0-cantidad": 3,
     }
 
-    request = factory.post(reverse("pedidos:create"), data)
-    request.user = user
+    # Login con el usuario creado
+    client.force_login(user)
+    url = reverse("pedidos:create")
 
-    response = PedidoCreateView.as_view()(request)
+    response = client.post(url, data)
+
+    # response = PedidoCreateView.as_view()(request)
 
     assert response.status_code == 200
     assert Pedido.objects.count() == 1

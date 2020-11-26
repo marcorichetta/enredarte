@@ -1,12 +1,11 @@
 # https: // stackoverflow.com/a/22053952/6389248
 
 from crispy_forms.layout import LayoutObject, TEMPLATE_PACK
-from django.shortcuts import render
 from django.template.loader import render_to_string
 
 
 class Formset(LayoutObject):
-    """ Renderiza un formset completo como si fuese un Field de un form. 
+    """ Renderiza un formset completo como si fuese un Field de un form.
 
     Ejemplos:
         Formset('contact_formset')

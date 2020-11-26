@@ -22,7 +22,7 @@ class PedidoForm(forms.ModelForm):
 
     class Meta:
         model = Pedido
-        fields = ("cliente", "detalles", "estado", "fecha_entrega", "descuento")
+        fields = ("cliente", "detalles", "estado", "fecha_entrega", "descuento", "pagado")
         widgets = {"fecha_entrega": DatePicker()}
 
     def __init__(self, *args, **kwargs):
@@ -40,6 +40,7 @@ class PedidoForm(forms.ModelForm):
                     Field("fecha_entrega"),
                     Field("detalles", style="height: 5rem"),
                     Field("descuento"),
+                    Field("pagado"),
                     css_class="col-6",
                 ),
                 Div(
@@ -77,9 +78,9 @@ class ProductosPedidoForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Field("producto", css_class="w-auto"),
-                Field("cantidad"),
+                Field("cantidad", min=1),
                 Field("DELETE"),
-                css_class=f"formset_row-{formtag_prefix}",
+                css_class=f"formset_row-{formtag_prefix}",  # Reemplaza a formCssClass
                 style="flex-wrap: nowrap;",
             )
         )
@@ -96,5 +97,5 @@ ProductosPedidoFormset = forms.inlineformset_factory(
     can_delete=True,
     extra=0,
     min_num=1,
-    max_num=5,
+    max_num=20,
 )

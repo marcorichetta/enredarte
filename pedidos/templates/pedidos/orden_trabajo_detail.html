@@ -29,8 +29,16 @@ Orden de Trabajo # {{ object.id }}
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    <h6><b>Estado del proceso: </b> {{object.get_estado_display}}</h6>
                     <h6><b>Cliente: </b> <a href="{% url 'clientes:detail' object.pedido.cliente.pk %}">{{object.pedido.cliente}}</a></h6>
+                    <h6><b>Estado del proceso: </b> {{object.get_estado_display}}</h6>
+                    {% if object.estado == 0 %}
+                        <form action="{% url 'pedidos:finalizar_ot' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-outline-info" name="id_orden_trabajo" type="submit" value="{{ object.pk }}">
+                                Finalizar Orden de Trabajo
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
                 <div class="col-auto text-right">
                     <h6><b>Inicio del proceso:</b> {{ object.created | date }}</h6>
