@@ -1,12 +1,15 @@
+import json
+
 import django_tables2 as tables
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.template.defaultfilters import floatformat
-from django_filters.filters import CharFilter, ChoiceFilter
+from django.views.decorators.http import require_http_methods
 from django_filters import FilterSet
+from django_filters.filters import CharFilter, ChoiceFilter
 from django_tables2.export.views import ExportMixin
 
 from .models import Producto
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
 
 
 class ProductoTable(tables.Table):
@@ -140,3 +143,18 @@ def product_dispatch(request, pk: int):
         return redirect("productos:irregular:detail", pk=pk)
 
     raise Http404()
+
+
+@require_http_methods(["POST"])
+def ProductPriceView(request):
+    arrayProductos: list = json.load(request)["id_productos"]
+
+    precios: list = [
+        p.get_precio() for p in Producto.objects.filter(id__in=arrayProductos)
+    ]
+
+    # Formatear los precios de Decimal a float
+    preciosFormateados = [round(float(precio), 2) for precio in precios]
+
+    # Devolver info a JS
+    return JsonResponse(preciosFormateados, safe=False)

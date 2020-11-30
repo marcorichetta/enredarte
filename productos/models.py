@@ -121,7 +121,10 @@ class Producto(BaseModel):
         img = self.images.first()
         return img.imagen.url if img else img
 
-    def get_precio(self):
+    def get_precio(self) -> float:
+        """
+        Devuelve el precio total de un producto independientemente de su tipo
+        """
 
         if self.tipo == self.TIPOS.irregular:
             # Accede a la instancia del modelo Irregular y devuelve el campo 'precio'

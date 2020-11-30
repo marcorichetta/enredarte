@@ -5,13 +5,22 @@
     
 {% block content %}
 <div class="d-grid p-3">
-    {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" create=True %}
+
+    {% block breadcrumb %}
+        {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" create=True %}
+    {% endblock breadcrumb %}
+        
 
     <div class="content-section">
-        <legend class="border-bottom mb-3">Crear Pedido</legend>
-            <div class="col-9">
-                {% crispy form %}
-            </div>
+        <legend class="border-bottom mb-3">
+            {% block legend %}
+                Crear Pedido
+            {% endblock legend %}
+        </legend>
+        <div class="col-9">
+            {% crispy form %}
+        </div>
     </div>
 </div>
+
 {% endblock content %}
