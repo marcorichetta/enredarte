@@ -34,7 +34,7 @@ Pedido # {{ object.id }}
                         maxWidth: 1500,
                         css: '/static/css/bootstrap-452.min.css',
                         ignoreElements: [
-                            'btn-delete', 'btn-update', 'btn-OT', 'printjs'
+                            'btn-delete', 'btn-update', 'btn-OT', 'printjs', 'form-estado'
                         ]
                         })">
                     Descargar Presupuesto
@@ -46,14 +46,17 @@ Pedido # {{ object.id }}
             <div class="d-flex flex-wrap no-gutters">
                 <div class="col-sm">
                     <h6><b>Estado: </b> {{object.get_estado_display}}</h6>
-                    {% if object.estado == 0 %}
-                        <form action="{% url 'pedidos:pagar' %}" method="post">
-                            {% csrf_token %}
-                            <button class="btn btn-sm btn-outline-info" name="id_pedido" type="submit" value="{{ object.pk }}">
-                                Cambiar a En Proceso
-                            </button>
-                        </form>
-                    {% endif %}
+                    <div id="form-estado">
+                        {% if object.estado == 0 %}
+                            <form action="{% url 'pedidos:pagar' %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-info" name="id_pedido" type="submit" value="{{ object.pk }}">
+                                    Cambiar a En Proceso
+                                </button>
+                            </form>
+                        {% endif %}
+                        <!-- TODO - Agregar para el otro cambio de estado -->
+                    </div>
                 </div>
                 
                     

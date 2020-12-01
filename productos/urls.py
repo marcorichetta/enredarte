@@ -22,7 +22,7 @@ from .views_insumos import (
     InsumoDetailView,
     InsumoDeleteView,
 )
-from productos.views import product_dispatch
+from productos.views import ProductPriceView, product_dispatch
 
 insumos_urlpatterns = [
     path("", InsumoListView.as_view(), name="list"),
@@ -49,6 +49,7 @@ irregulares_urlpatterns = [
 app_name = "productos"
 urlpatterns = [
     path("", ProductoListView.as_view(), name="list"),
+    path("precio/", ProductPriceView, name="price"),
     # Redirects
     path("<int:pk>/", product_dispatch, name="detail"),
     path("<int:pk>/delete/", product_dispatch, name="delete"),

@@ -44,7 +44,12 @@ class PedidoForm(forms.ModelForm):
                     css_class="col-6",
                 ),
                 Div(
-                    Fieldset("Agregar Productos", Formset("productos")),
+                    Fieldset(
+                        "Agregar Productos",
+                        Formset(
+                            "productos", template="pedidos/formset_productos_pedidos.html"
+                        ),
+                    ),
                     css_class="col-6 flex-wrap: nowrap",
                 ),
             ),
@@ -77,7 +82,7 @@ class ProductosPedidoForm(forms.ModelForm):
         self.helper.field_class = "col-auto"
         self.helper.layout = Layout(
             Row(
-                Field("producto", css_class="w-auto"),
+                Field("producto", css_class="w-auto",),
                 Field("cantidad", min=1),
                 Field("DELETE"),
                 css_class=f"formset_row-{formtag_prefix}",  # Reemplaza a formCssClass

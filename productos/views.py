@@ -1,12 +1,16 @@
+import json
+
 import django_tables2 as tables
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.template.defaultfilters import floatformat
-from django_filters.filters import CharFilter, ChoiceFilter
+from django.views.decorators.http import require_http_methods
 from django_filters import FilterSet
+from django_filters.filters import CharFilter, ChoiceFilter
 from django_tables2.export.views import ExportMixin
 
 from .models import Producto
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
+from collections import defaultdict
 
 
 class ProductoTable(tables.Table):
@@ -140,3 +144,37 @@ def product_dispatch(request, pk: int):
         return redirect("productos:irregular:detail", pk=pk)
 
     raise Http404()
+
+
+@require_http_methods(["POST"])
+def ProductPriceView(request):
+    """
+        Recibe un array con IDs de productos, 
+        calcula los precios y devuelve una lista con los mismos
+    """
+
+    arrayProductos: list = json.load(request)["dataProductos"]
+
+    idsProductos = [arr[0] for arr in arrayProductos]
+
+    qsProductos = Producto.objects.filter(id__in=idsProductos)
+
+    precios: dict = {
+        str(prod.pk): round(float(prod.get_precio()), 2) for prod in qsProductos
+    }
+
+    dictProductosOrdenadosConQty = dict(arrayProductos)
+
+    # https://linkode.org/#7ImxADU7tJAdHj8kRevBI6
+    customDict = defaultdict(list)
+
+    for k, v in precios.items():
+        customDict[k].append(v)
+
+    for k, v in dictProductosOrdenadosConQty.items():
+        customDict[k].append(v)
+
+    finalData: dict = {k: v for k, v in customDict.items()}
+
+    # Devolver info a JS
+    return JsonResponse(finalData, safe=False)
