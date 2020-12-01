@@ -10,6 +10,7 @@ from django_filters.filters import CharFilter, ChoiceFilter
 from django_tables2.export.views import ExportMixin
 
 from .models import Producto
+from collections import defaultdict
 
 
 class ProductoTable(tables.Table):
@@ -147,14 +148,33 @@ def product_dispatch(request, pk: int):
 
 @require_http_methods(["POST"])
 def ProductPriceView(request):
-    arrayProductos: list = json.load(request)["id_productos"]
+    """
+        Recibe un array con IDs de productos, 
+        calcula los precios y devuelve una lista con los mismos
+    """
 
-    precios: list = [
-        p.get_precio() for p in Producto.objects.filter(id__in=arrayProductos)
-    ]
+    arrayProductos: list = json.load(request)["dataProductos"]
 
-    # Formatear los precios de Decimal a float
-    preciosFormateados = [round(float(precio), 2) for precio in precios]
+    idsProductos = [arr[0] for arr in arrayProductos]
+
+    qsProductos = Producto.objects.filter(id__in=idsProductos)
+
+    precios: dict = {
+        str(prod.pk): round(float(prod.get_precio()), 2) for prod in qsProductos
+    }
+
+    dictProductosOrdenadosConQty = dict(arrayProductos)
+
+    # https://linkode.org/#7ImxADU7tJAdHj8kRevBI6
+    customDict = defaultdict(list)
+
+    for k, v in precios.items():
+        customDict[k].append(v)
+
+    for k, v in dictProductosOrdenadosConQty.items():
+        customDict[k].append(v)
+
+    finalData: dict = {k: v for k, v in customDict.items()}
 
     # Devolver info a JS
-    return JsonResponse(preciosFormateados, safe=False)
+    return JsonResponse(finalData, safe=False)
