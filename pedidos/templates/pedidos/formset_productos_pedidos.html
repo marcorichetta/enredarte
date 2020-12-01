@@ -19,7 +19,6 @@
         {{ hidden|as_crispy_field }}
     {% endfor %}
 
-    <div id="formset-container" class="formset">
         <div class="row formset_row-productos_pedidos dynamic-form" style="flex-wrap: nowrap">
                 {{ form.producto|add_class:"w-auto"|add_class:"producto"|as_crispy_field}}
                 {{ form.cantidad|attr:"min:1"|add_class:"cantidad"|as_crispy_field }}
@@ -38,30 +37,56 @@
                 </div>
                 {{ form.DELETE|as_crispy_field }}
         </div>
-    </div>
 
 {% endfor %}
 
-<div class="btn btn-info"
-    name="test"
-    onclick="calcularPrecio()"
->
-    Calcular precio del pedido
+
+<div class="d-flex align-items-end mt-4">
+    <div class="btn btn-info"
+        name="test"
+        onclick="calcularPrecio()"
+    >
+        Calcular precios
+    </div>
 </div>
-<div id="div_precio_pedido" class="col-4 form-group" hidden>
-    <label for="precio_pedido" class="col-form-label col-auto">
-        Precio total del pedido
-    </label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
+<div class="d-flex">
+    <div id="div_precio_pedido" class="col-4" hidden>
+        <label for="precio_pedido" class="col-form-label col-auto">
+            Precio del pedido
+        </label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <div type="number" class="numberinput form-control" id="precio_pedido">
+            </div>
         </div>
-        <div type="number" class="numberinput form-control" id="precio_pedido">
+    </div>
+    <div id="div_descuento_pedido" class="col-4" hidden>
+        <label for="descuento_pedido" class="col-form-label col-auto">
+            Descuento
+        </label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <div type="number" class="numberinput form-control" id="descuento_pedido">
+            </div>
+        </div>
+    </div>
+    <div id="div_precio_pedido_descuento" class="col-4" hidden>
+        <label for="precio_pedido_descuento" class="col-form-label col-auto">
+            <b>Precio final</b>
+        </label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <div type="number" class="numberinput form-control" id="precio_pedido_descuento">
+            </div>
         </div>
     </div>
 </div>
-
-<br>
 
 <!-- Django Dynamic Formset -->
 <script src="{% static 'js/jquery.formset-15.js' %}"></script>
@@ -82,4 +107,4 @@
 <!-- HTMX -->
 <script src="{% static 'js/htmx.min.js' %}"></script>
 
-<script src="{% static 'js/base2.js' %}"></script>
+<script src="{% static 'js/calculoPrecioPedido.js' %}"></script>
