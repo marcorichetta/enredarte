@@ -15,6 +15,7 @@ from django.views.generic import (
 from django_filters import CharFilter, FilterSet
 from django_tables2.export.views import ExportMixin
 from pedidos.models import Pedido
+from proveedores.models import Proveedor
 
 from core.mixins import DeleteSuccessMessageMixin
 
@@ -36,6 +37,8 @@ class Dashboard(LoginRequiredMixin, TemplateView):
 
         context["pedidos_en_proceso"] = Pedido.objects.filter(estado=Pedido.EN_PROCESO)
         context["pedidos_listos"] = Pedido.objects.filter(estado=Pedido.LISTO)
+
+        context["proveedores"] = Proveedor.objects.all()[:5]
 
         return context
 
