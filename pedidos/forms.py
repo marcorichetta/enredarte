@@ -39,9 +39,9 @@ class PedidoForm(forms.ModelForm):
                     Field("estado"),
                     Field("fecha_entrega"),
                     Field("detalles", style="height: 5rem"),
-                    Field("descuento"),
+                    Field("descuento", min=0, max=100),
                     Field("pagado"),
-                    css_class="col-6",
+                    css_class="col-5",
                 ),
                 Div(
                     Fieldset(
@@ -50,7 +50,7 @@ class PedidoForm(forms.ModelForm):
                             "productos", template="pedidos/formset_productos_pedidos.html"
                         ),
                     ),
-                    css_class="col-6 flex-wrap: nowrap",
+                    css_class="col-7 flex-wrap: nowrap",
                 ),
             ),
             HTML("<br>"),

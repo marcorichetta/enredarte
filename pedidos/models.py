@@ -56,6 +56,9 @@ class Pedido(BaseModel):
     pagado = models.BooleanField(default=False, verbose_name="Pagado")
     fecha_pedido = models.DateField(default=date.today, verbose_name="Fecha de pedido")
     fecha_entrega = models.DateField(verbose_name="Fecha de entrega estimada", blank=True)
+    fecha_entrega_real = models.DateField(
+        verbose_name="Fecha de entrega real", blank=True, null=True
+    )
 
     class Meta:
 
@@ -78,12 +81,18 @@ class Pedido(BaseModel):
         se crea o actualiza la OT correspondiente.
         """
 
+        # Si el pedido se crea con estado "En Proceso", es necesario
+        # que se guarde primero para que la OT pueda ser creada
         super().save(*args, **kwargs)
 
         if self.estado == Pedido.EN_PROCESO:
             # Si cambia el pedido -> Actualizar OT
             # Si no existe -> Crear OT
             orden_trabajo, created = OrdenTrabajo.objects.update_or_create(pedido=self,)
+
+        elif self.estado == Pedido.ENTREGADO:
+            self.pagado = True
+            self.fecha_entrega_real = date.today()
 
     @property
     def tiempo_total(self) -> int:

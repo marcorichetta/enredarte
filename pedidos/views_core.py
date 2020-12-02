@@ -11,14 +11,21 @@ def PedidoEnProcesoView(request):
     """
 
     pedido_id = request.POST.get("id_pedido")
+    estado_pedido = request.POST.get("estado_pedido")
 
-    pedido_a_comenzar: Pedido = Pedido.objects.get(id=pedido_id)
+    pedido_a_cambiar: Pedido = Pedido.objects.get(id=pedido_id)
 
-    pedido_a_comenzar.estado = Pedido.EN_PROCESO
-    pedido_a_comenzar.save()
+    if int(estado_pedido) == Pedido.CREADO:
+        pedido_a_cambiar.estado = Pedido.EN_PROCESO
+        pedido_a_cambiar.save()
 
-    messages.success(request, f"El {pedido_a_comenzar} se cambió a estado: En Proceso")
-    messages.success(request, "Se creó la Orden de Trabajo correspondiente")
+        messages.success(request, f"El {pedido_a_cambiar} se cambió a estado: En Proceso")
+        messages.success(request, "Se creó la Orden de Trabajo correspondiente")
+    else:
+        pedido_a_cambiar.estado = Pedido.ENTREGADO
+        pedido_a_cambiar.save()
+
+        messages.success(request, f"El {pedido_a_cambiar} se cambió a estado: Entregado")
 
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
