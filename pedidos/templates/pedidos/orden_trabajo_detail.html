@@ -18,12 +18,7 @@ Orden de Trabajo # {{ object.id }}
                     {{ object.pedido }}
                 </a>
             </h3>
-            <a class="btn btn-sm btn-outline-secondary ml-2" href="{% url 'pedidos:update' object.id %}">
-                <span data-feather="edit-3"></span>
-            </a>
-            <a class="btn btn-sm btn-outline-danger ml-2" href="{% url 'pedidos:delete' object.id %}">
-                <span data-feather="trash"></span>
-            </a>
+
             <span class="ml-auto"><b>Fecha del pedido:</b> {{object.pedido.fecha_pedido}}</span>
         </div>
         <div class="container">
