@@ -32,8 +32,10 @@
 				{{ user.username }}
 			</a>
 			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="{% url 'admin:index' %}">Administrador</a>
-				<a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
+				<a class="dropdown-item" href="{% url 'admin:index' %}">Panel Administrador</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
+        		<div class="dropdown-divider"></div>
+                <button class="dropdown-item">Versión: 1.1.0</button>
 			</div>
 		</li>
 	</ul>
