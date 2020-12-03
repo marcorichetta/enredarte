@@ -15,6 +15,23 @@
     <div class="d-grid p-3">
     <div class="row h-25">
         <div class="col-3">
+            <div class="card shadow border-primary">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-9">
+                            <h5 class="card-title font-weight-bold">
+                                Pedidos creados
+                            </h5>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_creados.count }}</div>
+                        </div>
+                        <a class="col-auto" href="{{ url_pedidos_creados }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
             <div class="card shadow border-warning">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -57,33 +74,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card shadow">
-                <a class="card-body h5 font-weight-bold" href="{% url 'proveedores:list' %}">
-                    Proveedores
-                </a>
-                <ul class="list-group">
-                    {% for proveedor in proveedores %}
-                        <a href="{% url 'proveedores:detail' proveedor.pk %}" class="list-group-item list-group-item-action">
-                            {{ proveedor }}
-                        </a>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card">
-                <div class="card-body">Pedidos en proceso</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small  stretched-link" href="{{ url_pedidos_en_proceso }}">{{ pedidos_en_proceso.count }}</a>
-                </div>
-            </div>
-        </div>
     </div>
-
-    
-    
-    {% include 'core/reporte.html' %}
 </div>
 </div>  
 

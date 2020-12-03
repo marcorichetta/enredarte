@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Reportes {% endblock title %}
+
+{% block extra_head %}
+{% endblock extra_head %}
+
+
+{% block content %}
+<div class="content-section">
+    <h2 class="border-bottom mb-3">Reportes</h2>
+
+    <div class="d-grid p-3">
+        <div class="row">
+            <div class="col mx-2">
+                <h4>Clientes</h4>
+                <div class="list-group">
+                    <a href="{% url 'reportes:clientes-localidad' %}" class="list-group-item list-group-item-action">
+                    Clientes por localidad
+                    </a>
+                </div>
+            </div>
+            <div class="col mx-2">
+                <h4>Productos</h4>
+            </div>
+            <div class="col mx-2">
+                <h4>Pedidos</h4>
+                <a href="{% url 'reportes:pedidos-tiempo' %}" class="list-group-item list-group-item-action">Pedidos por mes</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

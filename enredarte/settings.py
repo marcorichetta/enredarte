@@ -66,6 +66,7 @@ INSTALLED_APPS: List[str] = [
     "pedidos",
     "compras",
     "calendario",
+    "reportes",
 ]
 
 MIDDLEWARE: List[str] = [
@@ -85,7 +86,7 @@ MIDDLEWARE: List[str] = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#internal-ips
 
 # Enable the debug toolbar only in DEBUG mode.
-if DEBUG:
+if False:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["172.22.0.1", "localhost", "127.0.0.1"]

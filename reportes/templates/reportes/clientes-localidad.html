@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Reporte de Clientes {% endblock title %}
+
+{% block content %}
+
+<div class="content-section">
+
+    {% include 'breadcrumb.html' with url_listado='reportes:list' plural="Reportes" %}
+
+    <h2 class="border-bottom mb-3">Reportes de Clientes</h2>
+    <div class="container">
+        {% include 'reportes/reporte.html' %}
+    </div>
+</div>
+
+{% endblock content %}

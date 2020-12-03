@@ -19,14 +19,16 @@
     <!-- PrintJS -->
     <link rel="stylesheet" href="{% static 'css/print.min.css' %}">
 
+    <!-- Jquery JS -->
     <script src="{% static 'js/jquery-3-41.min.js' %}"></script>
 
+    <!-- Select2 -->
     <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
 
 	<!-- Bootstrap Tempus dominus DateTimePicker -->
   	<link rel="stylesheet" href="{% static 'css/tempusdominus-bootstrap-4.min.css' %}" />
 
-    <!-- Toastr -->
+    <!-- Toastr CSS & JS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/toastr-214.css' %}" media="all">
     <script type="text/javascript" src="{% static 'js/toastr-214.min.js' %}" ></script>  
 
@@ -45,21 +47,20 @@
 
             {% include 'toastr.html' %}
 
-			<!-- Errores -->
-			<!-- {% include 'msg_errors.html' %} -->
-			<!-- Errores end-->
-
 			<div class="p-4">
 				{% block content %} {% endblock content %}
 			</div>
 		</main>
 		<!-- Contenido principal end -->
 	</div>
-	<!-- Wrapper end -->
-    <!-- BOOTSTRAP JS -->
+    <!-- Wrapper end -->
+    
+    <!-- Static JS -->
 
+    <!-- BOOTSTRAP JS -->
     <script src="{% static 'js/bootstrap-4-52.bundle.min.js' %}"></script>
 
+    <!-- Feather icons -->
 	<script src="{% static 'js/feather-4-28.min.js' %}"></script>
 
     <!-- Bootstrap datepicker -->
@@ -72,7 +73,10 @@
     <!-- PrintJS -->
     <script src="{% static 'js/print.min.js' %}"></script>
 
+    <!-- ChartJS -->
+    <script src="{% static 'js/chart.min.js' %}"></script>
 
+    <!-- Custom JS -->
 	<script src="{% static 'js/base.js' %}" async></script>
 
 	{% block extra_js %}{% endblock extra_js %}

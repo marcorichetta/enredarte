@@ -19,6 +19,7 @@ urlpatterns += [
     path("productos/", include("productos.urls", namespace="productos")),
     path("proveedores/", include("proveedores.urls", namespace="proveedores")),
     path("pedidos/", include("pedidos.urls", namespace="pedidos")),
+    path("reportes/", include("reportes.urls", namespace="reportes")),
     path("users/", include("users.urls")),
     path("users/", include("django.contrib.auth.urls")),
     # path("reportes/", ReporteView.as_view(), name="reporte")
