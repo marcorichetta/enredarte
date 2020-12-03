@@ -1,20 +1,28 @@
 <div id="container" style="width: 75%;">
-    <canvas id="clientes-chart" data-url="{% url 'clientes:reporte' %}"></canvas>
-  </div>
+    <canvas id="clientes-chart" data-url="{% url 'reportes:clientes-localidad-json' %}"></canvas>
+</div>
 
-  <script>
+<script>
 
-        function dynamicColors() {
+        function dynamicColors(alpha=0.5) {
             var r = Math.floor(Math.random() * 255);
             var g = Math.floor(Math.random() * 255);
             var b = Math.floor(Math.random() * 255);
-            return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`
         }
         
-        function poolColors(a) {
+        /**
+        * Generate a pool of colors based on data length
+        *
+        * @param {int} length - Data length
+        * @param {int} alpha - Used in the a of rgba
+        * @return {array} pool - Array of colors
+        */
+        function poolColors(length, alpha) {
             var pool = [];
-            for(i = 0; i < a; i++) {
-                pool.push(dynamicColors());
+            for(i = 0; i < length; i++) {
+                pool.push(dynamicColors(alpha));
             }
             return pool;
         }
@@ -32,22 +40,21 @@
                 var ctx = $clientesChart[0].getContext("2d");
 
                 new Chart(ctx, {
-                    type: 'pie',
+                    type: 'doughnut',
                     data: {
                         labels: data.labels,
                         datasets: [{
                             data: data.num_clientes,
                             label: 'Numero de clientes',
-                            // backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
-                            backgroundColor: poolColors(data.num_clientes.length),
-                            borderColor: "#0",
-                            borderWidth: 1,
+                            backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
+                            // backgroundColor: poolColors(data.num_clientes.length, alpha=0.2),
+                            borderColor: "rgba(0, 0, 0, 0.3)",
                         }]
                     },
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'top',
+                            position: 'bottom',
                         },
                         title: {
                             display: true,
@@ -59,8 +66,3 @@
           })
       })
   </script>
-
-
-{% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-{% endblock extra_js %}

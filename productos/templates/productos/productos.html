@@ -66,12 +66,10 @@ Productos
 
 <div>
     {% render_table table %}
-    {% if filter.qs.count != 0 %}
-        <caption>
-            Mostrando {{ filter.qs.count }} de {{ filter.queryset.count }} registros
-        </caption>
-    {% else %}
-        No se encontraron registros que coinciden con la búsqueda.
+    {% if filter.qs.count == 0 %}
+        No se encontraron registros que coincidan con la búsqueda.
+        <br>
+        Pruebe con otros filtros de búsqueda.
     {% endif %}
 
 </div>

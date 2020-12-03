@@ -5,7 +5,6 @@ from .views import (
     ClienteCreateView,
     ClienteUpdateView,
     ClienteDeleteView,
-    reporte_clientes,
 )
 
 app_name = "clientes"
@@ -15,5 +14,4 @@ urlpatterns = [
     path("<int:pk>/", ClienteDetailView.as_view(), name="detail"),
     path("<int:pk>/delete/", ClienteDeleteView.as_view(), name="delete"),
     path("<int:pk>/update/", ClienteUpdateView.as_view(), name="update"),
-    path("reportes/", reporte_clientes, name="reporte"),
 ]

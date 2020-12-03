@@ -7,7 +7,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters import FilterSet
-from django_filters.filters import DateFromToRangeFilter, ModelChoiceFilter
+from django_filters.filters import ChoiceFilter, DateFromToRangeFilter, ModelChoiceFilter
 from django_tables2.export.views import ExportMixin
 
 from .forms import PedidoForm, ProductosPedidoFormset
@@ -49,7 +49,9 @@ class PedidoTable(tables.Table):
     )
 
 
-class ProductoFilter(FilterSet):
+class PedidoFilter(FilterSet):
+    estado = ChoiceFilter(choices=Pedido.ESTADO_PEDIDO_CHOICES)
+
     nombre = ModelChoiceFilter(
         queryset=Cliente.objects.all(), field_name="cliente", label="Buscar por cliente"
     )
@@ -62,13 +64,13 @@ class ProductoFilter(FilterSet):
 
     class Meta:
         model = Pedido
-        fields = ["cliente", "fecha_entrega"]
+        fields = ["estado", "cliente", "fecha_entrega"]
 
 
 class PedidoListView(ExportMixin, tables.SingleTableView):
     table_class = PedidoTable
     model = Pedido
-    filter_class = ProductoFilter
+    filter_class = PedidoFilter
     template_name = "pedidos/pedidos.html"
     export_formats = ("csv", "xlsx")
     table_pagination = {"per_page": 10}

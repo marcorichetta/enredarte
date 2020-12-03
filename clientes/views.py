@@ -124,21 +124,3 @@ class ClienteDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Cliente
     success_url = reverse_lazy("clientes:list")
     success_message = "El cliente fue eliminado con éxito."
-
-
-def reporte_clientes(request):
-
-    labels = []
-    data = []
-
-    qs = (
-        Localidad.objects.values("localidad")
-        .annotate(num_clientes=Count("clientes"))
-        .exclude(num_clientes__lte=0)
-    )
-
-    for c in qs:
-        labels.append(c["localidad"])
-        data.append(c["num_clientes"])
-
-    return JsonResponse(data={"labels": labels, "num_clientes": data})
