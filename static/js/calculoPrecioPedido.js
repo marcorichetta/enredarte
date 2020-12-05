@@ -13,33 +13,45 @@ function* zip(arr1, arr2, i = 0) {
         yield [arr1[i], arr2[i++]];
 }
 
+// Como no vas a tener una función para hacer sleep JS
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 
 async function calcularPrecio() {
 
-    let productosFiltrados = filtrarElementosBorrados()
+    const spinner = document.getElementById("spinner");
+
+    spinner.removeAttribute("hidden");
+
+    let productosFiltrados = filtrarFormsetsBorrados()
 
     let productos = obtenerIDProductos(productosFiltrados);
 
     let cantidades = obtenerCantidades(productosFiltrados);
 
     // Merge de los arrays en uno solo para enviar al back
-    let dataProductos = [ ...zip(productos, cantidades) ]
+    let datosAEnviar = [ ...zip(productos, cantidades) ]
     
-    let precios = await obtenerPrecio(dataProductos);
+    let datosProductos = await enviarDatosAjax(datosAEnviar);
 
-    mostrarPreciosProductos(precios, productosFiltrados);
+    await sleep(500)
 
-    calcularPrecioPedido(precios);
+    crearHTMLProductos(datosProductos)
 
+    spinner.setAttribute('hidden', '');
+
+    return true
 }
 
 /**
  * Selecciona los formsets creados
- * Filtra los borrados => display: "none"
+ * Filtra los borrados => `display: "none"`
  * 
- * Devuelve un [] de elementos HTML
+ * Devuelve un `Array` de formsets
  */
-function filtrarElementosBorrados() {
+function filtrarFormsetsBorrados() {
     let formsetsProductos = document.querySelectorAll(".formset_row-productos_pedidos")
 
     let productosFiltrados = Array.from(formsetsProductos).filter(e => e.style.display !== "none")
@@ -48,71 +60,31 @@ function filtrarElementosBorrados() {
 }
 
 /**
- * Toma un array de precios, reemplaza el valor en los elementos
- * y los hace visibles
- * @param {Object} listaPrecios Array con precios a mostrar
+ * Obtiene el pk de los productos seleccionados
+ * 
+ * @param {Element[]} formsets Array de elementos HTML de los formsets
+ * 
+ * @returns {Array}
  */
-function mostrarPreciosProductos(listaPrecios, elementos) {
+function obtenerIDProductos(formsets) {
+    // Extraer ids de los elementos hijos de cada formset
+    const idProductos = Array.from(formsets).map(elem => elem.querySelector(".producto").value);
 
-    divPrecios = Array.from(elementos).map(elem => elem.querySelector("#div_precio"));
-    boxPrecios = Array.from(elementos).map(elem => elem.querySelector("#precio_producto"));
-
-    // Por cada "input" del precio
-    calcularPrecioProducto(boxPrecios);
-
-    // Mostrar los elementos que contienen el precio
-    Array.from(divPrecios).map(elem => elem.removeAttribute("hidden"))
-
-
-    function calcularPrecioProducto(boxPrecios) {
-        Array.from(boxPrecios).map(elem => {
-
-            // Sacar el id
-            let key = elem.dataset.id;
-
-            // Matchear array de precio - cantidad dentro del object precios 
-            // con el Id del producto siendo iterado
-            let arrPrecioQty = listaPrecios[key];
-
-            // precio * cantidad
-            let precioProducto = arrPrecioQty[0] * arrPrecioQty[1];
-
-            elem.textContent = precioProducto;
-        });
-    }
+    return idProductos;
 }
 
 /**
- * Multiplicar arrays [precio, cantidad] 
- * Sumar todos los valores
- * Asignar total
- * Sacar descuento
- * Mostrar valores en los precios
- * @param {Object} listaPrecios Objeto con id de productos { [ precio, cantidad ]}
+ * Obtiene la cantidad de los productos seleccionados
+ * 
+ * @param {Element[]} elementos Array de elementos HTML de los formsets
+ * 
+ * @returns {Array}
  */
-function calcularPrecioPedido(listaPrecios) {
-    let totalPedido = Object.values(listaPrecios)
-        .map(p => p[0] * p[1])
-        .reduce((a, b) => a + b, 0);
+function obtenerCantidades(elementos) {
+    // Extraer ids de los elementos hijos de cada formset
+    const cantidades = Array.from(elementos).map(elem => elem.querySelector(".cantidad").value);
 
-        
-    let porcentajeDescuento = document.querySelector("#id_descuento").value
-    
-    let precioDescuento = totalPedido * (parseInt(porcentajeDescuento)/100)
-    
-    let totalPedidoConDescuento = parseInt(totalPedido) - parseInt(precioDescuento)
-    
-    // Asignar precios y mostrar los elementos
-
-    document.querySelector("#precio_pedido").textContent = totalPedido.toFixed(0);
-    document.querySelector("#div_precio_pedido").removeAttribute("hidden");
-
-    document.querySelector("#descuento_pedido").textContent = precioDescuento.toFixed(0);
-    document.querySelector("#div_descuento_pedido").removeAttribute("hidden");
-
-    document.querySelector("#precio_pedido_descuento").textContent = totalPedidoConDescuento.toFixed(0);
-    document.querySelector("#div_precio_pedido_descuento").removeAttribute("hidden");
-    
+    return cantidades
 }
 
 /**
@@ -121,9 +93,9 @@ function calcularPrecioPedido(listaPrecios) {
  * donde se calculan los precios de los productos.
  * 
  * Devuelve un Json
- * @param {Array} dataProductos Array con los IDs de los productos seleccionados
+ * @param {Array} datosAEnviar Array con los IDs y las cantidades de los productos seleccionados
  */
-async function obtenerPrecio(dataProductos) {
+async function enviarDatosAjax(datosAEnviar) {
     let url = "/productos/precio/"
 
     const csrftoken = $("[name=csrfmiddlewaretoken]").val()
@@ -139,7 +111,7 @@ async function obtenerPrecio(dataProductos) {
                     "Content-Type": "application/json",
                 },
                 method: "POST",
-                body: JSON.stringify({ 'dataProductos': dataProductos })
+                body: JSON.stringify({ 'dataProductos': datosAEnviar })
             },
         )
         
@@ -151,59 +123,74 @@ async function obtenerPrecio(dataProductos) {
 }
 
 /**
- * Obtiene el pk de los productos seleccionados
- * Asigna el atributo [data-id = pk] a los "input" de precio de cada producto
- * 
- * @param {Element[]} elementos Array de elementos HTML de los formsets
- * 
- * @returns {Array}
+ * Crea los elementos HTML para los productos
+ * y los anexa al listado.
+ * @param {Object} precios Objeto que contiene los precios y cantidades de los productos
+ * @param {Array} formsets Productos a mostrar en el listado de precios
  */
-function obtenerIDProductos(elementos) {
+function crearHTMLProductos(datosProductos) {
 
-    // Seleccionar formsets
-    // Filtrar los que no estén ocultos
-    // Extraer ids de los elementos
+    // Crear nodos para productos
+    const productosNuevos = Object.entries(datosProductos).map(producto => {
 
-    // let formsetsProductos = document.querySelectorAll(".formset_row-productos_pedidos")
+        const { nombre, precio, cantidad } = producto[1]
 
-    // let productosFiltrados = Array.from(formsetsProductos).filter(e => e.style.display !== "none")
+        let precioTotal = precio * cantidad
 
-    // Extraer ids de los elementos hijos de cada formset
-    let idProductos = Array.from(elementos).map(elem => elem.querySelector(".producto").value);
+        let nuevoProducto = document.createElement("li")
+        nuevoProducto.id = "li-producto"
+        nuevoProducto.classList = "list-group-item d-flex justify-content-between"
 
-    // Buscar los el box del precio de cada elemento seleccionado
-    // Setearle un atributo data-id == al pk del producto seleccionado
-    Array.from(elementos).map(prod => {
-        let idProducto = prod.querySelector(".producto").value
-        prod.querySelector("#precio_producto").dataset.id = parseInt(idProducto)
-    });
-    // Array.from(productosFiltrados).map(prod => {
-    //     parentDivProducto = prod.parentElement.parentElement.parentElement // Que sucio me siento escribiendo esto
-    //     parentDivProducto.querySelector("#precio_producto").dataset.id = prod.value
-    // });
+        nuevoProducto.innerHTML = 
+        `<div>
+                <h6 class="my-0" id="nombre_producto">${nombre}</h6>
+            </div>
+            <span class="text-muted" id="precio_producto">$ ${precioTotal.toFixed()}</span>
+        `
 
-    return idProductos
-}
-
-/**
- * Obtiene la cantidad de los productos seleccionados
- * 
- * @param {Element[]} elementos Array de elementos HTML de los formsets
- * 
- * @returns {Array}
- */
-function obtenerCantidades(elementos) {
+        return nuevoProducto
+    })
     
-    // let formsetsProductos = document.querySelectorAll(".formset_row-productos_pedidos")
-
-    // let productosFiltrados = Array.from(formsetsProductos).filter(e => e.style.display !== "none")
     
-    // Extraer ids de los elementos hijos de cada formset
-    let cantidadProductos = Array.from(elementos).map(elem => elem.querySelector(".cantidad").value);
+    // Calculo de precios
 
-    // let cantidadNodeList = document.querySelectorAll(".cantidad");
+    let porcentajeDescuento = document.querySelector("#id_descuento").value
 
-    // let cantidadProductos = Array.from(cantidadNodeList).map(cantidad => parseInt(cantidad.value));
+    let totalPedido = Object.entries(datosProductos).map(p => {
+        const { precio, cantidad } = p[1]
+      return precio * cantidad
+    }).reduce((a, b) => a + b, 0)
 
-    return cantidadProductos
+    let precioDescuento = totalPedido * (parseInt(porcentajeDescuento)/100)
+    
+    let totalPedidoConDescuento = parseInt(totalPedido) - parseInt(precioDescuento)
+
+    // Crear nodo para descuento
+    let liDescuento = document.createElement("li")
+    liDescuento.id = "li-descuento"
+    liDescuento.classList = "list-group-item d-flex justify-content-between bg-light"
+
+    liDescuento.innerHTML = 
+    `<div class="text-success">
+        <h6 class="my-0">Descuento</h6>
+    </div>
+    <span class="text-success">-$ ${precioDescuento.toFixed()}</span>
+    `
+
+    // Crear nodo para precio total
+    let liTotalPedido = document.createElement("li")
+    liTotalPedido.id = "li-total-pedido"
+    liTotalPedido.classList = "list-group-item d-flex justify-content-between"
+
+    liTotalPedido.innerHTML = 
+    `<span>Total</span>
+    <strong>$ ${totalPedidoConDescuento.toFixed()}</strong>
+    </li>`
+
+    // Seleccionar elemento padre
+    const listadoProductos = document.querySelector("#listado-productos")
+
+    // Reemplazar listado anterior con nuevo listado
+    listadoProductos.replaceChildren(...productosNuevos, liDescuento, liTotalPedido);
+
 }

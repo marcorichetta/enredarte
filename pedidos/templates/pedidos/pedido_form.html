@@ -1,26 +1,134 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load widget_tweaks %}
 
 {% block title %} Crear Pedido {% endblock title %}
-    
+
 {% block content %}
 <div class="d-grid p-3">
 
     {% block breadcrumb %}
-        {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" create=True %}
+    {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" create=True %}
     {% endblock breadcrumb %}
-        
+
 
     <div class="content-section">
         <legend class="border-bottom mb-3">
             {% block legend %}
-                Crear Pedido
+            Crear Pedido
             {% endblock legend %}
         </legend>
         <div class="col-9">
-            {% crispy form %}
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <!-- Datos generales -->
+                    <legend>Datos generales</legend>
+                    <div id="form-pedido" class="col-7 border rounded p-3 mb-4">
+                        {{ form.cliente|as_crispy_field }}
+                        {{ form.estado|as_crispy_field }}
+                        {{ form.fecha_entrega|as_crispy_field }}
+                    </div>
+                    <!-- End Datos generales -->
+
+                    <legend>Agregar Productos</legend>
+                    <!-- Agregar Productos -->
+                    <div class="d-flex flex-wrap border rounded p-2 mb-4">
+                        <div id="formset-pedido" class="col-7 d-flex flex-nowrap">
+                            <fieldset>
+                                {{ productos.management_form|crispy }}
+
+                                {% for form in productos.forms %}
+
+                                    {# Incluir los campos ocultos del form #}
+
+                                    {% for hidden in form.hidden_fields %}
+                                    {{ hidden|as_crispy_field }}
+                                    {% endfor %}
+
+                                    <div class="row formset_row-productos_pedidos dynamic-form" style="flex-wrap: nowrap">
+                                        {{ form.producto|add_class:"w-auto"|add_class:"producto"|as_crispy_field}}
+                                        {{ form.cantidad|attr:"min:1"|add_class:"cantidad"|as_crispy_field }}
+                                        {{ form.DELETE|as_crispy_field }}
+                                    </div>
+                                {% endfor %}
+                            </fieldset>
+                        </div>
+                        <!-- End Agregar Productos -->
+                        <!-- Calcular Precios -->
+                        <div class="col-4 ml-auto mb-4">
+                            <!-- this will show our spinner -->
+                            <div hidden id="spinner"></div>
+                            <h4 class="d-flex justify-content-between align-items-center">
+                              <span class="text-muted">Resumen</span>
+                            </h4>
+                            <ul id="listado-productos" class="list-group mb-3">
+                              <li id="li-producto" class="list-group-item d-flex justify-content-between">
+                                <div>
+                                <h6 class="my-0" id="nombre_producto">
+                                    Agregue productos y luego presione <b>Calcular Precio</b>
+                                </h6>
+                                </div>
+                              </li>
+                            </ul>
+
+                            <div class="card flex-row p-2 align-items-center">
+                                <div class="col-5">
+                                    <input type="number" id="id_descuento" name="descuento" value="{{ form.descuento.value }}" min="0" max="100" step="1" required="" class="form-control">
+                                    <small id="hint_id_descuento" class="form-text text-muted">% de descuento.</small>
+                                </div>
+                              <div class="col-7">
+                                <button type="button" class="btn btn-secondary" onclick="calcularPrecio()">Calcular precio</button>
+                              </div>
+                            </div>
+                        </div>
+                        <!-- End Calcular Precios -->
+                    </div>
+                <div id="form-pedido-extras">
+                    <legend>Extras</legend>
+
+                    <div class="col-8">
+
+                        {{ form.detalles|attr:"rows: 4"|as_crispy_field }}
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                {% crispy_field form.pagado 'class' 'custom-control-input' %}
+                                <label class="custom-control-label" for="{{ form.pagado.id_for_label }}">{{ form.pagado.label }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="buttonHolder">
+                        <input type="submit" name="submit" value="Guardar Pedido" class="btn btn-success mr-4"
+                            id="submit-id-submit">
+                        <button id="cancel-btn" type="button" class="btn btn-secondary" name="cancel" onclick="window.history.go(-1)" >Cancelar</button>
+                    </div>
+            </form>
         </div>
     </div>
 </div>
+
+
+
+<!-- Django Dynamic Formset -->
+<script src="{% static 'js/jquery.formset-15.js' %}"></script>
+<script type="text/javascript">
+    // Docs: https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst#formset-options
+
+    // Opciones para personalizar como se renderiza el formset
+    $('.formset_row-{{ productos.prefix }}').formset({
+        addText: 'Agregar',
+        addCssClass: 'btn btn-primary',
+        deleteText: 'Borrar',
+        deleteCssClass: 'btn btn-danger align-self-end',
+        prefix: '{{ productos.prefix }}',
+    });
+
+</script>
+
+<script src="{% static 'js/calculoPrecioPedido.js' %}"></script>
 
 {% endblock content %}

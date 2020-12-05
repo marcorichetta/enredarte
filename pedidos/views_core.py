@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 
-# TODO - #50 Agregar cambio de estado Listo => Entregado
 def PedidoEnProcesoView(request):
     """
     Endpoint para cambiar el estado del pedido a En Proceso.

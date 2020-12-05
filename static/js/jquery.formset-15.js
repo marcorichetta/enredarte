@@ -56,7 +56,17 @@
                 var delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.'),
                     addCssSelector = $.trim(options.addCssClass).replace(/\s+/g, '.');
 
-                var delButtonHTML = '<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>';
+                var delButtonHTML = 
+                `
+                <div class="d-flex form-group" data-id="div-borrar">
+                    <a class="${options.deleteCssClass}" href="javascript:void(0)">${options.deleteText}</a>
+                </div>
+                `;
+                // '<div class=""> \
+                // <label class="col-form-label col-auto requiredField"> </label> \
+                //     <a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a> \
+                // </div>';
+
                 if (options.deleteContainerClass) {
                     // If we have a specific container for the remove button,
                     // place it as the last child of that container:
