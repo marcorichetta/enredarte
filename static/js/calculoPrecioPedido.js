@@ -31,6 +31,8 @@ async function calcularPrecio() {
 
     let cantidades = obtenerCantidades(productosFiltrados);
 
+    if (cantidades === false) { return false }
+
     // Merge de los arrays en uno solo para enviar al back
     let datosAEnviar = [ ...zip(productos, cantidades) ]
     
@@ -83,6 +85,21 @@ function obtenerIDProductos(formsets) {
 function obtenerCantidades(elementos) {
     // Extraer ids de los elementos hijos de cada formset
     const cantidades = Array.from(elementos).map(elem => elem.querySelector(".cantidad").value);
+
+    if (cantidades.some(c => c === "")) {
+        
+        spinner.setAttribute('hidden', '');
+
+        Swal.fire({
+            title: 'Error!',
+            text: 'Por favor, ingrese las cantidades de todos los productos y vuelva a calcular el precio',
+            icon: 'error',
+            confirmButtonText: 'Entendido',
+          })
+
+        return false
+    }
+
 
     return cantidades
 }
