@@ -10,35 +10,49 @@ Orden de Trabajo # {{ object.id }}
 <div class="d-grid p-3">
     {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" detail=True %}
 
-    <div class="container border rounded p-3">
+    <div id="OT" class="container border rounded p-3">
 
         <div class="d-flex align-items-center border-bottom mb-4">
-            <h3>Orden de Trabajo #{{ object.id }} - 
-                <a href="{% url 'pedidos:detail' object.pedido.pk %}">
-                    {{ object.pedido }}
-                </a>
+            <h3>
+                Orden de Trabajo #{{ object.id }} -
+                {{ object.pedido }} -
+                <span>({{object.get_estado_display}})</span>
             </h3>
-
-            <span class="ml-auto"><b>Fecha del pedido:</b> {{object.pedido.fecha_pedido}}</span>
+            <ul id="btn-opciones" class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <button class="btn" href="#" role="button" id="dropdownExportar" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                        <a id="printjs" type="button" class="dropdown-item" onclick="printJS({
+                            printable: 'OT',
+                            type:'html',
+                            maxWidth: 1500,
+                            css: '/static/css/bootstrap-452.min.css',
+                            ignoreElements: [
+                                'printjs', 'form-estado', 'btn-opciones', 'btn-menu', 'btn-producto'
+                            ]
+                            })">
+                            Imprimir O.T.
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        </a>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    <h6><b>Cliente: </b> <a href="{% url 'clientes:detail' object.pedido.cliente.pk %}">{{object.pedido.cliente}}</a></h6>
-                    <h6><b>Estado del proceso: </b> {{object.get_estado_display}}</h6>
-                    {% if object.estado == 0 %}
-                        <form action="{% url 'pedidos:finalizar_ot' %}" method="post">
-                            {% csrf_token %}
-                            <button class="btn btn-sm btn-outline-info" name="id_orden_trabajo" type="submit" value="{{ object.pk }}">
-                                Finalizar Orden de Trabajo
-                            </button>
-                        </form>
-                    {% endif %}
+                    <h6><b>Cliente: </b> <a
+                            href="{% url 'clientes:detail' object.pedido.cliente.pk %}">{{object.pedido.cliente}}</a>
+                    </h6>
                 </div>
                 <div class="col-auto text-right">
+                    <h6><b>Fecha del pedido:</b> {{object.pedido.fecha_pedido}}</h6>
                     <h6><b>Inicio del proceso:</b> {{ object.created | date }}</h6>
-                    <h6><b>Última modificación:</b> {{object.modified | date }}</h6>
-                    <h6><b>Entrega estimada:</b> {{object.pedido.fecha_entrega}} ({{ object.pedido.fecha_entrega | timeuntil }})</h6>
+                    <h6><b>Entrega estimada:</b> {{object.pedido.fecha_entrega}}
+                        ({{ object.pedido.fecha_entrega | timeuntil }})</h6>
                 </div>
             </div>
         </div>
@@ -47,66 +61,73 @@ Orden de Trabajo # {{ object.id }}
         {% for registro in object.pedido.productos_pedidos.all %}
 
         {% with producto_del_pedido=registro.producto %}
-            <div class="accordion" id="accordionProductos-{{forloop.counter}}">
-                <div class="card w-100">
-                    <div class="card-header" id="heading-{{forloop.counter}}">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ forloop.counter }}" aria-expanded="true" aria-controls="#collapse-{{forloop.counter}}">
-                                {{producto_del_pedido}} - Cantidad: {{registro.cantidad}} 
-                            </button>
-                        </h2>
-                    </div>
-                
-                    <div id="collapse-{{forloop.counter}}" class="collapse" aria-labelledby="heading-{{forloop.counter}}" data-parent="#accordionProductos-{{forloop.counter}}">
-                        <div class="card-body">
-                            <h5>Insumos necesarios</h5>    
-                                {% if producto_del_pedido.tipo == "regular" %}
-                                    <b>Base</b>
-                                    <ul>
-                                        <li>Base: {{ producto_del_pedido.regular.insumo_base }}</li>
-                                        <li>Lados: {{ producto_del_pedido.regular.insumo_lados }}</li>
-                                    </ul>
-                                {% endif %}
+        <div class="accordion" id="accordionProductos-{{forloop.counter}}">
+            <div class="card w-100">
+                <div class="card-header" id="heading-{{forloop.counter}}">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                            data-target="#collapse-{{ forloop.counter }}" aria-expanded="true"
+                            aria-controls="#collapse-{{forloop.counter}}">
+                            {{producto_del_pedido}} - Cantidad: {{registro.cantidad}}
+                        </button>
+                    </h2>
+                </div>
 
-                            <b>Extra</b>
-                            <ul>
-                                {% for insumo in producto_del_pedido.insumos_por_producto.all %}
-                                    <li>{{ insumo }}</li>
-                                {% endfor %}
-                            </ul>
-                            <a class="btn btn-outline-info" href="{% url 'productos:detail' producto_del_pedido.pk %}">
-                                Ver producto
-                            </a>
-                        </div>
+                <div id="collapse-{{forloop.counter}}" class="collapse" aria-labelledby="heading-{{forloop.counter}}"
+                    data-parent="#accordionProductos-{{forloop.counter}}">
+                    <div class="card-body">
+                        <h5>Insumos necesarios</h5>
+                        {% if producto_del_pedido.tipo == "regular" %}
+                        <b>Base</b>
+                        <ul>
+                            <li>Base: {{ producto_del_pedido.regular.insumo_base }}</li>
+                            <li>Lados: {{ producto_del_pedido.regular.insumo_lados }}</li>
+                        </ul>
+                        {% endif %}
+
+                        <b>Extra</b>
+                        <ul>
+                            {% for insumo in producto_del_pedido.insumos_por_producto.all %}
+                            <li>{{ insumo }}</li>
+                            {% endfor %}
+                        </ul>
+                        <a id="btn-producto" class="btn btn-outline-info" href="{% url 'productos:detail' producto_del_pedido.pk %}">
+                            Ver producto
+                        </a>
                     </div>
-                    
                 </div>
             </div>
-            {% endwith %}
-
+        </div>
+        {% endwith %}
         {% endfor %}
-        <!--
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Producto</th>
-                    <th scope="col">Detalles</th>
-                </tr>
-            </thead>
-             <tbody>
-                {% for registro in object.pedido.productos_pedidos.all %}
-                <tr>
-                    <th scope="row">{{registro.cantidad}}</th>
-                    <td><a href="{% url 'productos:detail' registro.producto.pk %}">{{registro.producto}}</a></td>
-                    <td></td>
-                </tr>
-                {% endfor %}
-            </tbody> 
-        </table>-->
         <div class="dropdown-divider"></div>
         <h5>Observaciones</h5>
         {{ object.detalles }}
+        <div class="row mx-auto">
+            <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:detail' object.pedido.pk %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8l-4 4 4 4M16 12H9" /></svg>
+                Volver al pedido
+            </a>
+            {% if object.estado == 0 %}
+            <form id="form-estado" action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-outline-success" name="id_orden_trabajo" type="submit"
+                    value="{{ object.pk }}">
+                    Finalizar Orden de Trabajo
+                </button>
+            </form>
+            {% endif %}
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function confirmar() {
+        return confirm("¿Está seguro de finalizar la Orden de Trabajo?")
+    }
+</script>
+
 {% endblock content %}

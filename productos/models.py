@@ -52,6 +52,9 @@ class Insumo(BaseModel):
     def __str__(self):
         return self.nombre
 
+    def get_absolute_url(self):
+        return reverse("productos:insumos:detail", kwargs={"pk": self.pk})
+
     @property
     def precio_m2(self) -> float:
         """

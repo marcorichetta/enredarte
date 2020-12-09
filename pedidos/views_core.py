@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 
-# TODO - #50 Agregar cambio de estado Listo => Entregado
 def PedidoEnProcesoView(request):
     """
     Endpoint para cambiar el estado del pedido a En Proceso.
@@ -47,4 +46,6 @@ def OrdenTrabajoFinalizadaView(request):
         request, f"El {ot_a_finalizar.pedido} se encuentra Listo para Entrega"
     )
 
-    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    url_pedido_detail: str = ot_a_finalizar.pedido.get_absolute_url()
+
+    return HttpResponseRedirect(url_pedido_detail)

@@ -149,8 +149,13 @@ def product_dispatch(request, pk: int):
 @require_http_methods(["POST"])
 def ProductPriceView(request):
     """
-        Recibe un array con IDs de productos, 
-        calcula los precios y devuelve una lista con los mismos
+        Recibe un array con IDs de productos, calcula los precios
+        y devuelve un JSON con la siguiente estructura:
+        ```json
+        {
+            "15": {"nombre": "Producto regular", "precio": 772.02, "cantidad": "2"}
+        }
+        ```
     """
 
     arrayProductos: list = json.load(request)["dataProductos"]
@@ -159,22 +164,25 @@ def ProductPriceView(request):
 
     qsProductos = Producto.objects.filter(id__in=idsProductos)
 
-    precios: dict = {
-        str(prod.pk): round(float(prod.get_precio()), 2) for prod in qsProductos
+    dictPrecios: dict = {
+        str(prod.pk): {
+            "nombre": prod.nombre,
+            "precio": round(float(prod.get_precio()), 2),
+        }
+        for prod in qsProductos
     }
 
-    dictProductosOrdenadosConQty = dict(arrayProductos)
+    # { 15: {"cantidad": 1} }
+    dictProductosCantidad = {k: {"cantidad": int(v)} for k, v in arrayProductos}
 
     # https://linkode.org/#7ImxADU7tJAdHj8kRevBI6
-    customDict = defaultdict(list)
+    customDict = defaultdict(dict)
 
-    for k, v in precios.items():
-        customDict[k].append(v)
+    for k, v in dictPrecios.items():
+        customDict[k].update(v)
 
-    for k, v in dictProductosOrdenadosConQty.items():
-        customDict[k].append(v)
-
-    finalData: dict = {k: v for k, v in customDict.items()}
+    for k, v in dictProductosCantidad.items():
+        customDict[k].update(v)
 
     # Devolver info a JS
-    return JsonResponse(finalData, safe=False)
+    return JsonResponse(customDict)

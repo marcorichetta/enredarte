@@ -9,6 +9,8 @@
 
 {% block content %}
 
+<div class="d-grid p-3">
+
 {% include 'breadcrumb.html' with url_listado='productos:insumos:list' plural="Insumos" detail=True %}
 
 <div class="container">
@@ -67,5 +69,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock content  %}

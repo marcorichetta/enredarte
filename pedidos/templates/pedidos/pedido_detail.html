@@ -11,85 +11,79 @@ Pedido # {{ object.id }}
 <div class="d-grid p-3">
     {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" %}
 
-    <div id="OT" class="container border rounded p-3">
+    <div id="Pedido" class="container border rounded p-3">
 
         <div class="d-flex align-items-center border-bottom mb-4">
-            <h3>Pedido #{{ object.id }} - {{ object.cliente }}</h3>
-            <a id="btn-update" class="btn btn-sm btn-outline-secondary ml-2" href="{% url 'pedidos:update' object.id %}">
+            <h3>Pedido #{{ object.id }} - <a href="{% url 'clientes:detail' object.cliente.pk %}">{{ object.cliente }}</a></h3>
+            <a id="btn-update" class="btn btn-sm btn-outline-secondary ml-2"
+                href="{% url 'pedidos:update' object.id %}">
                 <span data-feather="edit-3"></span>
             </a>
             <a id="btn-delete" class="btn btn-sm btn-outline-danger ml-2" href="{% url 'pedidos:delete' object.id %}">
                 <span data-feather="trash"></span>
             </a>
-            {% if object.orden_de_trabajo %}
-                <a id="btn-OT" class="btn btn-sm btn-outline-info ml-2" href="{% url 'pedidos:ot_detail' object.orden_de_trabajo.pk %}">
-                    {{ object.orden_de_trabajo }}
-                </a>
-            {% endif %}
 
-            <button id="printjs" type="button" class="btn btn-sm btn-outline-success ml-auto"
-                    onclick="printJS({
-                        printable: 'OT',
-                        type:'html',
-                        maxWidth: 1500,
-                        css: '/static/css/bootstrap-452.min.css',
-                        ignoreElements: [
-                            'btn-delete', 'btn-update', 'btn-OT', 'printjs', 'form-estado'
-                        ]
-                        })">
-                    Descargar Presupuesto
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" /></svg>
-                </button>
-        </div>
-            <div class="d-flex flex-wrap no-gutters">
-                <div class="col-sm">
-                    <h6><b>Estado: </b> {{object.get_estado_display}}</h6>
-                    
-                    <h6>
-                        <b>Pagado: </b> 
-                        {% if object.pagado %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                        {% else %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+            <ul id="btn-opciones" class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <button class="btn" href="#" role="button" id="dropdownExportar" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                        {% if object.orden_de_trabajo %}
+                            <a id="btn-OT" class="dropdown-item" href="{% url 'pedidos:ot_detail' object.orden_de_trabajo.pk %}">
+                                {{ object.orden_de_trabajo }}
+                            </a>
+
+                            <div class="dropdown-divider"></div>
                         {% endif %}
-                    </h6>
-                        
-                    <div id="form-estado">
-                        <form action="{% url 'pedidos:pagar' %}" method="post">
-                            {% csrf_token %}
-                            
-                            {% if object.estado == 0 %}
-                                {% comment %} Creado {% endcomment %}
-                                <input type="hidden" name="estado_pedido" value="{{ object.estado }}">
-                                <button class="btn btn-sm btn-outline-info" name="id_pedido" type="submit" value="{{ object.pk }}">
-                                    Cambiar a En Proceso
-                                </button>
-                            {% elif object.estado == 2 %}
-                                {% comment %} Listo para Entrega {% endcomment %}
-                                <input type="hidden" name="estado_pedido" value="{{ object.estado }}">
-                                <button class="btn btn-sm btn-outline-info" name="id_pedido" type="submit" value="{{ object.pk }}">
-                                    Cambiar a Entregado
-                                </button>
-                            {% endif %}
-                        </form>
+
+                        <a id="printjs" type="button" class="dropdown-item" onclick="printJS({
+                            printable: 'Pedido',
+                            type:'html',
+                            maxWidth: 1500,
+                            css: '/static/css/bootstrap-452.min.css',
+                            ignoreElements: [
+                                'btn-delete', 'btn-update', 'btn-OT', 'printjs', 'form-estado', 'btn-opciones', 'btn-menu'
+                            ]
+                            })">
+                            Descargar Presupuesto
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" /></svg>
+                        </a>
                     </div>
-                </div>
+                </li>
+            </ul>
 
-                <div class="col-sm">
-                    <h6><b>Cliente: </b> <a href="{% url 'clientes:detail' object.cliente.pk %}">{{object.cliente}}</a></h6>
-                </div>
-                <div class="col-auto">
-                    <h6><b>Fecha pedido:</b> {{object.fecha_pedido}}</h6>
-                    <h6><b>Fecha entrega estimada:</b> {{object.fecha_entrega}}</h6>
-
-                    {% if object.fecha_entrega_real %}
-                        <h6><b>Fecha entrega real:</b> {{object.fecha_entrega_real}}</h6>
+        </div>
+        <div class="d-flex flex-wrap no-gutters">
+            <div class="col-sm">
+                <h6><b>Estado: </b> {{object.get_estado_display}}</h6>
+                <h6>
+                    <b>Pagado: </b>
+                    {% if object.pagado %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="round">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     {% endif %}
-                        
-                </div>
+                </h6>
             </div>
+
+            <div class="col-auto">
+                <h6><b>Fecha pedido:</b> {{object.fecha_pedido}}</h6>
+                <h6><b>Fecha entrega estimada:</b> {{object.fecha_entrega}}</h6>
+
+                {% if object.fecha_entrega_real %}
+                <h6><b>Fecha entrega real:</b> {{object.fecha_entrega_real}}</h6>
+                {% endif %}
+
+            </div>
+        </div>
         <div class="dropdown-divider"></div>
         <h4>Productos</h4>
         <table class="table table-striped">
@@ -97,7 +91,7 @@ Pedido # {{ object.id }}
                 <tr>
                     <th scope="col">Cantidad</th>
                     <th scope="col">Producto</th>
-                    <th scope="col">Detalles</th>
+                    <th scope="col"></th>
                     <th scope="col">Precio Unitario</th>
                     <th scope="col">Importe</th>
                 </tr>
@@ -106,59 +100,122 @@ Pedido # {{ object.id }}
                 {% for registro in object.productos_pedidos.all %}
                 <tr>
                     <th scope="row">{{registro.cantidad}}</th>
-                    <td><a href="{% url 'productos:detail' registro.producto.pk %}">{{registro.producto}}</a></td>
-                    <td>{{registro.detalles|default:"-"}}</td>
+                    <td colspan="2"><a href="{% url 'productos:detail' registro.producto.pk %}">{{registro.producto}}</a></td>
                     <td>$ {{registro.producto.get_precio|floatformat}}</td>
                     <td>$ {{registro.precio_pedido|floatformat}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
-                
                 {% if object.descuento > 0 %}
-                    <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <b>Descuento:</b>
-                            <span class="text-success">
-                                $ {{precios.descuento|floatformat}} ({{ object.descuento }}%)
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <b>Total:</b>
-                            <span class="text-success">
-                                $ {{precios.precio_final|floatformat}}
-                            </span>
-                        </td>
-                    </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <b>Descuento:</b>
+                        <span class="text-success">
+                            $ {{precios.descuento|floatformat}} ({{ object.descuento }}%)
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <b>Total:</b>
+                        <span>
+                            $ {{precios.precio_final|floatformat}}
+                        </span>
+                    </td>
+                </tr>
                 {% else %}
-                    <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <b>Total:</b>
-                            <span class="text-success">
-                                $ {{object.get_precio_total|floatformat}}
-                            </span>
-                        </td>
-                    </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <b>Total:</b>
+                        <span>
+                            $ {{object.get_precio_total|floatformat}}
+                        </span>
+                    </td>
+                </tr>
                 {% endif %}
             </tfoot>
         </table>
         <div class="dropdown-divider"></div>
         <h5>Observaciones</h5>
         {{ object.detalles }}
+        <div class="row mx-auto mt-4">
+            <a id="btn-menu" class="btn btn-sm btn-outline-info mr-auto mr-2" href="{% url 'pedidos:list' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8l-4 4 4 4M16 12H9" /></svg>
+                Volver al menú de pedidos
+            </a>
+            <div>
+                <form id="form-estado" action="{% url 'pedidos:cambiar_estado' %}" method="post" onsubmit="return validar(this)">
+                    {% csrf_token %}
+
+                    {% if object.estado == 0 or object.estado == 2 %}
+                        {% comment %} Creado {% endcomment %}
+                        <input type="hidden" name="estado_pedido" value="{{ object.estado }}">
+                        <button class="btn btn-sm btn-success" name="id_pedido" type="submit" value="{{ object.pk }}">
+                            Cambiar a estado
+                            {% if object.estado == 0 %}
+                            En Proceso
+                            {% elif object.estado == 2 %}
+                            Entregado
+                            {% endif %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8l4 4-4 4M8 12h7" /></svg>
+                        </button>
+                    {% elif object.estado == 1 %}
+                        {% comment %} Listo para entrega {% endcomment %}
+                        {% if object.orden_de_trabajo %}
+                        <a id="btn-OT" class="btn btn-sm btn-outline-info ml-2"
+                            href="{% url 'pedidos:ot_detail' object.orden_de_trabajo.pk %}">
+                            {{ object.orden_de_trabajo }}
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function validar(form) {
+
+        return confirm("¿Está seguro de cambiar el estado del pedido?")
+
+        // event.preventDefault();
+
+        // Swal.fire({
+        //     title: '¿Está seguro de cambiar el estado del pedido?',
+        //     showCancelButton: true,
+        //     cancelButtonText: "Cancelar",
+        //     confirmButtonText: "Cambiar",
+        // }).then((result) => {
+
+        //     if (result.isConfirmed) {
+        //         // form.submit() # TODO - Enviar id pedido
+        //         return true
+        //     } else if (result.isDismissed) {
+        //         Swal.fire('Cancelado', '', 'info')
+        //         return false
+        //     }
+        // })
+    }
+
+</script>
 {% endblock content %}
