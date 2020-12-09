@@ -10,7 +10,7 @@ Orden de Trabajo # {{ object.id }}
 <div class="d-grid p-3">
     {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" detail=True %}
 
-    <div class="container border rounded p-3">
+    <div id="OT" class="container border rounded p-3">
 
         <div class="d-flex align-items-center border-bottom mb-4">
             <h3>
@@ -18,6 +18,28 @@ Orden de Trabajo # {{ object.id }}
                 {{ object.pedido }} -
                 <span>({{object.get_estado_display}})</span>
             </h3>
+            <ul id="btn-opciones" class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <button class="btn" href="#" role="button" id="dropdownExportar" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                        <a id="printjs" type="button" class="dropdown-item" onclick="printJS({
+                            printable: 'OT',
+                            type:'html',
+                            maxWidth: 1500,
+                            css: '/static/css/bootstrap-452.min.css',
+                            ignoreElements: [
+                                'printjs', 'form-estado', 'btn-opciones', 'btn-menu', 'btn-producto'
+                            ]
+                            })">
+                            Imprimir O.T.
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        </a>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="container">
             <div class="row">
@@ -69,7 +91,7 @@ Orden de Trabajo # {{ object.id }}
                             <li>{{ insumo }}</li>
                             {% endfor %}
                         </ul>
-                        <a class="btn btn-outline-info" href="{% url 'productos:detail' producto_del_pedido.pk %}">
+                        <a id="btn-producto" class="btn btn-outline-info" href="{% url 'productos:detail' producto_del_pedido.pk %}">
                             Ver producto
                         </a>
                     </div>
@@ -90,7 +112,7 @@ Orden de Trabajo # {{ object.id }}
                 Volver al pedido
             </a>
             {% if object.estado == 0 %}
-            <form action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
+            <form id="form-estado" action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
                 {% csrf_token %}
                 <button class="btn btn-sm btn-outline-success" name="id_orden_trabajo" type="submit"
                     value="{{ object.pk }}">
