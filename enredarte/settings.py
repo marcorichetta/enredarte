@@ -56,6 +56,7 @@ INSTALLED_APPS: List[str] = [
     "django_extensions",
     "django_tables2",
     "widget_tweaks",
+    "stronghold",
     # My apps
     "core",
     "users",
@@ -71,6 +72,7 @@ INSTALLED_APPS: List[str] = [
 
 MIDDLEWARE: List[str] = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "stronghold.middleware.LoginRequiredMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
