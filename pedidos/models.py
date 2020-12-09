@@ -32,7 +32,7 @@ class Pedido(BaseModel):
     )
     # Un cliente no se puede eliminar si tiene pedidos asociados
     cliente = models.ForeignKey(
-        "clientes.Cliente", on_delete=models.PROTECT, related_name="clientes"
+        "clientes.Cliente", on_delete=models.PROTECT, related_name="pedidos"
     )
     productos_pedido = models.ManyToManyField(
         "productos.Producto", through="ProductosPedido"

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Reporte de Pedidos {% endblock title %}
+
+{% block content %}
+
+<div class="content-section">
+
+    {% include 'breadcrumb.html' with url_listado='reportes:list' plural="Reportes" %}
+
+    <div class="container">    
+
+        <div id="container" style="width: 75%;">
+            <canvas id="chart" data-url="{% url 'reportes:pedidos-a-cobrar-json' %}"></canvas>
+        </div>
+    </div>
+
+</div>
+    
+<script>
+
+    $(function () {
+
+        // https://www.chartjs.org/docs/latest/general/fonts.html
+        Chart.defaults.global.defaultFontSize = 16;
+
+        let $Chart = $('#chart')
+
+        $.ajax({
+            url: $Chart.data("url"),
+            success: function (data) {
+                var ctx = $Chart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Pedidos pagados', 'Pedidos a cobrar'],
+                        datasets: [{
+                            data: data.pedidos,
+                            barPercentage: 0.4,
+                            label: 'Pedidos',
+                            backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
+                            borderColor: "rgba(0, 0, 0, 0.3)",
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Pedidos a cobrar'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function(value) {if (value % 1 === 0) {return value;}}
+                                }
+                            }]
+                        }
+                    }
+                });
+              }
+          })
+      })
+  </script>
+
+{% endblock content %}

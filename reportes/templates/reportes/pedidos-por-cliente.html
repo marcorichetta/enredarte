@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Reporte de Clientes {% endblock title %}
+
+{% block content %}
+
+<div class="content-section">
+
+    {% include 'breadcrumb.html' with url_listado='reportes:list' plural="Reportes" %}
+
+    <h2 class="border-bottom mb-3">Reportes de Clientes</h2>
+    <div class="container">
+        <div id="container" style="width: 75%;">
+            <canvas id="chart" data-url="{% url 'reportes:pedidos-por-cliente-json' %}"></canvas>
+        </div>
+        
+        <script>
+        
+                function dynamicColors(alpha=0.5) {
+                    var r = Math.floor(Math.random() * 255);
+                    var g = Math.floor(Math.random() * 255);
+                    var b = Math.floor(Math.random() * 255);
+        
+                    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+                }
+                
+                /**
+                * Generate a pool of colors based on data length
+                *
+                * @param {int} length - Data length
+                * @param {int} alpha - Used in the a of rgba
+                * @return {array} pool - Array of colors
+                */
+                function poolColors(length, alpha) {
+                    var pool = [];
+                    for(i = 0; i < length; i++) {
+                        pool.push(dynamicColors(alpha));
+                    }
+                    return pool;
+                }
+        
+            $(function () {
+        
+                // https://www.chartjs.org/docs/latest/general/fonts.html
+                Chart.defaults.global.defaultFontSize = 16;
+        
+                let $Chart = $('#chart')
+        
+                $.ajax({
+                    url: $Chart.data("url"),
+                    success: function (data) {
+                        var ctx = $Chart[0].getContext("2d");
+        
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    data: data.num_pedidos,
+                                    order: 10,
+                                    label: 'Numero de pedidos',
+                                    barPercentage: 0.4,
+                                    backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
+                                    // backgroundColor: poolColors(data.num_pedidos.length, alpha=0.2),
+                                    borderColor: "rgba(0, 0, 0, 0.3)",
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                legend: {
+                                    display: false,
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Pedidos por cliente'
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            callback: function(value) {if (value % 1 === 0) {return value;}}
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                      }
+                  })
+              })
+          </script>
+        
+    </div>
+</div>
+
+{% endblock content %}

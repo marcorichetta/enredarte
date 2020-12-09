@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from pedidos.models import Pedido
 
 import datetime
+from clientes.models import Cliente
 
 
 class ReportesView(TemplateView):
@@ -15,29 +16,26 @@ class ClientesLocalidadView(TemplateView):
     template_name = "reportes/clientes-localidad.html"
 
 
-class PedidosTiempoView(TemplateView):
-    template_name = "reportes/pedidos-tiempo.html"
+def cliente_por_localidad(request):
 
-
-class ProductosMasSolicitadosView(TemplateView):
-    template_name = "reportes/productos-solicitados.html"
-
-
-def productos_mas_solicitados(request):
-
-    # Recorrer los pedidos
-    # Por cada pedido extraer los productos y sus cantidades
-    # Mezclar los productos y sumar las cantidades
-    # Obtener un dict con los productos junto a sus cantidades
-    # Ordenar por producto
-
-    pedidos = Pedido.objects.all()
-
-    [produ.cantidad for produ in p.productos_pedidos.all() for p in pedidos]
-
+    labels = []
     data = []
 
-    return JsonResponse()
+    qs = (
+        Localidad.objects.values("localidad")
+        .annotate(num_clientes=Count("clientes"))
+        .exclude(num_clientes__lte=0)
+    )
+
+    for c in qs:
+        labels.append(c["localidad"])
+        data.append(c["num_clientes"])
+
+    return JsonResponse(data={"labels": labels, "num_clientes": data})
+
+
+class PedidosTiempoView(TemplateView):
+    template_name = "reportes/pedidos-tiempo.html"
 
 
 def pedidos_por_tiempo(request):
@@ -62,19 +60,61 @@ def pedidos_por_tiempo(request):
     return JsonResponse(data={"pedidos": data})
 
 
-def cliente_por_localidad(request):
+class ProductosMasSolicitadosView(TemplateView):
+    template_name = "reportes/productos-solicitados.html"
+
+
+def productos_mas_solicitados(request):
+
+    # Recorrer los pedidos
+    # Por cada pedido extraer los productos y sus cantidades
+    # Mezclar los productos y sumar las cantidades
+    # Obtener un dict con los productos junto a sus cantidades
+    # Ordenar por producto
+
+    pedidos = Pedido.objects.all()
+
+    [produ.cantidad for produ in p.productos_pedidos.all() for p in pedidos]
+
+    data = []
+
+    return JsonResponse()
+
+
+class PedidosCobrarView(TemplateView):
+    template_name = "reportes/pedidos-a-cobrar.html"
+
+
+def pedidos_a_cobrar(request):
+    """ Pedidos no Pagados """
+
+    no_pagados = Pedido.objects.filter(pagado=False).count()
+    pagados = Pedido.objects.filter(pagado=True).count()
+
+    data = [pagados, no_pagados]
+
+    return JsonResponse(data={"pedidos": data})
+
+
+class PedidosPorClienteView(TemplateView):
+    template_name = "reportes/pedidos-por-cliente.html"
+
+
+def pedidos_por_cliente(request):
+    """ Pedidos por cliente """
 
     labels = []
     data = []
 
     qs = (
-        Localidad.objects.values("localidad")
-        .annotate(num_clientes=Count("clientes"))
-        .exclude(num_clientes__lte=0)
+        Cliente.objects.values("nombre", "apellido")
+        .annotate(num_pedidos=Count("pedidos"))
+        .exclude(num_pedidos__lte=0)
     )
 
     for c in qs:
-        labels.append(c["localidad"])
-        data.append(c["num_clientes"])
+        full_name = f" {c['nombre']} {c['apellido']}"
+        labels.append(full_name)
+        data.append(c["num_pedidos"])
 
-    return JsonResponse(data={"labels": labels, "num_clientes": data})
+    return JsonResponse(data={"labels": labels, "num_pedidos": data})

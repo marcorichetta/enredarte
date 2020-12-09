@@ -11,7 +11,75 @@
 
     <h2 class="border-bottom mb-3">Reportes de Clientes</h2>
     <div class="container">
-        {% include 'reportes/reporte.html' %}
+        <div id="container" style="width: 75%;">
+            <canvas id="clientes-chart" data-url="{% url 'reportes:clientes-localidad-json' %}"></canvas>
+        </div>
+
+        <script>
+
+            function dynamicColors(alpha = 0.5) {
+                var r = Math.floor(Math.random() * 255);
+                var g = Math.floor(Math.random() * 255);
+                var b = Math.floor(Math.random() * 255);
+
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`
+            }
+
+            /**
+            * Generate a pool of colors based on data length
+            *
+            * @param {int} length - Data length
+            * @param {int} alpha - Used in the a of rgba
+            * @return {array} pool - Array of colors
+            */
+            function poolColors(length, alpha) {
+                var pool = [];
+                for (i = 0; i < length; i++) {
+                    pool.push(dynamicColors(alpha));
+                }
+                return pool;
+            }
+
+            $(function () {
+
+                // https://www.chartjs.org/docs/latest/general/fonts.html
+                Chart.defaults.global.defaultFontSize = 16;
+
+                let $clientesChart = $('#clientes-chart')
+
+                $.ajax({
+                    url: $clientesChart.data("url"),
+                    success: function (data) {
+                        var ctx = $clientesChart[0].getContext("2d");
+
+                        new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    data: data.num_clientes,
+                                    label: 'Numero de clientes',
+                                    backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
+                                    // backgroundColor: poolColors(data.num_clientes.length, alpha=0.2),
+                                    borderColor: "rgba(0, 0, 0, 0.3)",
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                legend: {
+                                    position: 'bottom',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Clientes por localidad'
+                                }
+                            }
+                        });
+                    }
+                })
+            })
+        </script>
+
     </div>
 </div>
 
