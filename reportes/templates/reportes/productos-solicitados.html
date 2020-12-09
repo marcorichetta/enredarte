@@ -9,7 +9,7 @@
 
     {% include 'breadcrumb.html' with url_listado='reportes:list' plural="Reportes" %}
 
-    <div class="container">    
+    <div class="container">
 
         <div id="container" style="width: 75%;">
             <canvas id="chart" data-url="{% url 'reportes:productos-solicitados-json' %}"></canvas>
@@ -17,7 +17,7 @@
     </div>
 
 </div>
-    
+
 <script>
 
     $(function () {
@@ -33,37 +33,37 @@
                 var ctx = $clientesChart[0].getContext("2d");
 
                 new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
-                        labels: ['Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                        labels: data.labels,
                         datasets: [{
-                            data: data.pedidos,
-                            label: 'Pedidos',
+                            data: data.num_productos,
+                            backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
                             borderColor: 'rgb(255, 99, 132)',
                         }]
-                        // labels: data.labels,
-                        // datasets: [{
-                        //     data: data.num_clientes,
-                        //     label: 'Numero de clientes',
-                        //     backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
-                        //     // backgroundColor: poolColors(data.num_clientes.length, alpha=0.2),
-                        //     borderColor: "rgba(0, 0, 0, 0.3)",
-                        // }]
                     },
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'bottom',
+                            display: false,
                         },
                         title: {
                             display: true,
-                            text: 'Pedidos por mes'
+                            text: 'Productos más solicitados'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function (value) { if (value % 1 === 0) { return value; } }
+                                }
+                            }]
                         }
                     }
                 });
-              }
-          })
-      })
-  </script>
+            }
+        })
+    })
+</script>
 
 {% endblock content %}

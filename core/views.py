@@ -1,5 +1,4 @@
 import django_tables2 as tables
-from clientes.models import Cliente
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse

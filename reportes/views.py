@@ -2,7 +2,7 @@ from core.models import Localidad
 from django.db.models import Count
 from django.http import JsonResponse
 from django.views.generic import TemplateView
-from pedidos.models import Pedido
+from pedidos.models import Pedido, ProductosPedido
 
 import datetime
 from clientes.models import Cliente
@@ -65,20 +65,18 @@ class ProductosMasSolicitadosView(TemplateView):
 
 
 def productos_mas_solicitados(request):
+    """ Productos más pedidos ordenados de mayor a menor """
 
-    # Recorrer los pedidos
-    # Por cada pedido extraer los productos y sus cantidades
-    # Mezclar los productos y sumar las cantidades
-    # Obtener un dict con los productos junto a sus cantidades
-    # Ordenar por producto
+    qs = (
+        ProductosPedido.objects.values_list("producto__nombre")
+        .annotate(num_productos=Count("cantidad"))
+        .order_by("num_productos")
+    )
 
-    pedidos = Pedido.objects.all()
+    labels = [reg[0] for reg in qs]
+    data = [reg[1] for reg in qs]
 
-    [produ.cantidad for produ in p.productos_pedidos.all() for p in pedidos]
-
-    data = []
-
-    return JsonResponse()
+    return JsonResponse(data={"labels": labels, "num_productos": data})
 
 
 class PedidosCobrarView(TemplateView):
