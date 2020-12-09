@@ -26,11 +26,25 @@
                 <div>
                     <!-- Datos generales -->
                     <legend>Datos generales</legend>
-                    <div id="form-pedido" class="col-7 border rounded p-3 mb-4">
-                        {{ form.cliente|as_crispy_field }}
-                        {{ form.estado|as_crispy_field }}
-                        {{ form.fecha_entrega|as_crispy_field }}
+                    <div id="form-pedido" class="row align-items-center mx-auto pt-3 mb-4 border rounded">
+
+                        <div class="col-4">
+                            {{ form.cliente|add_class:"mb-0"|as_crispy_field }}
+                        </div>
+                        <div class="col-3">
+                            {{ form.estado|as_crispy_field }}
+                        </div>
+                        <div class="col-5">
+                            <div id="div_id_fecha_entrega" class="form-group row">
+
+                            <label class="col-form-label create-label" for="{{ form.fecha_entrega.id_for_label }}">{{ form.fecha_entrega.label }}</label>
+                            <div class="col-6">
+                                {% crispy_field form.fecha_entrega %}
+                            </div>
+                            </div>
+                        </div>
                     </div>
+
                     <!-- End Datos generales -->
 
                     <legend>Agregar Productos</legend>
@@ -86,7 +100,7 @@
                         </div>
                         <!-- End Calcular Precios -->
                     </div>
-                <div id="form-pedido-extras">
+                <div id="form-pedido-extras" class="row mx-auto">
                     <legend>Extras</legend>
 
                     <div class="col-8">
@@ -99,13 +113,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                    <div class="buttonHolder">
-                        <input type="submit" name="submit" value="Guardar Pedido" class="btn btn-success mr-4"
+                    <div class="col-4 align-self-end">
+                        <div class="buttonHolder">
+                            <input type="submit" name="submit" value="Guardar Pedido" class="btn btn-success mr-4"
                             id="submit-id-submit">
-                        <button id="cancel-btn" type="button" class="btn btn-secondary" name="cancel" onclick="window.history.go(-1)" >Cancelar</button>
+                            <button id="cancel-btn" type="button" class="btn btn-secondary" name="cancel" onclick="window.history.go(-1)" >Cancelar</button>
+                        </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>

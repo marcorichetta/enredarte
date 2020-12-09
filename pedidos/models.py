@@ -83,7 +83,6 @@ class Pedido(BaseModel):
 
         # Si el pedido se crea con estado "En Proceso", es necesario
         # que se guarde primero para que la OT pueda ser creada
-        super().save(*args, **kwargs)
 
         if self.estado == Pedido.EN_PROCESO:
             # Si cambia el pedido -> Actualizar OT
@@ -93,6 +92,8 @@ class Pedido(BaseModel):
         elif self.estado == Pedido.ENTREGADO:
             self.pagado = True
             self.fecha_entrega_real = date.today()
+
+        super().save(*args, **kwargs)
 
     @property
     def tiempo_total(self) -> int:

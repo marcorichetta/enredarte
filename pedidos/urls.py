@@ -19,6 +19,6 @@ urlpatterns = [
     path("<int:pk>/update/", PedidoUpdateView.as_view(), name="update"),
     path("orden_trabajo/<int:pk>/", OrdenTrabajoDetailView.as_view(), name="ot_detail"),
     # Estado Pedido
-    path("pagar/", PedidoEnProcesoView, name="pagar"),
+    path("pagar/", PedidoEnProcesoView, name="cambiar_estado"),
     path("finalizar_ot/", OrdenTrabajoFinalizadaView, name="finalizar_ot"),
 ]
