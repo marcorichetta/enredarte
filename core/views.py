@@ -34,10 +34,12 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         context["url_pedidos_creados"] = "%s?estado=0" % reverse_lazy("pedidos:list")
         context["url_pedidos_en_proceso"] = "%s?estado=1" % reverse_lazy("pedidos:list")
         context["url_pedidos_listos"] = "%s?estado=2" % reverse_lazy("pedidos:list")
+        context["url_pedidos_a_cobrar"] = "%s?pagado=false" % reverse_lazy("pedidos:list")
 
         context["pedidos_creados"] = Pedido.objects.filter(estado=Pedido.CREADO)
         context["pedidos_en_proceso"] = Pedido.objects.filter(estado=Pedido.EN_PROCESO)
         context["pedidos_listos"] = Pedido.objects.filter(estado=Pedido.LISTO)
+        context["pedidos_a_cobrar"] = Pedido.objects.filter(pagado=False)
 
         context["proveedores"] = Proveedor.objects.all()[:5]
 

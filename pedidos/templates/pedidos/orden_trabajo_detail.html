@@ -8,8 +8,11 @@ Orden de Trabajo # {{ object.id }}
 {% block content %}
 
 <div class="d-grid p-3">
+    {% if user.groups.all.0 == grupo_operario %}
+
     {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" detail=True %}
 
+    {% endif %}
     <div id="OT" class="container border rounded p-3">
 
         <div class="d-flex align-items-center border-bottom mb-4">
@@ -103,24 +106,36 @@ Orden de Trabajo # {{ object.id }}
         <div class="dropdown-divider"></div>
         <h5>Observaciones</h5>
         {{ object.detalles }}
-        <div class="row mx-auto">
-            <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:detail' object.pedido.pk %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 8l-4 4 4 4M16 12H9" /></svg>
-                Volver al pedido
-            </a>
-            {% if object.estado == 0 %}
-            <form id="form-estado" action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
-                {% csrf_token %}
-                <button class="btn btn-sm btn-outline-success" name="id_orden_trabajo" type="submit"
-                    value="{{ object.pk }}">
-                    Finalizar Orden de Trabajo
-                </button>
-            </form>
-            {% endif %}
-        </div>
+
+            <div class="row mx-auto">
+                {% if user.groups.all.0 != grupo_operario %}
+                    <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:ordenes' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8l-4 4 4 4M16 12H9" /></svg>
+                        Volver al listado de órdenes
+                    </a>
+                {% else %}
+                    <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:detail' object.pedido.pk %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8l-4 4 4 4M16 12H9" /></svg>
+                        Volver al pedido
+                    </a>
+                {% endif %}
+
+                {% if object.estado == 0 %}
+                <form id="form-estado" action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-outline-success" name="id_orden_trabajo" type="submit"
+                        value="{{ object.pk }}">
+                        Finalizar Orden de Trabajo
+                    </button>
+                </form>
+                {% endif %}
+            </div>
     </div>
 </div>
 
