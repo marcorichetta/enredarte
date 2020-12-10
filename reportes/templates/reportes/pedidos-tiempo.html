@@ -9,69 +9,61 @@
 
     {% include 'breadcrumb.html' with url_listado='reportes:list' plural="Reportes" %}
 
-    <div class="container">    
+    <div class="container">
 
-        <div id="container" style="width: 75%;">
-            <canvas id="chart" data-url="{% url 'reportes:pedidos-tiempo-json' %}"></canvas>
+        <div class="row">
+
+            <div id="container" class="col-8" style="width: 75%;">
+                <canvas id="chart" data-url="{% url 'reportes:pedidos-tiempo-json' %}"></canvas>
+            </div>
+            <div class="card col-4">
+                <div class="card-body">
+                    <h5 class="card-title">Ingrese los datos</h5>
+                    <form id="form-grafico" action="{% url 'reportes:pedidos-tiempo-json' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="InputProvincia">Fecha de inicio</label>
+                            <input type="date" class="form-control" id="FechaInicio" placeholder="dd/mm/aaaa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="InputProvincia">Fecha de fin</label>
+                            <input type="date" class="form-control" id="FechaFin" placeholder="dd/mm/aaaa" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Calcular</a>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
-    
-<script>
 
-        function dynamicColors(alpha=0.5) {
-            var r = Math.floor(Math.random() * 255);
-            var g = Math.floor(Math.random() * 255);
-            var b = Math.floor(Math.random() * 255);
+<script type="text/javascript">
 
-            return `rgba(${r}, ${g}, ${b}, ${alpha})`
-        }
-        
-        /**
-        * Generate a pool of colors based on data length
-        *
-        * @param {int} length - Data length
-        * @param {int} alpha - Used in the a of rgba
-        * @return {array} pool - Array of colors
-        */
-        function poolColors(length, alpha) {
-            var pool = [];
-            for(i = 0; i < length; i++) {
-                pool.push(dynamicColors(alpha));
-            }
-            return pool;
-        }
+    document.addEventListener('DOMContentLoaded', () => {
 
-    $(function () {
+        let myChart;
 
         // https://www.chartjs.org/docs/latest/general/fonts.html
         Chart.defaults.global.defaultFontSize = 16;
 
-        let $clientesChart = $('#chart')
+        let $chart = $('#chart')
 
         $.ajax({
-            url: $clientesChart.data("url"),
+            url: $chart.data("url"),
             success: function (data) {
-                var ctx = $clientesChart[0].getContext("2d");
+                var ctx = $chart[0].getContext("2d");
 
-                new Chart(ctx, {
+                // MODIFICAR ESTO PARA QUE EL PRIMER GRÁFICO NO DE ERROR
+                myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ['Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                        labels: data.meses,
                         datasets: [{
-                            data: data.pedidos,
+                            data: data.num_pedidos,
                             label: 'Pedidos',
                             borderColor: 'rgb(255, 99, 132)',
                         }]
-                        // labels: data.labels,
-                        // datasets: [{
-                        //     data: data.num_clientes,
-                        //     label: 'Numero de clientes',
-                        //     backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
-                        //     // backgroundColor: poolColors(data.num_clientes.length, alpha=0.2),
-                        //     borderColor: "rgba(0, 0, 0, 0.3)",
-                        // }]
                     },
                     options: {
                         responsive: true,
@@ -84,9 +76,55 @@
                         }
                     }
                 });
-              }
-          })
-      })
-  </script>
+            }
+        })
+
+        function updateData(chart, label, data) {
+            // Remover datos
+            chart.data.labels.length = 0;
+
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.length = 0;
+            });
+
+            // Agregar nueva data
+            chart.data.labels = label
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data = data
+            });
+
+            chart.update();
+        }
+
+        document.querySelector("#form-grafico").addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const url = document.querySelector("#form-grafico").action
+
+            const csrftoken = $("[name=csrfmiddlewaretoken]").val()
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    fecha_inicio: $('#FechaInicio').val(),
+                    fecha_fin: $('#FechaFin').val(),
+                },
+                dataType: 'json',
+                success: (data) => {
+
+                    console.log(data)
+
+                    let { meses, num_pedidos } = data
+
+                    updateData(myChart, meses, num_pedidos)
+
+                }
+            })
+        })
+
+    })
+</script>
 
 {% endblock content %}
