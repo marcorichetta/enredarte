@@ -23,6 +23,9 @@
             <div class="col-auto">
                 {{ filter.form.nombre|as_crispy_field }}
             </div>
+            <div class="col-auto">
+                {{ filter.form.pagado|as_crispy_field }}
+            </div>
             <div class="col-5 d-flex flex-wrap">
                 {{ filter.form.fecha_entrega|as_crispy_field }}
             </div>
@@ -43,7 +46,7 @@
     <!-- Filtro End -->
 
     <!-- Export -->
-    <div class="d-flex dropdown align-items-center">
+    <div class="d-flex dropdown align-items-center ml-auto col-auto">
         <button class="btn btn-outline-primary" href="#" role="button" id="dropdownExportar" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             Exportar

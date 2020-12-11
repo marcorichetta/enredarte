@@ -7,7 +7,12 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters import FilterSet
-from django_filters.filters import ChoiceFilter, DateFromToRangeFilter, ModelChoiceFilter
+from django_filters.filters import (
+    BooleanFilter,
+    ChoiceFilter,
+    DateFromToRangeFilter,
+    ModelChoiceFilter,
+)
 from django_tables2.export.views import ExportMixin
 
 from .forms import PedidoForm, ProductosPedidoFormset
@@ -53,7 +58,7 @@ class PedidoFilter(FilterSet):
     estado = ChoiceFilter(choices=Pedido.ESTADO_PEDIDO_CHOICES)
 
     nombre = ModelChoiceFilter(
-        queryset=Cliente.objects.all(), field_name="cliente", label="Buscar por cliente"
+        queryset=Cliente.objects.all(), field_name="cliente", label="Cliente"
     )
 
     fecha_entrega = DateFromToRangeFilter(
@@ -62,9 +67,11 @@ class PedidoFilter(FilterSet):
         label="Rango de fechas de entrega",
     )
 
+    pagado = BooleanFilter(field_name="pagado", label="Pagado")
+
     class Meta:
         model = Pedido
-        fields = ["estado", "cliente", "fecha_entrega"]
+        fields = ["estado", "cliente", "fecha_entrega", "pagado"]
 
 
 class PedidoListView(ExportMixin, tables.SingleTableView):

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from .views import RegisterView
+from .views import RegisterView, choice_homepage
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
@@ -12,4 +12,5 @@ urlpatterns = [
         ),
         name="login",
     ),
+    path("choice/", choice_homepage, name="choice-homepage"),
 ]
