@@ -16,10 +16,9 @@ def choice_homepage(request):
 
     user = request.user
 
-    administrativo = user.groups.filter(name="grupo_administrativo")
     operario = user.groups.filter(name="grupo_operario")
 
-    if administrativo:
-        return redirect("core:home")
     if operario:
         return redirect("pedidos:ordenes")
+
+    return redirect("core:home")

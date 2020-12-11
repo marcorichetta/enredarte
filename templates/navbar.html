@@ -32,7 +32,10 @@
 				{{ user.username }}
 			</a>
 			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="{% url 'admin:index' %}">Panel Administrador</a>
+
+                {% if user.groups.all.0.name != "grupo_operario" %}
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">Panel Administrador</a>
+                {% endif %}
                 <a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
         		<div class="dropdown-divider"></div>
                 <button class="dropdown-item">Versión: 1.1.0</button>

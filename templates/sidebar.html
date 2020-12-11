@@ -5,13 +5,25 @@
 <!-- Sidebar -->
 <ul id="sidebar" class="bg-light sidebar hide navbar-nav">
 	<ul class="nav flex-column">
-		<a class="sidebar-brand d-flex align-items-center" href="{% url 'core:home' %}">
+        <a class="sidebar-brand d-flex align-items-center">
 			<div class="sidebar-brand-icon">
                 <img src="{% static 'images/logo.svg' %}" alt="" height="90">
 			</div>
 			<div>Enredarte</div>
 		</a>
-		<hr class="sidebar-divider my-0" />
+        <hr class="sidebar-divider my-0" />
+        {% if user.groups.all.0.name == "grupo_operario" %}
+            <li class="nav-item">
+                <a class="nav-link {% active '/' %}" href="{% url 'pedidos:ordenes' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Órdenes de Trabajo
+                </a>
+            </li>
+        {% else %}
 		<li class="nav-item">
 			<a class="nav-link {% active '/' %}" href="{% url 'core:home' %}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -21,7 +33,7 @@
 				</svg>
 				Inicio
 			</a>
-		</li>
+        </li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
 			<a class="nav-link {% active 'calendario/' %}" href="{% url 'calendario:index' %}">
@@ -139,6 +151,7 @@
 				Reportes
 			</a>
         </li>
+        {% endif %}
 	</ul>
 </ul>
 <!-- Sidebar end -->

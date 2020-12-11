@@ -8,7 +8,7 @@ Orden de Trabajo # {{ object.id }}
 {% block content %}
 
 <div class="d-grid p-3">
-    {% if user.groups.all.0 == grupo_operario %}
+    {% if user.groups.all.0.name != "grupo_operario" %}
 
     {% include 'breadcrumb.html' with url_listado='pedidos:list' plural="Pedidos" detail=True %}
 
@@ -108,7 +108,7 @@ Orden de Trabajo # {{ object.id }}
         {{ object.detalles }}
 
             <div class="row mx-auto">
-                {% if user.groups.all.0 != grupo_operario %}
+                {% if user.groups.all.0.name == "grupo_operario" %}
                     <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:ordenes' %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">

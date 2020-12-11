@@ -173,7 +173,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # Override login redirect url
-LOGIN_REDIRECT_URL = "core:home"
+LOGIN_REDIRECT_URL = "choice-homepage"
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "login"
 
