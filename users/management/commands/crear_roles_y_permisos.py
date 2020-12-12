@@ -1,7 +1,7 @@
 # !/usr/bin/python
 
-from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
+from django.core.management.base import BaseCommand
 from users.models import CustomUser
 
 
@@ -21,6 +21,18 @@ class Command(BaseCommand):
         grupo_administrativo, created = Group.objects.get_or_create(
             name="grupo_administrativo"
         )
+
+        permiso_ver_pedidos = Permission.objects.get(
+            codename="view_pedido", content_type__app_label="pedidos"
+        )
+
+        permiso_ver_clientes = Permission.objects.get(
+            codename="view_cliente", content_type__app_label="clientes"
+        )
+
+        permiso_ver_productos = Permission.objects.get(
+            codename="view_producto", content_type__app_label="productos"
+        )
         permiso_modificar_precio = Permission.objects.get(
             codename="change_product_price", content_type__app_label="productos"
         )
@@ -28,7 +40,11 @@ class Command(BaseCommand):
             codename="change_discount", content_type__app_label="pedidos"
         )
         grupo_administrativo.permissions.add(
-            permiso_modificar_precio, permiso_modificar_descuento
+            permiso_modificar_precio,
+            permiso_modificar_descuento,
+            permiso_ver_pedidos,
+            permiso_ver_clientes,
+            permiso_ver_productos,
         )
 
         self.stdout.write(

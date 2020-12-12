@@ -12,5 +12,4 @@ urlpatterns = [
         ),
         name="login",
     ),
-    path("choice/", choice_homepage, name="choice-homepage"),
 ]

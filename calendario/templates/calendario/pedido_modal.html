@@ -21,7 +21,7 @@
     $("#estado").html(estados[event.extendedProps.status]);
 
     let url = '{% url "pedidos:detail" pk=0 %}'.replace(0, event.id)
-    $("#url").attr('href', url)
+    $("#url").attr('href', url).attr('target', '_blank')
   }
 </script>
 

@@ -8,10 +8,12 @@ from .views import (
     LocalidadDetailView,
     LocalidadDeleteView,
 )
+from users.views import choice_homepage
 
 app_name = "core"
 urlpatterns = [
-    path("", Dashboard.as_view(), name="home"),
+    path("", choice_homepage, name="choice-homepage"),
+    path("inicio/", Dashboard.as_view(), name="home"),
     # Usada con AJAX en el modalform de creación del cliente
     path("localidades/", LocalidadListView.as_view(), name="localidades-list"),
     path("localidades/new/", LocalidadCreateView.as_view(), name="localidades-create"),

@@ -1,4 +1,5 @@
 from core.mixins import DeleteSuccessMessageMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
@@ -94,9 +95,11 @@ class ProductoRegularUpdateView(SuccessMessageMixin, UpdateView):
         return reverse_lazy("productos:regular:detail", kwargs={"pk": self.object.pk})
 
 
-class ProductoRegularDetailView(DetailView):
+class ProductoRegularDetailView(PermissionRequiredMixin, DetailView):
     model = Regular
     template_name = "productos/regular_detail.html"
+
+    permission_required = "productos.view_producto"
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()

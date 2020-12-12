@@ -1,12 +1,13 @@
 from core.mixins import DeleteSuccessMessageMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 
+from productos.forms import PrecioSoloLecturaForm
 from productos.models import Irregular
 
 from .forms import InsumosProductoFormset, ProductoIrregularForm
-from productos.forms import PrecioSoloLecturaForm
 
 
 class ProductoIrregularCreateView(SuccessMessageMixin, CreateView):
@@ -102,9 +103,11 @@ class ProductoIrregularUpdateView(SuccessMessageMixin, UpdateView):
         return reverse_lazy("productos:irregular:detail", kwargs={"pk": self.object.pk})
 
 
-class ProductoIrregularDetailView(DetailView):
+class ProductoIrregularDetailView(PermissionRequiredMixin, DetailView):
     model = Irregular
     template_name = "productos/irregular_detail.html"
+
+    permission_required = "productos.view_producto"
 
 
 class ProductoIrregularDeleteView(DeleteSuccessMessageMixin, DeleteView):

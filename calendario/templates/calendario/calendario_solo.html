@@ -1,0 +1,166 @@
+{% load static %}
+
+{% block extra_head %}
+<!-- Fullcalendar CSS -->
+<!-- <link rel="stylesheet" href="{% static 'calendar/packages/bootstrap/main.min.css' %}" /> -->
+
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css"> -->
+<link rel="stylesheet" href="{% static 'calendar/packages/core/main.min.css' %}" />
+
+
+<style>
+    .creado{
+      background-color: #007bff;
+    }
+    .enProceso{
+      background-color: #ffc107;
+    }
+    .listo{
+      background-color: #28a745;
+    }
+    .entregado{
+      background-color: rgb(99, 99, 99);
+    }
+    .cancelado{
+      background-color: #dc3545; 
+    }
+  </style>
+{% endblock extra_head %}
+
+{% block content %}
+
+<!-- Dashboard Template -->
+<div class="content-section">
+    <div class="container">
+        <div class="form-group col-4">
+            <label for="select_estado">Filtrar por estado</label>
+            <select class="form-control" name="estado" id="select_estado">
+                <option value="9">Todos</option>
+                <!-- https://www.djangotemplatetagsandfilters.com/tags/for/ -->
+                {% for estado in estados_pedidos %}
+                    <option value="{{ forloop.counter0 }}">{{ estado }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id='calendar'></div>
+    </div>
+
+    {% include 'calendario/pedido_modal.html' %}
+</div>
+
+<!-- Dashboard End -->
+
+{% endblock content %}
+
+
+{% block extra_js %}
+
+<!-- Fullcalendar JS -->
+<script src="{% static 'calendar/packages/core/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/core/locales/es.js' %}"></script>
+
+<!-- <script src="{% static 'calendar/packages/bootstrap/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/daygrid/main.min.js' %}"></script>
+<script src="{% static 'calendar/packages/list/main.min.js' %}"></script> -->
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.3.0,npm/fullcalendar@5.3.0/locales/es.min.js"></script> -->
+
+<script type="text/javascript">
+    'use strict';
+    let calendar;
+
+
+    // Calendar initialization
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,listMonth'
+            },
+            locale: 'es',
+            firstDay: 1,
+            editable: true,
+            dayMaxEventRows: 4,
+            eventTextColor: 'white',
+            eventSources: [{
+                url: '{% url "calendario:get_pedidos" idEstado=9 %}'
+            }],
+            eventClassNames: function (info) {
+                let status = info.event.extendedProps.status;
+                switch (status) { 
+                    case 0: 
+                        return "creado"
+                        break;
+                    case 1: 
+                        return "enProceso"
+                        break;
+                    case 2: 
+                        return "listo"
+                        break;
+                    case 3: 
+                        return "entregado"
+                        break;
+                    case 4: 
+                        return "cancelado"
+                        break;
+                    default:
+                        break;
+                    }
+            },
+            eventDidMount: function (info) {
+                $(info.el).tooltip({ 
+                    // Mostrar estado en tooltip (views.py -> get_pedidos)
+                    title: info.event.extendedProps.status_display,
+                });     
+            },
+            eventClick: function (info) {
+                cargarDataForm(info.event);
+                $("#PedidoModal").modal('show');
+            },
+            // https://fullcalendar.io/docs/eventDrop
+            // eventDrop: function (info) {
+            //     console.log(info.event.title, info.oldResource, info)
+            // }
+        });
+
+        calendar.render();
+    });
+
+    function replaceEvents(id_estado) {
+        // Workaround para el render inicial
+        if (id_estado === null) {
+            calendar.removeAllEventSources();
+            return false
+        };
+
+        // Elimina todas las fuentes de eventos del calendario
+        calendar.removeAllEventSources();
+
+        // Creamos la nueva fuente con la url del servicio que necesitamos solicitar
+        let newEventSource = {
+            id: 'source',
+            url: '{% url "calendario:get_pedidos" idEstado=0 %}'.replace(0, id_estado),
+        }
+
+        // Agregamos nueva fuente de eventos
+        calendar.addEventSource(newEventSource);
+    }
+
+    // Cuando cambie el valor del select de Estado
+    $("#select_estado").change(function () {
+        /* 
+            El select contiene 2 propiedades:
+            - id del estado
+            - Texto de la estado
+        */
+        let id_estado = $('#select_estado').val();
+
+        replaceEvents(id_estado);
+    });
+</script>
+{% endblock extra_js %}

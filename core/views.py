@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -23,13 +23,23 @@ from .models import Localidad, Provincia
 # Create your views here.
 
 
-class Dashboard(LoginRequiredMixin, TemplateView):
+class Dashboard(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
     """ Panel principal que contiene información útil para el usuario """
 
     template_name = "index.html"
+    permission_required = "pedidos.view_pedido"
 
     def get_context_data(self, **kwargs):
         context = super(Dashboard, self).get_context_data(**kwargs)
+
+        # Calendario
+        context["estados_pedidos"] = {
+            "Creado": Pedido.CREADO,
+            "En Proceso": Pedido.EN_PROCESO,
+            "Listo para entrega": Pedido.LISTO,
+            "Entregado": Pedido.ENTREGADO,
+            "Cancelado": Pedido.CANCELADO,
+        }
 
         context["url_pedidos_creados"] = "%s?estado=0" % reverse_lazy("pedidos:list")
         context["url_pedidos_en_proceso"] = "%s?estado=1" % reverse_lazy("pedidos:list")

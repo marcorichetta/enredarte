@@ -4,6 +4,11 @@
 
     
 {% block content %}
-<h1>Error 403</h1>
-<b>{{ exception }}</b>
+<div>
+    <h1>Error 403</h1>
+    <h4>No tiene permiso para acceder a esta sección</h4>
+    <a href="{% url 'core:choice-homepage' %}" class="btn btn-primary mt-3">Volver al inicio</a>
+</div>
+
+
 {% endblock content %}

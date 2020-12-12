@@ -1,21 +1,15 @@
 import django_tables2 as tables
 from core.mixins import DeleteSuccessMessageMixin
 from core.models import Localidad, Provincia
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    UpdateView,
-)
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters import CharFilter, FilterSet
 from django_tables2.export.views import ExportMixin
 
 from .forms import ClienteForm
 from .models import Cliente
-from django.db.models.aggregates import Count
-from django.http.response import JsonResponse
 
 
 class ClienteTable(tables.Table):
@@ -107,8 +101,10 @@ class ClienteCreateView(SuccessMessageMixin, CreateView):
         return reverse_lazy("clientes:detail", kwargs={"pk": self.object.pk})
 
 
-class ClienteDetailView(DetailView):
+class ClienteDetailView(PermissionRequiredMixin, DetailView):
     model = Cliente
+
+    permission_required = "clientes.view_cliente"
 
 
 class ClienteUpdateView(SuccessMessageMixin, UpdateView):
