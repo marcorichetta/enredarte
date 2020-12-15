@@ -9,11 +9,23 @@
 
 {% block content %}
 <div class="d-grid p-3">
+    
+    {% block breadcrumb %}
     {% include 'breadcrumb.html' with url_listado='compras:list' plural="Compras" create=True %}
+        
+    {% endblock breadcrumb %}
+        
 
     <div class="content-section">
-        <legend class="border-bottom mb-3">Crear Compra</legend>
-        <div class="col-9">
+        <legend class="border-bottom mb-3">
+            
+            {% block legend %}
+            Crear Compra
+                
+            {% endblock legend %}
+                
+        </legend>
+        <div class="col-8">
             {% crispy form %}
         </div>
     </div>

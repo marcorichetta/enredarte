@@ -56,6 +56,17 @@ class Insumo(BaseModel):
         return reverse("productos:insumos:detail", kwargs={"pk": self.pk})
 
     @property
+    def precio_unitario(self) -> float:
+        """
+            Calcula el precio unitario del insumo
+            Ejemplo: Cola vinílica =>
+            Precio: 90
+            Medida: 25
+            Precio Unitario: 3.6
+        """
+        return self.precio / self.medida
+
+    @property
     def precio_m2(self) -> float:
         """
             Precio Insumo x Ganancia FF / m2 de una plancha de 380x280cm == (10.64 m2)
@@ -324,4 +335,4 @@ class InsumosProducto(BaseModel):
     @property
     def precio_insumos(self) -> float:
         """ Calcula el precio total de cada insumo del producto """
-        return self.cantidad * self.insumo.precio
+        return self.cantidad * self.insumo.precio_unitario

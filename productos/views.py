@@ -17,6 +17,8 @@ class ProductoTable(tables.Table):
 
     get_precio = tables.Column(verbose_name="Precio", orderable=False)
 
+    descripcion = tables.Column(verbose_name="Descripción", default="")
+
     class Meta:
         model = Producto
         fields = (

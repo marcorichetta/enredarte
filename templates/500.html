@@ -3,6 +3,9 @@
 {% block title %}Error 500{% endblock %}
 
 {% block content %}
-<h1>Error 500</h1>
-<p>Parece que algo salió mal</p>
+<div>
+    <h1>Error 500</h1>
+    <h4>Parece que algo salió mal.</h4>
+    <a href="{% url 'core:choice-homepage' %}" class="btn btn-primary mt-3">Volver al inicio</a>
+</div>
 {% endblock content %}

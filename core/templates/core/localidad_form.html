@@ -29,8 +29,8 @@ Crear Localidad
 
             {{ form.cod_postal|attr:"type:number"|attr:"min:0"|as_crispy_field }}
 
-            <div class="form-group">
-                <button class="btn btn-outline-success" type="submit">Guardar</button>
+            <div class="form-group mt-4">
+                <button class="btn btn-success mr-2" type="submit">Guardar</button>
                 <a href="{% url 'core:localidades-list' %}" class="btn btn-outline-secondary">Cancelar</a>
             </div>
             </form>

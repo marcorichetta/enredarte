@@ -15,8 +15,8 @@ class OrdenTrabajoTable(tables.Table):
             "id",
             "estado",
             "pedido__cliente",
-            "fecha_pedido",
-            "fecha_entrega",
+            "pedido__fecha_pedido",
+            "pedido__fecha_entrega",
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}

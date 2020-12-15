@@ -38,6 +38,29 @@
     </div>
 </form>
 <!-- Filtro End -->
+
+<!-- Export -->
+<div class="d-flex dropdown align-items-center ml-auto col-auto">
+    <button class="btn btn-outline-primary" href="#" role="button" id="dropdownExportar" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Exportar
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" /></svg>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownExportar">
+        {% for format in view.export_formats %}
+        <a class="dropdown-item" href="{% export_url format %}">
+            Formato <code>.{{ format }}</code>
+        </a>
+        {% endfor %}
+        <button class="dropdown-item" onclick="exportarTabla()">
+            Formato <code style="color: inherit;">.pdf</code>
+        </button>
+    </div>
+</div>
+<!-- Export End -->
 </div>
 
 <div>
@@ -51,3 +74,28 @@
 </div>
 
 {% endblock content %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/jspdf.umd.js' %}"></script>
+<script src="{% static 'js/jspdf.plugin.autotable.js' %}"></script>
+
+
+<script>
+    function exportarTabla() {
+        var doc = new jspdf.jsPDF()
+
+        doc.setFontSize(18)
+        doc.text(document.title, 14, 22)
+        var pageSize = doc.internal.pageSize
+        var pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth()
+
+        doc.autoTable({ 
+            html: '.table',
+            startY: 30,
+        })
+
+        doc.save(`${document.title}.pdf`)
+    }
+</script>
+{% endblock extra_js %}

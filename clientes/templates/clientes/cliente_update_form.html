@@ -1,65 +1,14 @@
-{% extends "base.html" %}
+{% extends "clientes/cliente_form.html" %}
 {% load crispy_forms_tags %}
 
 {% block title %}
     Actualizar Cliente
 {% endblock title %}
 
-{% block content %}
-<div class="d-grid p-3">
-
+{% block breadcrumb %}
     {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" update=True %}
+{% endblock breadcrumb %}
 
-    <div class="form-container">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="row">
-                <legend class="border-bottom mb-3">Actualizar Cliente</legend>
-                <div class="">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            {{ form.nombre|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.apellido|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.cuit|as_crispy_field }}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            {{ form.email|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.telefono|as_crispy_field }}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-2">
-                            {{ form.calle|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-2">
-                            {{ form.numero|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            <div>
-                                {{ form.localidad|as_crispy_field }}
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                    Agregar localidad
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-outline-success" type="submit">Guardar</button>
-                <a href="{% url 'clientes:list' %}" class="btn btn-outline-secondary">Cancelar</a>
-            </div>
-        </form>
-    </div>
-</div>
-{% endblock content %}
+{% block legend %}
+    Actualizar Cliente
+{% endblock legend %}

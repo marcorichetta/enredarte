@@ -4,6 +4,7 @@ from productos.models import Producto, Insumo, InsumosProducto, Regular, Irregul
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
+    Button,
     ButtonHolder,
     Div,
     Field,
@@ -39,14 +40,19 @@ class ProductoIrregularForm(forms.ModelForm):
                 Field("nombre"),
                 Hidden("tipo", "irregular"),  # Campo 'tipo' oculto con valor Irregular
                 Field("descripcion", style="height: 5rem"),
-                Field("tiempo"),
                 Field("detalles", style="height: 5rem"),
+                Field("tiempo"),
                 Field("precio", value=0),
-                css_class="col-8",
+                css_class="col-7",
             ),
-            Div(Fieldset("Insumos extra", Formset("insumos")),),
-            HTML("<br>"),
-            ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
+            Div(Fieldset("Insumos extra", Formset("insumos")), css_class="col-10",),
+            ButtonHolder(
+                Submit("submit", "Guardar", css_class="btn-success mr-2"),
+                HTML(
+                    "<a href='{% url 'productos:list' %}' class='btn btn-outline-secondary'>Cancelar</a>"
+                ),
+                css_class="mt-4",
+            ),
         )
 
 
@@ -64,10 +70,10 @@ class ProductoRegularForm(forms.ModelForm):
     # Filtra los insumos disponibles para base y lados
     # Solo incluye los que contengan MDF
     insumo_base = forms.ModelChoiceField(
-        queryset=Insumo.objects.filter(nombre__contains="MDF")
+        queryset=Insumo.objects.filter(nombre__contains="MDF").order_by("id")
     )
     insumo_lados = forms.ModelChoiceField(
-        queryset=Insumo.objects.filter(nombre__contains="MDF")
+        queryset=Insumo.objects.filter(nombre__contains="MDF").order_by("id")
     )
 
     class Meta:
@@ -95,19 +101,24 @@ class ProductoRegularForm(forms.ModelForm):
                     Field("ancho", min=0),
                     Field("alto", min=0),
                     "tiempo",
-                    css_class="col-4",
+                    css_class="col-4 mr-2",
                 ),
                 Fieldset(
                     "Fibrofacil utilizado",
                     "insumo_base",
                     "insumo_lados",
-                    css_class="col-6",
+                    css_class="col-4",
                 ),
                 css_class="d-flex",
             ),
-            Div(Fieldset("Insumos extra", Formset("insumos")),),
-            HTML("<br>"),
-            ButtonHolder(Submit("submit", "Guardar Producto", css_class="btn-success")),
+            Div(Fieldset("Insumos extra", Formset("insumos")), css_class="col-10",),
+            ButtonHolder(
+                Submit("submit", "Guardar", css_class="btn-success mr-2"),
+                HTML(
+                    "<a href='{% url 'productos:list' %}' class='btn btn-outline-secondary'>Cancelar</a>"
+                ),
+                css_class="mt-4",
+            ),
         )
 
 

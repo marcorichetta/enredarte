@@ -12,95 +12,117 @@
 <div class="content-section">
     <h2 class="border-bottom mb-3">Inicio</h2>
 
-    <div class="d-grid p-3">
-        <div class="row h-25 mb-4">
-            <div class="col-3">
-                <div class="card shadow border-primary" style="border-width: 2px;">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-9">
-                                <h5 class="card-title font-weight-bold">
-                                    Pedidos creados
-                                </h5>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_creados.count }}</div>
-                            </div>
-                            <a class="col-auto" href="{{ url_pedidos_creados }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg>
-                            </a>
-                        </div>
+    <div class="row p-3">
+        <div class="col-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    Calendario de pedidos
+                </div>
+                <div class="card-body">
+                    <div id="calendario">
+                        {% include 'calendario/calendario_solo.html' %}
                     </div>
                 </div>
             </div>
-            <div class="col-3">
-                <div class="card shadow border-warning" style="border-width: 2px;">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-9">
-                                <h5 class="card-title font-weight-bold">
-                                    Pedidos en proceso
-                                </h5>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_en_proceso.count }}</div>
-                            </div>
-                            <a class="col-auto" href="{{ url_pedidos_en_proceso }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card shadow border-success" style="border-width: 2px;">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-9">
-                                <h5 class="card-title font-weight-bold">
-                                    Pedidos listos
-                                </h5>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ pedidos_listos.count }}
+        </div>
+        <div class="col-4">
+                <div class="col mb-4">
+                    <div class="card shadow border-primary" style="border-width: 2px;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <h5 class="card-title font-weight-bold">
+                                        Pedidos creados
+                                    </h5>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_creados.count }}
+                                    </div>
                                 </div>
+                                <a class="col-auto" href="{{ url_pedidos_creados }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"
+                                        stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 8l4 4-4 4M8 12h7" />
+                                    </svg>
+                                </a>
                             </div>
-                            <a class="col-auto" href="{{ url_pedidos_listos }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg>
-                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-3">
-                <div class="card shadow border-danger" style="border-width: 2px;">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-9">
-                                <h5 class="card-title font-weight-bold">
-                                    Pedidos a cobrar
-                                </h5>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_a_cobrar.count }}</div>
+                <div class="col mb-4">
+                    <div class="card shadow border-warning" style="border-width: 2px;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <h5 class="card-title font-weight-bold">
+                                        Pedidos en proceso
+                                    </h5>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_en_proceso.count }}
+                                    </div>
+                                </div>
+                                <a class="col-auto" href="{{ url_pedidos_en_proceso }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"
+                                        stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 8l4 4-4 4M8 12h7" />
+                                    </svg>
+                                </a>
                             </div>
-                            <a class="col-auto" href="{{ url_pedidos_a_cobrar }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg>
-                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-7">
-                <div class="card shadow">
-                    <div class="card-header">
-                        Calendario de pedidos
-                    </div>
-                    <div class="card-body">
-                        <div id="calendario">
-                            {% include 'calendario/calendario_solo.html' %}
+                <div class="col mb-4">
+                    <div class="card shadow border-success" style="border-width: 2px;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <h5 class="card-title font-weight-bold">
+                                        Pedidos listos
+                                    </h5>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        {{ pedidos_listos.count }}
+                                    </div>
+                                </div>
+                                <a class="col-auto" href="{{ url_pedidos_listos }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"
+                                        stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 8l4 4-4 4M8 12h7" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col mb-4">
+                    <div class="card shadow border-danger" style="border-width: 2px;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <h5 class="card-title font-weight-bold">
+                                        Pedidos a cobrar
+                                    </h5>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pedidos_a_cobrar.count }}
+                                    </div>
+                                </div>
+                                <a class="col-auto" href="{{ url_pedidos_a_cobrar }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"
+                                        stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 8l4 4-4 4M8 12h7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
+        
+    </div>
 </div>
-</div>  
 
 <!-- Inicio End -->
 

@@ -3,6 +3,9 @@
 {% block title %}Error 404{% endblock %}
 
 {% block content %}
-<h1>Error 404</h1>
-<p>¡Esta página no existe!</p>
+<div>
+    <h1>Error 404</h1>
+    <h4>¡Esta página no existe!</h4>
+    <a href="{% url 'core:choice-homepage' %}" class="btn btn-primary mt-3">Volver al inicio</a>
+</div>
 {% endblock content %}

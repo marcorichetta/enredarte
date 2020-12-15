@@ -13,13 +13,20 @@
 
 <!-- Form -->
 <div class="d-grid p-3">
-    {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" create=True %}
+    
+    {% block breadcrumb %}
+        {% include 'breadcrumb.html' with url_listado='clientes:list' plural="Clientes" create=True %}
+    {% endblock breadcrumb %}
 
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
+            <legend class="border-bottom mb-3">
+            {% block legend %}
+                Crear Cliente
+            {% endblock legend %}
+            </legend>
             <div class="col-8">
-                <legend class="border-bottom mb-3">Crear Cliente</legend>
                 <div class="">
                     <div class="form-row">
                         <div class="form-group col-md-3">
@@ -50,8 +57,7 @@
                         <div class="form-group col-md-3">
                             <div>
                                 {{ form.localidad|as_crispy_field }}
-                            </div>
-                            <div>
+                            
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                     Agregar localidad
                                 </button>
@@ -59,8 +65,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-outline-success" type="submit">Guardar</button>
+                <div class="form-group mt-4">
+                    <button class="btn btn-success mr-2" type="submit">Guardar</button>
                     <a href="{% url 'clientes:list' %}" class="btn btn-outline-secondary">Cancelar</a>
                 </div>
             </div>

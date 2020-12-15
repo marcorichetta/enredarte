@@ -37,17 +37,20 @@ class CompraForm(forms.ModelForm):
         self.helper.label_class = "col-md-3 create-label"
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
-            Row(
-                Div(
-                    Field("proveedor"),
-                    Field("fecha_compra"),
-                    Field("detalles", style="height: 5rem"),
-                    css_class="col-6",
-                ),
-                Div(Fieldset("Agregar Insumos", Formset("insumos")),),
+            Div(
+                Field("proveedor"),
+                Field("fecha_compra"),
+                Field("detalles", style="height: 5rem"),
+                css_class="col-6",
             ),
-            HTML("<br>"),
-            ButtonHolder(Submit("submit", "Guardar Compra", css_class="btn-success")),
+            Div(Fieldset("Agregar Insumos", Formset("insumos")), css_class="col-10",),
+            ButtonHolder(
+                Submit("submit", "Guardar", css_class="btn-success mr-2"),
+                HTML(
+                    "<a href='{% url 'productos:list' %}' class='btn btn-outline-secondary'>Cancelar</a>"
+                ),
+                css_class="mt-4",
+            ),
         )
 
 

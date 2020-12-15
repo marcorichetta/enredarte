@@ -59,6 +59,9 @@ Productos
                 Formato <code>.{{ format }}</code>
             </a>
             {% endfor %}
+            <button class="dropdown-item" onclick="exportarTabla()">
+                Formato <code style="color: inherit;">.pdf</code>
+            </button>
         </div>
     </div>
     <!-- Export End -->
@@ -75,3 +78,28 @@ Productos
 </div>
 
 {% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/jspdf.umd.js' %}"></script>
+<script src="{% static 'js/jspdf.plugin.autotable.js' %}"></script>
+
+
+<script>
+    function exportarTabla() {
+        var doc = new jspdf.jsPDF()
+
+        doc.setFontSize(18)
+        doc.text(document.title, 14, 22)
+        var pageSize = doc.internal.pageSize
+        var pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth()
+
+        doc.autoTable({ 
+            html: '.table',
+            startY: 30,
+        })
+
+        
+        doc.save(`${document.title}.pdf`)
+    }
+</script>
+{% endblock extra_js %}

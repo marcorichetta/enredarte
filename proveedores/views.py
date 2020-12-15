@@ -110,6 +110,16 @@ class ProveedorUpdateView(SuccessMessageMixin, UpdateView):
     # Modify the template used for this view
     template_name_suffix = "_update_form"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Devuelve una lista con los id y los nombres de localidades y provincias
+        # Se usan en el form original y en el modal para crear nueva localidad
+        context["localidades"] = Localidad.objects.get_queryset()
+        context["provincias"] = Provincia.objects.get_queryset()
+
+        return context
+
 
 class ProveedorDeleteView(DeleteSuccessMessageMixin, DeleteView):
     model = Proveedor

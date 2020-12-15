@@ -1,60 +1,14 @@
-{% extends "base.html" %}
+{% extends "proveedores/proveedor_form.html" %}
 {% load crispy_forms_tags %}
 
 {% block title %}
     Actualizar Proveedor
 {% endblock title %}
 
-{% block content %}
-<div class="d-grid p-3">
+{% block breadcrumb %}
     {% include 'breadcrumb.html' with url_listado='proveedores:list' plural="Proveedores" update=True %}
+{% endblock breadcrumb %}
 
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="col-8">
-                <legend class="border-bottom mb-3">Actualizar Proveedor</legend>
-                <div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            {{ form.razon_social|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.cuit|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.email|as_crispy_field }}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            {{ form.telefono|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.calle|as_crispy_field }}
-                        </div>
-                        <div class="form-group col-md-3">
-                            {{ form.numero|as_crispy_field }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-4 px-0">
-                            {{ form.localidad|as_crispy_field }}
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                Agregar localidad
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-outline-info" type="submit">Guardar</button>
-                    <a href="{% url 'proveedores:list' %}" class="btn btn-outline-secondary">Cancelar</a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-{% endblock content %}
+{% block legend %}
+    Actualizar Proveedor
+{% endblock legend %}

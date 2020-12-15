@@ -1,11 +1,21 @@
 /* Navbar */
 
+#navbarDropdown {
+    color: rgba(255, 255, 255, 0.80);
+}
+
+#navbarDropdown:hover {
+    color: rgba(255, 255, 255);
+}
+
+
+
 .custom-gradient {
-	background: #1488cc; /* fallback for old browsers */
+	background: #ba8f2b; /* fallback for old browsers */
 	background: linear-gradient(
 		to right,
-		#1488cc,
-		#2b32b2
+		#cc9b14,
+		#ba8f2b
 	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -39,7 +49,7 @@
 .line {
 	fill: none;
 	transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
-	stroke: gainsboro;
+	stroke: white;
 	stroke-width: 5.5;
 	stroke-linecap: round;
 }

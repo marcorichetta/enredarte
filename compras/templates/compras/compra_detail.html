@@ -14,7 +14,7 @@ Compra #{{ object.pk }}
 <div class="container border rounded p-3">
 
     <div class="d-flex align-items-center border-bottom mb-4">
-        <h4>Compra #{{ object.id }} - {{ object.proveedor }}</h4>
+        <h4>Compra #{{ object.id }}</h4>
         <a class="btn btn-sm btn-outline-secondary ml-2" href="{% url 'compras:update' object.id %}">
             <span data-feather="edit-3"></span>
         </a>
@@ -26,7 +26,7 @@ Compra #{{ object.pk }}
     <div class="container">
         <div class="row">
             <div class="col-sm">
-                <h6><b>Cliente: </b> <a href="{% url 'proveedores:detail' object.proveedor.pk %}">{{object.proveedor}}</a></h6>
+                <h6><b>Proveedor: </b> <a href="{% url 'proveedores:detail' object.proveedor.pk %}">{{object.proveedor}}</a></h6>
             </div>
         </div>
     </div>

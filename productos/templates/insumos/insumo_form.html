@@ -10,54 +10,58 @@
 
 {% block extra_head %}
 {{ block.super }}
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
 {% endblock extra_head %}
 
 
 {% block content %}
 
 <div class="d-grid p-3">
+
     {% block breadcrumb %}
-    {% include 'breadcrumb.html' with url_listado='productos:insumos:list' plural="Insumos" create=True %}
+        {% include 'breadcrumb.html' with url_listado='productos:insumos:list' plural="Insumos" create=True %}
     {% endblock breadcrumb %}
-    <legend class="border-bottom mb-3">
-        {% block legend %} Crear Insumo {% endblock legend %}
-    </legend>
-    <div class="form-container">
+
+    <div class="content-section">
         <form method="POST">
             {% csrf_token %}
-            <div class="row">
+            <legend class="border-bottom mb-3">
+                {% block legend %} Crear Insumo {% endblock legend %}
+            </legend>
+            <div class="col-9">
                 <div>
                     <div class="form-row">
                         <div class="form-group col-4">
                             {{ form.nombre|as_crispy_field }}
                         </div>
-                        <div class="form-group col-4 px-2">
-                            {{ form.descripcion|as_crispy_field }}
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-4">
+                            {{ form.descripcion|attr:"rows:3"|as_crispy_field }}
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-3">
+                        <div class="form-group col-2">
                             {{ form.unidad_medida|as_crispy_field }}
                         </div>
                         <div class="form-group col-3">
                             {{ form.medida|attr:"min:0"|as_crispy_field }}
                         </div>
-                        <div class="form-group col-4">
+                        <div class="form-group col-3">
                             {{ form.precio|attr:"min:0"|as_crispy_field }}
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-row">
                         <div class="form-group col-4">
                             {{ form.proveedores|as_crispy_field }}
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-outline-success" type="submit">Guardar</button>
-                <a href="{% url 'productos:insumos:list' %}" class="btn btn-outline-secondary">Cancelar</a>
+                <div class="form-group mt-4">
+                    <button class="btn btn-success mr-2" type="submit">Guardar</button>
+                    <a href="{% url 'productos:insumos:list' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
             </div>
         </form>
     </div>

@@ -5,12 +5,12 @@
 <!-- Sidebar -->
 <ul id="sidebar" class="bg-light sidebar hide navbar-nav">
 	<ul class="nav flex-column">
-        <a class="sidebar-brand d-flex align-items-center">
+        <div class="sidebar-brand d-flex align-items-center">
 			<div class="sidebar-brand-icon">
                 <img src="{% static 'images/logo.svg' %}" alt="" height="90">
 			</div>
 			<div>Enredarte</div>
-		</a>
+		</div>
         <hr class="sidebar-divider my-0" />
         {% if user.groups.all.0.name == "grupo_operario" %}
             <li class="nav-item">
@@ -59,6 +59,9 @@
 			<ul class="collapse subMenu" id="PedidosSubmenu">
 				<li>
 					<a href="{% url 'pedidos:list' %}">Listado</a>
+                </li>
+                <li>
+					<a href="{% url 'pedidos:ordenes' %}">Listado O.T.</a>
                 </li>
 				<li>
 					<a href="{% url 'pedidos:create' %}">Crear pedido</a>
