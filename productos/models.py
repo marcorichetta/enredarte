@@ -6,6 +6,7 @@ from model_utils import Choices
 from core.base_model import BaseModel
 
 from variables.models import Variable
+from imagefield.fields import ImageField
 
 # Modelos
 
@@ -299,7 +300,7 @@ class ProductImage(BaseModel):
     producto = models.ForeignKey(
         Producto, on_delete=models.CASCADE, related_name="images"
     )
-    imagen = models.ImageField(upload_to="productos/", blank=True)
+    imagen = ImageField(upload_to="productos/", blank=True, auto_add_fields=True)
 
     class Meta:
         verbose_name = "Imagen de Producto"

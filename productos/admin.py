@@ -12,6 +12,12 @@ from .models import (
 )
 
 
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+
+    list_display = ("imagen", "producto")
+
+
 @admin.register(Unidad)
 class UnidadAdmin(admin.ModelAdmin):
     def get_queryset(self, request):

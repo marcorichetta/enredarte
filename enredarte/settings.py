@@ -57,6 +57,7 @@ INSTALLED_APPS: List[str] = [
     "django_tables2",
     "widget_tweaks",
     "stronghold",
+    "imagefield",
     # My apps
     "core",
     "users",
@@ -182,6 +183,16 @@ AUTH_USER_MODEL = "users.CustomUser"
 # DJANGO TABLES 2
 # ------------------------------------------------------------------------------
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+
+# DJANGO ImageField
+# ------------------------------------------------------------------------------
+IMAGEFIELD_FORMATS = {
+    # image field path, lowercase
+    "yourapp.yourmodel.image": {
+        "square": ["default", ("crop", (200, 200))],
+        "full": ["default", ("thumbnail", (800, 500))],
+    }
+}
 
 # SENTRY
 # ------------------------------------------------------------------------------

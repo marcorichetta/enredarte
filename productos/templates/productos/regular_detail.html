@@ -14,17 +14,6 @@
 {% include 'breadcrumb.html' with url_listado='productos:list' plural="Productos" detail=True %}
 
 <div class="container">
-    <!-- {% for img in object.images.all %}
-        <h2>{{ img.imagen }}</h2>
-        <h2>{{ img.imagen.full }}</h2>
-        <h2>{{ img.imagen.thumbnail }}</h2>
-
-
-        <a href="{{ img.imagen.url }}">
-            <img class="w-25 rounded-left" alt="" src="{{ img.imagen.url }}"/>    
-        </a>
-
-    {% endfor %} -->
     <div class="row">
         {% if object.image_url %}
             <img class="w-50 rounded-left" src="{{object.image_url}}" alt="{{object.nombre}}">
