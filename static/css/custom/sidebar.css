@@ -45,7 +45,7 @@
 
 .sidebar .nav-link .feather {
 	margin-right: 4px;
-	color: #999;
+	color: black;
 }
 
 .sidebar .nav-link.active {
@@ -77,6 +77,13 @@ a[data-toggle="collapse"] {
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
+}
+
+li > a.nav-link[aria-expanded=false] .text-expanded {
+    display: none;
+}
+li > a.nav-link[aria-expanded=true] .text-collapsed {
+    display: none;
 }
 
 ul.subMenu {

@@ -7,6 +7,22 @@ from pedidos.models import Pedido, ProductosPedido
 import datetime
 from clientes.models import Cliente
 
+meses = [
+    "_",
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+]
+
 
 class ReportesView(TemplateView):
     template_name = "reportes/listado.html"
@@ -53,21 +69,6 @@ def pedidos_por_tiempo(request):
         .order_by("fecha_pedido__month")
     )
 
-    meses = [
-        "_",
-        "Enero",
-        "Febrero",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
-    ]
     labels = [meses[reg[0]] for reg in qs]  # reg[0] == 1, 2, 3...
     data = [reg[1] for reg in qs]
 
@@ -81,11 +82,23 @@ class ProductosMasSolicitadosView(TemplateView):
 def productos_mas_solicitados(request):
     """ Productos más pedidos ordenados de mayor a menor """
 
+    str_fecha_inicio = request.GET.get("fecha_inicio") or "2020-6-1"
+    str_fecha_fin = request.GET.get("fecha_fin") or "2020-12-1"
+
+    inicio = datetime.datetime.strptime(str_fecha_inicio, "%Y-%m-%d")
+    fin = datetime.datetime.strptime(str_fecha_fin, "%Y-%m-%d")
+
     qs = (
-        ProductosPedido.objects.values_list("producto__nombre")
+        ProductosPedido.objects.filter(
+            pedido__fecha_pedido__gte=inicio, pedido__fecha_pedido__lte=fin
+        )
+        .values_list("producto__nombre")
         .annotate(num_productos=Count("cantidad"))
         .order_by("num_productos")
     )
+
+    # labels = [meses[reg[0]] for reg in qs]  # reg[0] == 1, 2, 3...
+    # data = [reg[1] for reg in qs]
 
     labels = [reg[0] for reg in qs]
     data = [reg[1] for reg in qs]

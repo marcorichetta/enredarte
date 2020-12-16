@@ -3,7 +3,7 @@
 import os
 import sys
 
-# TODO: #6 Crear config con docker + testing
+
 def main():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "enredarte.settings")
     try:

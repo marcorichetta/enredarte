@@ -57,7 +57,7 @@ class CompraForm(forms.ModelForm):
 class InsumosCompraForm(forms.ModelForm):
     """Estructura del formulario para agregar insumos a la compra. """
 
-    insumo = CustomChoiceField(queryset=Insumo.objects.all(),)
+    insumo = CustomChoiceField(queryset=Insumo.objects.all().order_by("nombre"),)
 
     class Meta:
         model = InsumosCompra
@@ -75,7 +75,7 @@ class InsumosCompraForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Field("insumo", css_class="w-auto"),
-                Field("cantidad", min=1,),
+                Field("cantidad", min=0,),
                 PrependedText("precio_compra", "$", min=0,),
                 Field("DELETE"),
                 css_class=f"formset_row-{formtag_prefix} flex-nowrap",  # Reemplaza a formCssClass

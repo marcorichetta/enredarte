@@ -1,9 +1,9 @@
-version: "3.7" # Update to 3.8
+version: "3.8"
 
 services:
     web:
         # build: .
-        image: enredarte_web:latest
+        image: enredarte_web:build-kit-latest
         command: python manage.py runserver 0.0.0.0:8000 --settings=enredarte.settings
         volumes:
             - .:/usr/app/enredarte
@@ -21,6 +21,8 @@ services:
             - postgres_data:/var/lib/postgresql/data
         env_file: 
             - ./enredarte/.env
+        ports: 
+            - "9999:5432"
 
 # Makes data persistent
 volumes: 

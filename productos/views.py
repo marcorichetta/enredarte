@@ -15,9 +15,9 @@ from collections import defaultdict
 
 class ProductoTable(tables.Table):
 
-    get_precio = tables.Column(verbose_name="Precio", orderable=False)
+    get_precio = tables.Column(verbose_name="Precio de Venta", orderable=False)
 
-    descripcion = tables.Column(verbose_name="Descripción", default="")
+    # descripcion = tables.Column(verbose_name="Descripción", default="")
 
     class Meta:
         model = Producto
@@ -25,8 +25,8 @@ class ProductoTable(tables.Table):
             "id",
             "tipo",
             "nombre",
-            "descripcion",
             "get_precio",
+            "tiempo",
             "opciones",
         )
         attrs = {"class": "table table-sm table-hover"}
@@ -36,6 +36,10 @@ class ProductoTable(tables.Table):
         """ Función para modificar como se muestra el precio de venta en el template """
         precio = floatformat(value)
         return f"$ {precio}"
+
+    def render_tiempo(self, value):
+
+        return f"{value} min."
 
     opciones = tables.TemplateColumn(
         template_name="botones_tabla.html",

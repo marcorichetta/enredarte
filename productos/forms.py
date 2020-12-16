@@ -149,7 +149,7 @@ class InsumosProductoForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Field("insumo"),
-                Field("cantidad", min=1),
+                Field("cantidad", min=0),
                 Field("DELETE"),
                 css_class=f"formset_row-{formtag_prefix}",  # Reemplaza a formCssClass
             )

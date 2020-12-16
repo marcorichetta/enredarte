@@ -3,7 +3,7 @@
 {% load static %}
 
 <!-- Sidebar -->
-<ul id="sidebar" class="bg-light sidebar hide navbar-nav">
+<ul id="sidebar" class="bg-light sidebar hide navbar-nav shadow-lg">
 	<ul class="nav flex-column">
         <div class="sidebar-brand d-flex align-items-center">
 			<div class="sidebar-brand-icon">
@@ -49,12 +49,15 @@
 		</li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link dropdown-toggle {% active 'pedidos/' %}" href="#PedidosSubmenu" data-toggle="collapse" aria-expanded="false">
+            <a class="nav-link {% active 'pedidos/' %}" href="#PedidosSubmenu" data-toggle="collapse" aria-expanded="false">
+                
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z" />
 					<path d="M14 3v5h5M16 13H8M16 17H8M10 9H8" /></svg>
-				Pedidos
+                <span>Pedidos</span>
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
 			</a>
 			<ul class="collapse subMenu" id="PedidosSubmenu">
 				<li>
@@ -64,57 +67,95 @@
 					<a href="{% url 'pedidos:ordenes' %}">Listado O.T.</a>
                 </li>
 				<li>
-					<a href="{% url 'pedidos:create' %}">Crear pedido</a>
+                    <a href="{% url 'pedidos:create' %}" target="_blank">
+                        Nuevo pedido
+                        <span data-feather="plus-circle"></span>
+                    </a>
 				</li>
 			</ul>
         </li>
         <hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link {% active 'compras/' %}" href="{% url 'compras:list' %}">
+			<a class="nav-link {% active 'compras/' %}" href="#ComprasSubmenu" data-toggle="collapse" aria-expanded="false">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<line x1="12" y1="1" x2="12" y2="23"></line>
 					<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
 				</svg>
-				Compras
+                Compras
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
+			</a>
+			<ul class="collapse subMenu" id="ComprasSubmenu">
+				<li>
+					<a href="{% url 'compras:list' %}">Listado</a>
+                </li>
+				<li>
+                    <a href="{% url 'compras:create' %}" target="_blank">
+                        Nueva compra
+                        <span data-feather="plus-circle"></span>
+                    </a>
+				</li>
+			</ul>
 			</a>
 		</li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link dropdown-toggle {% active 'productos/' %}" href="#ProductosSubmenu" data-toggle="collapse" aria-expanded="false">
+			<a class="nav-link {% active 'productos/' %}" href="#ProductosSubmenu" data-toggle="collapse" aria-expanded="false">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<circle cx="10" cy="20.5" r="1" />
 					<circle cx="18" cy="20.5" r="1" />
 					<path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6l1.6-8.4H7.1" /></svg>
-				Productos
+                Productos
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
             </a>
             <ul class="collapse subMenu" id="ProductosSubmenu">
 				<li>
 					<a href="{% url 'productos:list' %}">Listado</a>
                 </li>
 				<li>
-					<a href="{% url 'productos:regular:create' %}">Producto regular</a>
+					<a href="{% url 'productos:regular:create' %}" target="_blank">
+                        Producto regular
+                        <span data-feather="plus-circle"></span>
+                    </a>
                 </li>
                 <li>
-					<a href="{% url 'productos:irregular:create' %}">Producto irregular</a>
+					<a href="{% url 'productos:irregular:create' %}" target="_blank">
+                        Producto irregular
+                        <span data-feather="plus-circle"></span>
+                    </a>
 				</li>
 			</ul>
         </li>
         <hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link {% active 'productos/insumos/' %}" href="{% url 'productos:insumos:list' %}">
+			<a class="nav-link {% active 'productos/insumos/' %}" href="#InsumosSubmenu" data-toggle="collapse" aria-expanded="false">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<circle cx="10" cy="20.5" r="1" />
 					<circle cx="18" cy="20.5" r="1" />
 					<path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6l1.6-8.4H7.1" /></svg>
-				Insumos
-			</a>
+                Insumos
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
+            </a>
+            <ul class="collapse subMenu" id="InsumosSubmenu">
+				<li>
+					<a href="{% url 'productos:insumos:list' %}">Listado</a>
+                </li>
+                <li>
+                    <a href="{% url 'productos:insumos:create' %}" target="_blank">
+                        Nuevo insumo
+                        <span data-feather="plus-circle"></span>
+                    </a>
+				</li>
+			</ul>
 		</li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link {% active 'clientes/' %}" href="{% url 'clientes:list' %}">
+			<a class="nav-link {% active 'clientes/' %}" href="#ClientesSubmenu" data-toggle="collapse" aria-expanded="false">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -122,20 +163,46 @@
 					<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
 					<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
 				</svg>
-				Clientes
-			</a>
+                Clientes
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
+            </a>
+            <ul class="collapse subMenu" id="ClientesSubmenu">
+				<li>
+					<a href="{% url 'clientes:list' %}">Listado</a>
+                </li>
+                <li>
+                    <a href="{% url 'clientes:create' %}" target="_blank">
+                        Nuevo cliente
+                        <span data-feather="plus-circle"></span>
+                    </a>
+				</li>
+			</ul>
 		</li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link {% active 'proveedores/' %}" href="{% url 'proveedores:list' %}">
+			<a class="nav-link {% active 'proveedores/' %}" href="#ProveedoresSubmenu" data-toggle="collapse" aria-expanded="false">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path
 						d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
 					</path>
 				</svg>
-				Proveedores
-			</a>
+                Proveedores
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
+            </a>
+            <ul class="collapse subMenu" id="ProveedoresSubmenu">
+				<li>
+					<a href="{% url 'proveedores:list' %}">Listado</a>
+                </li>
+                <li>
+                    <a href="{% url 'proveedores:create' %}" target="_blank">
+                        Nuevo proveedor
+                        <span data-feather="plus-circle"></span>
+                    </a>
+				</li>
+			</ul>
 		</li>
         <hr class="sidebar-divider my-0" />
         <li class="nav-item">

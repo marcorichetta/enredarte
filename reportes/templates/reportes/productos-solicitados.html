@@ -11,9 +11,31 @@
 
     <div class="container">
 
-        <div id="container" style="width: 75%;">
+        <div class="row">
+
+
+        <div id="container" class="col-8" style="width: 75%;">
             <canvas id="chart" data-url="{% url 'reportes:productos-solicitados-json' %}"></canvas>
         </div>
+        <div class="card col-4">
+            <div class="card-body">
+                <h5 class="card-title">Ingrese los datos</h5>
+                <form id="form-grafico" action="{% url 'reportes:productos-solicitados-json' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="InputProvincia">Fecha de inicio</label>
+                        <input type="date" class="form-control" id="FechaInicio" placeholder="dd/mm/aaaa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="InputProvincia">Fecha de fin</label>
+                        <input type="date" class="form-control" id="FechaFin" placeholder="dd/mm/aaaa" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calcular</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
     </div>
 
 </div>
@@ -25,14 +47,14 @@
         // https://www.chartjs.org/docs/latest/general/fonts.html
         Chart.defaults.global.defaultFontSize = 16;
 
-        let $clientesChart = $('#chart')
+        let $chart = $('#chart')
 
         $.ajax({
-            url: $clientesChart.data("url"),
+            url: $chart.data("url"),
             success: function (data) {
-                var ctx = $clientesChart[0].getContext("2d");
+                var ctx = $chart[0].getContext("2d");
 
-                new Chart(ctx, {
+                myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: data.labels,
@@ -49,7 +71,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Productos más solicitados'
+                            text: 'Productos más solicitados por período de tiempo'
                         },
                         scales: {
                             yAxes: [{
@@ -62,6 +84,51 @@
                     }
                 });
             }
+        });
+
+        function updateData(chart, label, data) {
+            // Remover datos
+            chart.data.labels.length = 0;
+
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.length = 0;
+            });
+
+            // Agregar nueva data
+            chart.data.labels = label
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data = data
+            });
+
+            chart.update();
+        }
+
+        document.querySelector("#form-grafico").addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const url = document.querySelector("#form-grafico").action
+
+            const csrftoken = $("[name=csrfmiddlewaretoken]").val()
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    fecha_inicio: $('#FechaInicio').val(),
+                    fecha_fin: $('#FechaFin').val(),
+                },
+                dataType: 'json',
+                success: (data) => {
+
+                    console.log(data)
+
+                    let { labels, num_productos } = data
+
+                    updateData(myChart, labels, num_productos)
+
+                }
+            })
         })
     })
 </script>
