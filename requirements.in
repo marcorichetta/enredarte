@@ -13,7 +13,7 @@ docutils==0.16
 factory-boy==2.12.0
 gunicorn==20.0.4
 ipython==7.13.0
-django-jazzmin==2.3.11
+django-jazzmin==2.4.1
 psycopg2-binary==2.8.5
 Pillow==7.2.0
 sentry-sdk==0.16.5

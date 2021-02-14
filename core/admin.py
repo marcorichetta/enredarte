@@ -6,7 +6,6 @@ from .models import (
 )
 
 # Register your models here.
-# Password: enredarte
 
 
 class LocalidadInline(admin.TabularInline):

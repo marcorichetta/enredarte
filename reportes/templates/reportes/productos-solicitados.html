@@ -14,7 +14,7 @@
         <div class="row">
 
 
-        <div id="container" class="col-8" style="width: 75%;">
+        <div id="container" class="col-8" style="width: 1000px; height: 600px;">
             <canvas id="chart" data-url="{% url 'reportes:productos-solicitados-json' %}"></canvas>
         </div>
         <div class="card col-4">
@@ -66,6 +66,7 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         legend: {
                             display: false,
                         },

@@ -39,13 +39,16 @@ class ProductoIrregularForm(forms.ModelForm):
             Div(
                 Field("nombre"),
                 Hidden("tipo", "irregular"),  # Campo 'tipo' oculto con valor Irregular
-                Field("descripcion", style="height: 5rem"),
+                # Field("descripcion", style="height: 5rem"),
                 Field("detalles", style="height: 5rem"),
                 Field("tiempo"),
                 Field("precio", value=0),
                 css_class="col-7",
             ),
-            Div(Fieldset("Insumos extra", Formset("insumos")), css_class="col-10",),
+            Div(
+                Fieldset("Insumos extra", Formset("insumos")),
+                css_class="col-10",
+            ),
             ButtonHolder(
                 Submit("submit", "Guardar", css_class="btn-success mr-2"),
                 HTML(
@@ -111,7 +114,10 @@ class ProductoRegularForm(forms.ModelForm):
                 ),
                 css_class="d-flex",
             ),
-            Div(Fieldset("Insumos extra", Formset("insumos")), css_class="col-10",),
+            Div(
+                Fieldset("Insumos extra", Formset("insumos")),
+                css_class="col-10",
+            ),
             ButtonHolder(
                 Submit("submit", "Guardar", css_class="btn-success mr-2"),
                 HTML(
@@ -131,7 +137,9 @@ class CustomChoiceField(forms.ModelChoiceField):
 class InsumosProductoForm(forms.ModelForm):
     """Estructura del formulario para agregar insumos al crear un producto. """
 
-    insumo = CustomChoiceField(queryset=Insumo.objects.all(),)
+    insumo = CustomChoiceField(
+        queryset=Insumo.objects.all(),
+    )
 
     class Meta:
         model = InsumosProducto

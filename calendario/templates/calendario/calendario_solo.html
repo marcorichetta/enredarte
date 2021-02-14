@@ -32,15 +32,24 @@
 <!-- Dashboard Template -->
 <div class="content-section">
     <div class="container">
-        <div class="form-group col-4">
-            <label for="select_estado">Filtrar por estado</label>
-            <select class="form-control" name="estado" id="select_estado">
-                <option value="9">Todos</option>
-                <!-- https://www.djangotemplatetagsandfilters.com/tags/for/ -->
-                {% for estado in estados_pedidos %}
+        <div class="row mb-4">
+            <div class="form-group col-4">
+                <label for="select_estado">Filtrar por estado</label>
+                <select class="form-control" name="estado" id="select_estado">
+                    <option value="9">Todos</option>
+                    <!-- https://www.djangotemplatetagsandfilters.com/tags/for/ -->
+                    {% for estado in estados_pedidos %}
                     <option value="{{ forloop.counter0 }}">{{ estado }}</option>
-                {% endfor %}
-            </select>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ml-auto align-self-center">
+                <label> </label>
+                <a href="{% url 'pedidos:create' %}" class="btn btn-success">
+                    Nuevo pedido
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </div>
         </div>
         <div id='calendar'></div>
     </div>
@@ -77,6 +86,8 @@
                 right: 'dayGridMonth,dayGridWeek,listMonth'
             },
             contentHeight: 600,
+            stickyHeaderDates: true, 
+            stickyFooterScrollbar: true,
             locale: 'es',
             firstDay: 1,
             editable: true,

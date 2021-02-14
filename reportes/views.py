@@ -135,6 +135,7 @@ def pedidos_por_cliente(request):
         Cliente.objects.values("nombre", "apellido")
         .annotate(num_pedidos=Count("pedidos"))
         .exclude(num_pedidos__lte=0)
+        .order_by("num_pedidos")
     )
 
     for c in qs:

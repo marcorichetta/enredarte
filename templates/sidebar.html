@@ -7,9 +7,9 @@
 	<ul class="nav flex-column">
         <div class="sidebar-brand d-flex align-items-center">
 			<div class="sidebar-brand-icon">
-                <img src="{% static 'images/logo.svg' %}" alt="" height="90">
+                <img src="{% static 'images/logo-costado.svg' %}" alt="Flexbox" height="160"
+                    style="margin-bottom: -20px;">
 			</div>
-			<div>Enredarte</div>
 		</div>
         <hr class="sidebar-divider my-0" />
         {% if user.groups.all.0.name == "grupo_operario" %}
@@ -25,7 +25,7 @@
             </li>
         {% else %}
 		<li class="nav-item">
-			<a class="nav-link {% active '/' %}" href="{% url 'core:home' %}">
+			<a class="nav-link {% active 'inicio/' %}" href="{% url 'core:home' %}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -213,13 +213,20 @@
 		</li>
 		<hr class="sidebar-divider my-0" />
 		<li class="nav-item">
-			<a class="nav-link {% active 'reportes/' %}" href="{% url 'reportes:list' %}">
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+			<a class="nav-link {% active 'reportes/' %}" href="#ReportesSubmenu" data-toggle="collapse" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M3 3v18h18" />
 					<path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" /></svg>
-				Reportes
-			</a>
+                Reportes
+                <span class="text-collapsed" data-feather="chevron-down"></span>
+                <span class="text-expanded" data-feather="chevron-up"></span>
+            </a>
+            <ul class="collapse subMenu" id="ReportesSubmenu">
+				<li>
+					<a href="{% url 'reportes:pedidos-tiempo' %}">Pedidos</a>
+                </li>
+			</ul>
         </li>
         {% endif %}
 	</ul>

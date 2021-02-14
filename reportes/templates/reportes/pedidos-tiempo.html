@@ -13,7 +13,7 @@
 
         <div class="row">
 
-            <div id="container" class="col-8" style="width: 75%;">
+            <div id="container" class="col-8" style="width: 1000px; height: 600px;">
                 <canvas id="chart" data-url="{% url 'reportes:pedidos-tiempo-json' %}"></canvas>
             </div>
             <div class="card col-4">
@@ -67,12 +67,21 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         legend: {
                             position: 'bottom',
                         },
                         title: {
                             display: true,
                             text: 'Pedidos por mes'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function (value) { if (value % 1 === 0) { return value; } }
+                                }
+                            }]
                         }
                     }
                 });

@@ -54,8 +54,7 @@ Orden de Trabajo # {{ object.id }}
                 <div class="col-auto text-right">
                     <h6><b>Fecha del pedido:</b> {{object.pedido.fecha_pedido}}</h6>
                     <h6><b>Inicio del proceso:</b> {{ object.created | date }}</h6>
-                    <h6><b>Entrega estimada:</b> {{object.pedido.fecha_entrega}}
-                        ({{ object.pedido.fecha_entrega | timeuntil }})</h6>
+                    <h6><b>Entrega estimada:</b> {{object.pedido.fecha_entrega}}</h6>
                 </div>
             </div>
         </div>
@@ -79,21 +78,44 @@ Orden de Trabajo # {{ object.id }}
                 <div id="collapse-{{forloop.counter}}" class="collapse" aria-labelledby="heading-{{forloop.counter}}"
                     data-parent="#accordionProductos-{{forloop.counter}}">
                     <div class="card-body">
-                        <h5>Insumos necesarios</h5>
                         {% if producto_del_pedido.tipo == "regular" %}
-                        <b>Base</b>
+                        <b>Medidas</b>
+                        <ul>
+                            <li>Largo: {{ producto_del_pedido.regular.largo }} cm</li>
+                            <li>Ancho: {{ producto_del_pedido.regular.ancho }} cm</li>
+                            <li>Alto: {{ producto_del_pedido.regular.alto }} cm</li>
+                            <li>Tiempo: {{ producto_del_pedido.regular.tiempo }} min</li>
+                        </ul>
+                        <b>Fibrofacil</b>
                         <ul>
                             <li>Base: {{ producto_del_pedido.regular.insumo_base }}</li>
                             <li>Lados: {{ producto_del_pedido.regular.insumo_lados }}</li>
                         </ul>
+
+                        {% else %}
+                            <h5>Detalles de fabricación</h5>
+                            <div class="mb-4">
+                                <div class="mb-2">
+                                    {{ producto_del_pedido.irregular.detalles }}
+                                </div>
+                                <div class="mb-2">
+                                    <b>Tiempo:</b> {{ producto_del_pedido.irregular.tiempo }} min
+                                </div>
+                            </div>
                         {% endif %}
 
-                        <b>Extra</b>
-                        <ul>
-                            {% for insumo in producto_del_pedido.insumos_por_producto.all %}
-                            <li>{{ insumo }}</li>
-                            {% endfor %}
-                        </ul>
+                        {% with producto_del_pedido.insumos_por_producto.all as insumos %}
+                            
+                            {% if insumos.count != 0 %}
+                            <b>Insumos Extra</b>
+                            <ul>
+                                {% for insumo in insumos %}
+                                <li>{{ insumo }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        {% endwith %}
+                        
                         <a id="btn-producto" class="btn btn-outline-info" href="{% url 'productos:detail' producto_del_pedido.pk %}">
                             Ver producto
                         </a>
@@ -107,9 +129,9 @@ Orden de Trabajo # {{ object.id }}
         <h5>Observaciones</h5>
         {{ object.detalles }}
 
-            <div class="row mx-auto">
+            <div class="row mx-auto mt-4">
                 {% if user.groups.all.0.name == "grupo_operario" %}
-                    <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:ordenes' %}">
+                    <a id="btn-menu" class="btn btn-sm btn-outline-info mr-auto mr-2" href="{% url 'pedidos:ordenes' %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10" />
@@ -117,7 +139,7 @@ Orden de Trabajo # {{ object.id }}
                         Volver al listado de órdenes
                     </a>
                 {% else %}
-                    <a id="btn-menu" class="btn btn-sm btn-outline-info ml-auto mr-2" href="{% url 'pedidos:detail' object.pedido.pk %}">
+                    <a id="btn-menu" class="btn btn-sm btn-outline-info mr-auto mr-2" href="{% url 'pedidos:detail' object.pedido.pk %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10" />
@@ -127,13 +149,13 @@ Orden de Trabajo # {{ object.id }}
                 {% endif %}
 
                 {% if object.estado == 0 %}
-                <form id="form-estado" action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
-                    {% csrf_token %}
-                    <button class="btn btn-sm btn-outline-success" name="id_orden_trabajo" type="submit"
-                        value="{{ object.pk }}">
-                        Finalizar Orden de Trabajo
-                    </button>
-                </form>
+                    <form id="form-estado" action="{% url 'pedidos:finalizar_ot' %}" method="post" onsubmit="return confirmar()">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-success" name="id_orden_trabajo" type="submit"
+                            value="{{ object.pk }}">
+                            Finalizar Orden de Trabajo
+                        </button>
+                    </form>
                 {% endif %}
             </div>
     </div>

@@ -9,11 +9,11 @@ JAZZMIN_SETTINGS = {
     # square logo to use for your site, must be present in static files, used for favicon and brand on top left
     # "site_logo": "/images/logo.svg",
     # Welcome text on the login screen
-    "welcome_sign": "Bienvenido al panel de administración",
+    "welcome_sign": "Bienvenido al panel de administración de Flexbox",
     # Copyright on the footer
     "copyright": "Enredarte SRL",
     # The model admin to search from the search bar, search bar omitted if excluded
-    "search_model": "auth.User",
+    "search_model": "clientes.Cliente",
     # Field name on user model that contains avatar image
     "user_avatar": None,
     ############
@@ -57,6 +57,7 @@ JAZZMIN_SETTINGS = {
     # List of apps to base side menu (app or model) ordering off of
     "order_with_respect_to": [
         "variables",
+        "users",
         "pedidos",
         "compras",
         "productos",
@@ -87,12 +88,17 @@ JAZZMIN_SETTINGS = {
         "core.Provincia": "fas fa-map-marker-alt",
         "core.Localidad": "fas fa-map-marker-alt",
         "pedidos.Pedido": "fas fa-shopping-cart",
+        "pedidos.OrdenTrabajo": "fas fa-cogs",
         "productos.Insumo": "fas fa-toolbox",
         "productos.Producto": "fas fa-shopping-bag",
+        "productos.Regular": "fas fa-shopping-bag",
+        "productos.Irregular": "fas fa-shopping-bag",
         "productos.Unidad": "fas fa-ruler-horizontal",
         "productos.StockInsumo": "fas fa-boxes",
+        "productos.ProductImage": "fas fa-image",
         "proveedores.Proveedor": "fas fa-phone-alt",
         "variables.Variable": "fas fa-coins",
+        "users.CustomUser": "fas fa-user",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",

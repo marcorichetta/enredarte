@@ -50,7 +50,7 @@ class InsumoAdmin(admin.ModelAdmin):
     autocomplete_fields = ("proveedores",)
 
 
-@admin.register(StockInsumo)
+# @admin.register(StockInsumo)
 class StockInsumoAdmin(admin.ModelAdmin):
     list_display = ("id", "insumo", "cantidad", "detalles")
     list_filter = ("insumo",)

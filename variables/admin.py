@@ -1,7 +1,23 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-
+from django import forms
 from .models import Variable
+
+
+class VariableForm(forms.ModelForm):
+    """Form definition for Variable."""
+
+    class Meta:
+        """Meta definition for Variableform."""
+
+        model = Variable
+        fields = (
+            "is_removed",
+            "precio_hora",
+            "ganancia_fibrofacil",
+            "ganancia_por_mayor",
+            "ganancia_por_menor",
+        )
 
 
 @admin.register(Variable)
@@ -12,14 +28,16 @@ class VariableAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return Variable.all_objects.all()
 
+    form = VariableForm
+
     list_display = (
         "id",
         "precio_hora",
-        "precio_pintado",
+        # "precio_pintado",
         "ganancia_por_mayor",
         "ganancia_por_menor",
         "ganancia_fibrofacil",
-        "created",
+        # "created",
         "modified",
-        "is_removed",
+        # "is_removed",
     )

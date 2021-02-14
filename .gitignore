@@ -4,7 +4,6 @@
 
 ### Custom
 varios/
-.pre-commit-config.yaml
 
 ### Django ###
 *.log
