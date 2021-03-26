@@ -87,7 +87,7 @@ pytz==2019.1
     # via
     #   -c requirements.txt
     #   django
-pyyaml==5.3.1
+pyyaml==5.4
     # via pre-commit
 regex==2020.7.14
     # via black
