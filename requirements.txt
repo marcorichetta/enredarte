@@ -12,6 +12,13 @@ decorator==4.4.2
     # via
     #   ipython
     #   traitlets
+django==2.2.13
+    # via
+    #   -r requirements.in
+    #   django-filter
+    #   django-jazzmin
+    #   django-model-utils
+    #   django-tables2
 django-autocomplete-light==3.5.1
     # via -r requirements.in
 django-crispy-forms==1.7.2
@@ -34,13 +41,6 @@ django-tables2==2.3.1
     # via -r requirements.in
 django-widget-tweaks==1.4.8
     # via -r requirements.in
-django==2.2.13
-    # via
-    #   -r requirements.in
-    #   django-filter
-    #   django-jazzmin
-    #   django-model-utils
-    #   django-tables2
 docutils==0.16
     # via -r requirements.in
 et-xmlfile==1.0.1
@@ -51,10 +51,10 @@ faker==4.1.2
     # via factory-boy
 gunicorn==20.0.4
     # via -r requirements.in
+ipython==7.16.3
+    # via -r requirements.in
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.13.0
-    # via -r requirements.in
 jdcal==1.4.1
     # via openpyxl
 jedi==0.17.2
