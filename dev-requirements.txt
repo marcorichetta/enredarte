@@ -22,23 +22,23 @@ coverage==5.2.1
     # via -r dev-requirements.in
 distlib==0.3.1
     # via virtualenv
-django-debug-toolbar==2.2
-    # via -r dev-requirements.in
-django-stubs==1.5.0
-    # via -r dev-requirements.in
-django==2.2.13
+django==2.2.27
     # via
     #   -c requirements.txt
     #   django-debug-toolbar
     #   django-stubs
+django-debug-toolbar==2.2
+    # via -r dev-requirements.in
+django-stubs==1.5.0
+    # via -r dev-requirements.in
 filelock==3.0.12
     # via virtualenv
-flake8-comprehensions==3.2.3
-    # via -r dev-requirements.in
 flake8==3.8.3
     # via
     #   -r dev-requirements.in
     #   flake8-comprehensions
+flake8-comprehensions==3.2.3
+    # via -r dev-requirements.in
 identify==1.4.25
     # via pre-commit
 iniconfig==1.0.1
@@ -47,14 +47,14 @@ mccabe==0.6.1
     # via flake8
 more-itertools==8.4.0
     # via pytest
-mypy-extensions==0.4.3
-    # via
-    #   black
-    #   mypy
 mypy==0.770
     # via
     #   -r dev-requirements.in
     #   django-stubs
+mypy-extensions==0.4.3
+    # via
+    #   black
+    #   mypy
 nodeenv==1.4.0
     # via pre-commit
 nplusone==1.0.0
@@ -77,12 +77,12 @@ pyflakes==2.2.0
     # via flake8
 pyparsing==2.4.7
     # via packaging
-pytest-django==3.9.0
-    # via -r dev-requirements.in
 pytest==6.0.1
     # via
     #   -r dev-requirements.in
     #   pytest-django
+pytest-django==3.9.0
+    # via -r dev-requirements.in
 pytz==2019.1
     # via
     #   -c requirements.txt
